@@ -1,18 +1,15 @@
-version: '3.8'
-
 services:
   reverse-proxy:
-# Stable alpine pour une version moins lourde de nginx
     image: nginx:stable-alpine
     container_name: reverse-proxy
     volumes:
-      -./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
     ports:
-      -"443:443"
+      - "443:443"
     depends_on:
       - frontend
       - user-profile
-      - game
+      # - game
     networks:
       - web
 
@@ -25,7 +22,7 @@ services:
       - web
     depends_on:
       - user-profile
-      - game
+      # - game
 
   user-profile:
     build:
@@ -33,15 +30,15 @@ services:
       dockerfile: Dockerfile
     container_name: user-profile
     environment:
-      - DB_PATH=/user-profile/user-profile.sqlite
+      - DB_PATH=/data/user-profile.sqlite
       - PORT=3001
-    expose:
-      - 3001
+    ports:
+      - "3001:3001"
     networks:
       - web
       - backend
     volumes:
-      user-profile-data:/data
+      - user-profile-data:/data
 
   # game:
     # build:
@@ -49,7 +46,7 @@ services:
       # dockerfile: Dockerfile
     # container_name: game
     # environment:
-      # - DB_PATH=/game/game.sqlite
+      # - DB_PATH=/data/game.sqlite
       # - PORT=3002
     # expose:
       # - 3002
@@ -57,13 +54,13 @@ services:
       # - web
       # - backend
     # volumes:
-      # game-data:/data
+      # - game-data:/data
 
-  volumes:
-    user-profile-data:
+volumes:
+  user-profile-data:
 
-  networks:
-    web:
-      driver: bridge
-    backend:
-      driver: bridge
+networks:
+  web:
+    driver: bridge
+  backend:
+    driver: bridge
