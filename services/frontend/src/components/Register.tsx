@@ -1,9 +1,9 @@
 import { useState, type ChangeEvent } from 'react'
 import { Link } from 'react-router'
-import type { RegisterData } from "../interfaces/Register"
+import type { FormData } from "../interfaces/Form"
 
 export default function Register() {
-	const [data, setData] = useState<RegisterData>({
+	const [data, setData] = useState<FormData>({
 		username: '',
 		email: '',
 		password: ''
@@ -21,7 +21,7 @@ export default function Register() {
 	// }
 
 	return (
-		<form className='form'>
+		<form className='.auth-form'>
 			<label htmlFor="username">
 				NOM UTILISATEUR
 				<input
