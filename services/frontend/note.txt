@@ -1,0 +1,158 @@
+MANDATORY:
+1. Overview
+	* Take care to subject versions(updates)
+	* Strictly follow Tool / 3rd party instructions
+2. Min Tech Req
+	* SPA, back / forward btn
+	* Compatible with latest Firefox(all browsers) version
+	* No errors / warnings(also in console) while browsing the webapp
+	* Docker containerization runtime in /sgoinfre
+	* Vite.js?
+
+3. Game
+	* Local:
+		Rules: ALL players & AI same pad speed
+		1V1: same keyboard
+		1VIA: Module AI
+		Tournament: display all players, who VS who, order of play,
+			* Registration system: input their own temporary aliases(name)
+			* Matchmaking system: organize participants, announce next match
+			* Work with / without user registration(login or not via URL)
+
+4. Security
+	Password stored in DB -> hashed(bcrypt)
+	SQL Injections / XSS attacks protected webapp
+	HTTPS backend(wss)
+	Input Validation Forms(Front - Register / Login Pages) + Server-side protection too
+	API Rest Routes protected 1rst, before JWT(+ 2FA) module
+	.env: credentials, API keys, env vars saved locally + .gitignore -> not on github
+
+
+
+MODULES:
+Mandatory = 30%, Modules >= 70%
+2 minors = 1 major = 10 points
+7 majors = 14 minors = 100%(6 + 2 fonctionne aussi)
+
+* Web:
+	Major x1:
+		back framework(Node.js + Fastify pour API Rest)
+		front React(plus rapide pour gerer la SPA et les states) + tailwindCSS avec extension VSCode(pour la lisibilite)
+	Minor x1: db for backend(SQLite avec SQL)
+
+* User Management:
+	Majors x2:
+		Authentication(Register / Login Pages(HTML Tags), Input Form Validations(zod), ORM(SQL compatible))
+		Remote Auth(OAuth2.0 Google, via un button dans le form)
+
+* Gameplay & User XP:
+	Voir ci ca vous chauffe(Remote 1V1, 2V2, Tournoi...) mais long a implementer(d'apres les infos d'anciens transcendeurs)
+
+* AI-Algo:
+	Major x1: AI Opponent(pas encore fait de recherches dessus...)
+
+* Cyber:
+	Majors x2:
+		WAF/ModSecurity: pour les SQL Injections, XSS attacks, rate limiting bypass etc.
+		+ HashiCorp(node-vault): pour le serv Nginx, les Firewalls et les secrets (sensitive data
+								 that need secure storage = pwd, API key...) en ne les exposants pas directement.
+		JWT(+ 2FA): access / refresh token(set duration, in req header...)
+
+* Graphics:
+	Major x1: 3D techniques(Babilon.js, uniquement des particules 3D suffisent sur une scene)
+
+* Accessibility:
+	Minors x2:
+		expand browsers compatibility(selon versions des dependances du projet, a faire des le debut)
+		supp multiple languages(3 langues suffisent, dans des locale.json)
+
+TOTAL: 7 majors + 3 minors
+
+
+
+LIBRARIES LIST:
+Web:
+	front:
+		HTML
+		CSS
+		TS
+		React
+		TailwindCSS / SCSS(not pass module)
+		zod???
+	back:
+		Node.js
+		Fastify
+	db:
+		SQLite
+
+User Management:
+	Std, Authentication, Accross Tournament:
+		All pages(public / private) following HTTPS
+		(dev env / localhost -> vite.js --https flag + fetch "https...",
+		prod env / URL -> reverse proxy Nginx,
+		SSL certif -> Let's encrypt or Certbot):
+			1. Secure subscribe to webapp
+			2. Once register -> login
+				2.1 Handle duplicate username / email = Input Validation Layer 2(backend)
+					Layer 1: let dft HTML handling(front - zod + UI components + real time)
+					Layer 2: check for duplicate ones in db(back - middleware + response formatting???)
+			3. Select unique name in tournament???
+			4. Update infos(Profile section, username, email, pwd, 2FA...)
+			5. Avatar handling
+				dft avatar(DiceBear)
+				can upload 1(HTML upload tag)
+			6. Add friends(already register users) + see online status(online / offline)
+			7. Stats(in profile = faster to code, no time for graphs)
+			8. Match History
+				for logged in users(HTML table tag...)
+				1V1 data(scores, users, date)
+
+	Remote Auth:
+		OAuth 2.0(see Google)
+			1. Google btn
+			2. accounts.google.com form to choose the desired email
+			3. signing back confirmation page
+			4. redirect to menu(private home page for logged users)
+
+IA:
+	Opponent: (Math.js, lodash data manip, see if Python libs allowed)
+		* simulate keyboard input(see in console outputs)
+		* refresh 1x/sec, anticipate bounce + player actions
+		* adapts to diff gameplay scenarios / user interactions
+
+Cyber:
+	WAF/ModSecurity: 
+
+	HashiCorp Vault: for sensitive data that need secure storage
+		API Keys + Tokens(also use in dev mode.env?):
+			3rd party -> Google API Key
+			JWT signing keys
+			OAuth client secrets
+		db credentials(from validation forms):
+			encryption keys(TLS/SSL private keys)
+		env vars
+			production config secrets(db_URL...)
+			await vault.read(db_URL)
+		Certificate & PKI
+			CA keys
+		App secrets
+			session, pwd hashing salts, CSRF tokens
+
+	2FA + JWT: 
+
+Graphics:
+	3d techs(Babylon.js):
+		* visual effects that immerse player
+			particles: ball trail, impact, ambient, paddle glow
+			lighting: dynamic, neon/glow, reflections, bloom
+			camera: dynamic follow/shake on impact, transitions smooth, screen shake
+			ball: morphing / deformation on impact
+			audio-visual sync: color shift based on events
+
+DevOps???:
+	docker
+
+
+TODO:
+1. SPA scheme(Excalidraw or Paint) -> basic UI / UX flow(sketching)
+2. Project structure -> optimal root folders(front, back, db, server, makefile, .env, .gitignore...)
