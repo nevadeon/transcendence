@@ -1,17 +1,17 @@
 import { useState, type ChangeEvent } from 'react'
 import { Link } from 'react-router'
-import type { RegisterData } from '../interfaces/Register';
+import type { FormData } from "../interfaces/Form"
+import '../styles/index.css'
 
 export default function Login() {
-	const [data, setData] = useState<RegisterData>({
+	const [data, setData] = useState<FormData>({
 		username: '',
-		email: '',
 		password: ''
 	});
 
 	function handleInputChange(e: ChangeEvent<HTMLInputElement>): void {
 		const { name, value } = e.target;
-		setData(prev => ({ ...prev, [name]: value}));
+		setData((prev: FormData) => ({ ...prev, [name]: value}));
 	}
 
 	// function handleSubmit(e: FormEvent<HTMLFormElement>): void {
@@ -21,7 +21,7 @@ export default function Login() {
 	// }
 
 	return (
-		<form className='form'>
+		<form className='.auth-form'>
 			<label htmlFor="username">
 				NOM UTILISATEUR
 				<input
@@ -36,15 +36,15 @@ export default function Login() {
 			<label htmlFor="password">
 				MOT DE PASSE
 				<input
-				type="password"
-				id="password"
-				name="password"
-				onChange={handleInputChange}
-				value={data.password}
-				required
+					type="password"
+					id="password"
+					name="password"
+					onChange={handleInputChange}
+					value={data.password}
+					required
 				/>
 			</label>
-			<button type='submit'>S'INSCRIRE</button>
+			<button type='submit'>SE CONNECTER</button>
 			<p>Pas encore de compte? <Link to="/register">Enregistrez-vous</Link></p>
 		</form>
 	)
