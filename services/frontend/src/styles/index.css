@@ -1,65 +1,117 @@
-@import "tailwindcss";
+/* CSS, then TailwindCSS */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
 
-/* replace :root */
-@theme {
-	/* ----- COLORS ----- */
-	/* GREEN - HOLOGRAM */
-	--color-hologram-400: #80FF00;
-	--color-hologram-600: #2A631C;
-	/* RED - WARNING */
-	--color-warning-200: #B23521;
-	--color-warning-600: #590001;
-	/* YELLOW - INFOS */
-	--color-infos-100: #F2FEDA;
-	--color-infos-200: #F3F58F;
-
-	/* ----- FONTS ----- */
-	--font-family-inter: "Inter", sans-serif;
-	--font-family-orbitron: "Orbitron", sans-serif;
-}
-
-/* @layer utilities {
-	.glass-effect {
-		backdrop-filter: blur(10px);
-		background: rgba(255, 255, 255, 0.1);
-	}
-} */
-
-/* body */
-
-/* input {
-	@apply font-family-orbitron text-xl text-green-500 bg-green-800 border-4 border-green-500;
-} */
-
-
-
-/* PREVIOUS CSS */
 :root {
-	font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-	line-height: 1.5;
-	font-weight: 400;
+	/* CURSOR */
+	--cursor-pistol: url('../assets/rick-pistol.png');
+	/* --cursor-pistol-hover: url('assets/rick-pistol.png'); */
+
+	/* SIZES */
+	--width-desk-screen: 98vw;
+	--height-desk-screen: 90vh;
+	--width-mobile-screen: 100dvw;
+	--height-mobile-screen: 100dvh;
+	--width-input: 440px;
+
+	/* SPACES */
+	--margin-label: .75em;
+	--margin-input: 1.5em;
+	--margin-submit: .5em;
+	--padding-input: .96em;
+
+	/* FONTS */
+	--font-titles: "Orbitron", sans-serif;
+	--font-text: "Inter", sans-serif;
+	--font-size-span: .75em;
+	--font-size-text: .75em;
+	--font-size-input: 1.25em;
+	--font-weight-regular: 400;
+	--font-weight-bold: 600;
+	--font-weight-black: 900;
+	--font-synthesis: none;
+	--line-height: 1em;
+	--text-rendering: optimizeLegibility;
 
 	/* COLORS */
-	/* GREEN - HOLOGRAM */
-	--color-hologram-400: #80FF00;
-	--color-hologram-600: #2A631C;
 	/* RED - WARNING */
-	--color-warning-200: #B23521;
-	--color-warning-600: #590001;
+	--color-warning-300: rgb(228, 79, 74);
+	--color-warning-400: rgb(178, 53, 33);
+	--color-warning-600: rgb(89, 0, 1);
+	--color-warning-low-opa-300: rgba(228, 79, 74, .75);
+	/* GREEN - HOLOGRAM */
+	--color-hologram-400: rgb(128, 255, 0);
+	--color-hologram-600: rgb(42, 99, 28);
+	--color-hologram-low-opa-400: rgba(128, 255, 0, .5);
+	--color-hologram-low-opa-600: rgba(42, 99, 28, .75);
 	/* YELLOW - INFOS */
-	--color-infos-100: #F2FEDA;
-	--color-infos-200: #F3F58F;
+	--color-infos-100: rgb(242, 254, 218);
+	--color-infos-200: rgb(243, 245, 143);
+	--color-infos-low-opa-100: rgba(242, 254, 218, 0.5);
+	/* GREY - NEUTRAL */
+	--color-neutral-900: rgb(20, 20, 20);
+	/* BLUE - COMPUTER */
+	--color-computer-600: rgb(33, 66, 65);
 
-	font-synthesis: none;
-	text-rendering: optimizeLegibility;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
+	/* WEBKITS */
+	/* -webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale; */
+}
+
+*, ::after, ::before {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	cursor: var(--cursor-pistol) 8 8, var(--cursor-pistol) 16 16, var(--cursor-pistol) 32 32, auto !important;
+}
+
+body {
+	padding: 8px;
+	font-family: var(--font-text);
+	background: var(--color-computer-600);
+}
+
+form {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+label {
+	display: flex;
+	flex-direction: column;
+	margin-bottom: var(--margin-label);
+	font-size: var(--font-size-text);
+	font-weight: var(--font-weight-black);
+	color: var(--color-infos-200);
 }
 
 input {
+	width: 100%;
+	margin-bottom: var(--margin-input);
+	padding: var(--padding-input);
+	font-family: var(--font-titles);
+	font-size: var(--font-size-input);
+	font-weight: var(--font-weight-bold);
+	text-shadow: 0px 0px 4px var(--color-infos-low-opa-100);
 	color: var(--color-infos-100);
-	text-shadow: color-mix(in oklab, var(--color-amber-600) /* oklch(66.6% 0.179 58.318) */ var(--tw-text-shadow-alpha), transparent);;
-	font-size: 20px;
-	background-color: var(--color-hologram-600);
+	background: var(--color-hologram-low-opa-600);
+	box-shadow: 0px 0px 16px var(--color-hologram-low-opa-400);
 	border: solid 4px var(--color-hologram-400);
+}
+
+input:focus {
+    outline: none;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus {
+    outline: none;
+}
+
+span {
+	font-size: var(--font-size-span);
+	font-weight: var(--font-weight-black);
+	color: var(--color-infos-200);
 }
