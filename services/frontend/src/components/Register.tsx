@@ -21,9 +21,11 @@ export default function Register() {
 	// }
 
 	return (
-		<form className='.auth-form'>
-			<label htmlFor="username">
-				NOM UTILISATEUR
+		<form className='auth-form'>
+			<div className='usrname-input'>
+				<label htmlFor="username">
+					NOM UTILISATEUR
+				</label>
 				<input
 					type="text"
 					id="username"
@@ -32,9 +34,11 @@ export default function Register() {
 					value={data.username}
 					required
 				/>
-			</label>
-			<label htmlFor='email'>
-				ADRESSE MAIL
+			</div>
+			<div className='email-input'>
+				<label htmlFor='email'>
+					ADRESSE MAIL
+				</label>
 				<input
 					type='email'
 					id='email'
@@ -43,20 +47,24 @@ export default function Register() {
 					value={data.email}
 					required
 				/>
-			</label>
-			<label htmlFor="password">
-				MOT DE PASSE
+			</div>
+			<div className='pwd-input'>
+				<label htmlFor="password">
+					MOT DE PASSE
+				</label>
 				<input
-				type="password"
-				id="password"
-				name="password"
-				onChange={handleInputChange}
-				value={data.password}
-				required
+					type="password"
+					id="password"
+					name="password"
+					onChange={handleInputChange}
+					value={data.password}
+					required
 				/>
-			</label>
-			<button type='submit'>S'INSCRIRE</button>
-			<p>Déjà un compte? <Link to='/login'>Connectez-vous</Link></p>
+			</div>
+			<button type='submit' id='sunmit' className='submit'>S'INSCRIRE</button>
+			<span>Déjà un compte? 
+				<Link to='/login' id='link' className='link'>Connectez-vous</Link>
+			</span>
 		</form>
 	)
 }
