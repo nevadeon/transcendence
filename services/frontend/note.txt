@@ -1,3 +1,9 @@
+TODO:
+1. sound click events
+2. pistol states(blast(:active), target(:hover))
+3. screen visual effect(css anim or video background)
+
+
 MANDATORY:
 1. Overview
 	* Take care to subject versions(updates)
