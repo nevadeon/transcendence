@@ -14,6 +14,20 @@ export default function Login() {
 		setData((prev: FormData) => ({ ...prev, [name]: value}));
 	}
 
+	const playSound = () => {
+		const audio = new Audio('../assets/start.mp3')
+		audio.play()
+	}
+
+	async function handleNoises() {
+		try {
+			const audio = new Audio('/assets/start.mp3');
+			await audio.play();
+		} catch (err) {
+			console.log(err);
+		}
+	}
+
 	// function handleSubmit(e: FormEvent<HTMLFormElement>): void {
 	// 	e.preventDefault()
 	// 	// Handle form submission logic here
@@ -21,9 +35,12 @@ export default function Login() {
 	// }
 
 	return (
-		<form className='.auth-form'>
-			<label htmlFor="username">
-				NOM UTILISATEUR
+		<>
+		<form className='auth-form'>
+			<div className='usrname-input'>
+				<label htmlFor="username">
+					NOM UTILISATEUR
+				</label>
 				<input
 					type="text"
 					id="username"
@@ -31,10 +48,13 @@ export default function Login() {
 					onChange={handleInputChange}
 					value={data.username}
 					required
+					autoComplete='off'
 				/>
-			</label>
-			<label htmlFor="password">
-				MOT DE PASSE
+			</div>
+			<div className='pwd-input'>
+				<label htmlFor="password">
+					MOT DE PASSE
+				</label>
 				<input
 					type="password"
 					id="password"
@@ -43,9 +63,15 @@ export default function Login() {
 					value={data.password}
 					required
 				/>
-			</label>
-			<button type='submit'>SE CONNECTER</button>
-			<p>Pas encore de compte? <Link to="/register">Enregistrez-vous</Link></p>
+			</div>
+			<button type='submit' id='submit' className='submit' onClick={handleNoises}>
+				SE CONNECTER
+			</button>
+			<span>Pas encore de compte? 
+				<Link to="/register" id='link' className='link'>Enregistrez-vous</Link>
+			</span>
 		</form>
+			<button onClick={playSound}>qwerqwerqe</button>
+		</>
 	)
 }
