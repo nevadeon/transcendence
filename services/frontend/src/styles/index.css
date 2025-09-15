@@ -1,0 +1,65 @@
+@import "tailwindcss";
+
+/* replace :root */
+@theme {
+	/* ----- COLORS ----- */
+	/* GREEN - HOLOGRAM */
+	--color-hologram-400: #80FF00;
+	--color-hologram-600: #2A631C;
+	/* RED - WARNING */
+	--color-warning-200: #B23521;
+	--color-warning-600: #590001;
+	/* YELLOW - INFOS */
+	--color-infos-100: #F2FEDA;
+	--color-infos-200: #F3F58F;
+
+	/* ----- FONTS ----- */
+	--font-family-inter: "Inter", sans-serif;
+	--font-family-orbitron: "Orbitron", sans-serif;
+}
+
+/* @layer utilities {
+	.glass-effect {
+		backdrop-filter: blur(10px);
+		background: rgba(255, 255, 255, 0.1);
+	}
+} */
+
+/* body */
+
+/* input {
+	@apply font-family-orbitron text-xl text-green-500 bg-green-800 border-4 border-green-500;
+} */
+
+
+
+/* PREVIOUS CSS */
+:root {
+	font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+	line-height: 1.5;
+	font-weight: 400;
+
+	/* COLORS */
+	/* GREEN - HOLOGRAM */
+	--color-hologram-400: #80FF00;
+	--color-hologram-600: #2A631C;
+	/* RED - WARNING */
+	--color-warning-200: #B23521;
+	--color-warning-600: #590001;
+	/* YELLOW - INFOS */
+	--color-infos-100: #F2FEDA;
+	--color-infos-200: #F3F58F;
+
+	font-synthesis: none;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+input {
+	color: var(--color-infos-100);
+	text-shadow: color-mix(in oklab, var(--color-amber-600) /* oklch(66.6% 0.179 58.318) */ var(--tw-text-shadow-alpha), transparent);;
+	font-size: 20px;
+	background-color: var(--color-hologram-600);
+	border: solid 4px var(--color-hologram-400);
+}
