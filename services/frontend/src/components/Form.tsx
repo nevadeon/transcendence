@@ -1,11 +1,11 @@
-import { useState, type ChangeEvent } from 'react'
-import { Link } from 'react-router'
-import type { FormData } from "../interfaces/Form"
-import '../styles/index.css'
+import { useState, type ChangeEvent } from "react";
+import { Link } from "react-router";
+import type { FormData } from "../interfaces/Form";
 
-export default function Login() {
+export default function Form({ register }: {register: boolean}) {
 	const [data, setData] = useState<FormData>({
 		username: '',
+		email: '',
 		password: ''
 	});
 
@@ -14,12 +14,7 @@ export default function Login() {
 		setData((prev: FormData) => ({ ...prev, [name]: value}));
 	}
 
-	const playSound = () => {
-		const audio = new Audio('../assets/start.mp3')
-		audio.play()
-	}
-
-	async function handleNoises() {
+	async function handleAudio() {
 		try {
 			const audio = new Audio('/assets/start.mp3');
 			await audio.play();
@@ -35,7 +30,6 @@ export default function Login() {
 	// }
 
 	return (
-		<>
 		<form className='auth-form'>
 			<div className='usrname-input'>
 				<label htmlFor="username">
@@ -51,6 +45,22 @@ export default function Login() {
 					autoComplete='off'
 				/>
 			</div>
+			{
+				register &&
+				<div className='email-input'>
+					<label htmlFor='email'>
+						ADRESSE MAIL
+					</label>
+					<input
+						type='email'
+						id='email'
+						name='email'
+						onChange={handleInputChange}
+						value={data.email}
+						required
+					/>
+				</div>
+			}
 			<div className='pwd-input'>
 				<label htmlFor="password">
 					MOT DE PASSE
@@ -64,14 +74,21 @@ export default function Login() {
 					required
 				/>
 			</div>
-			<button type='submit' id='submit' className='submit' onClick={handleNoises}>
-				SE CONNECTER
+			<button type='submit' id='submit' className='submit' onClick={handleAudio}>
+				{register ? "S'INSCRIRE" : "SE CONNECTER"}
 			</button>
-			<span>Pas encore de compte? 
-				<Link to="/register" id='link' className='link'>Enregistrez-vous</Link>
+			<span>
+				{register ?
+					<>
+						Déjà un compte? 
+						<Link to='/login' id='link' className='link'>Connectez-vous</Link>
+					</> :
+					<>
+						Pas encore de compte? 
+						<Link to="/register" id='link' className='link'>Enregistrez-vous</Link>
+					</>
+				}
 			</span>
 		</form>
-			<button onClick={playSound}>qwerqwerqe</button>
-		</>
 	)
 }
