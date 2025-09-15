@@ -10,7 +10,7 @@ services:
       - "8443:443"
     depends_on:
       - frontend
-      # - user-profile
+      - user-profile
       # - game
     networks:
       - web
@@ -22,25 +22,25 @@ services:
     container_name: frontend
     networks:
       - web
-    # depends_on:
-      # - user-profile
+    depends_on:
+      - user-profile
       # - game
 
-  # user-profile:
-  #   build:
-  #     context: ../services/user-profile
-  #     dockerfile: Dockerfile
-  #   container_name: user-profile
-  #   environment:
-  #     - DB_PATH=/data/user-profile.sqlite
-  #     - PORT=3001
-  #   ports:
-  #     - "3001:3001"
-  #   networks:
-  #     - web
-  #     - backend
-  #   volumes:
-  #     - user-profile-data:/data
+  user-profile:
+    build:
+      context: ../services/user-profile
+      dockerfile: Dockerfile
+    container_name: user-profile
+    environment:
+      - DB_PATH=/data/user-profile.sqlite
+      - PORT=3001
+    ports:
+      - "3001:3001"
+    networks:
+      - web
+      - backend
+    volumes:
+      - user-profile-data:/data
 
   # game:
     # build:
