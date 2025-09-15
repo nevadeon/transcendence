@@ -24,60 +24,60 @@ app.use(express.json());
 
 // Create
 app.post("/users", async (req, res) => {
-  const { name, email } = req.body;
-  try {
-    const result = await db.run("INSERT INTO users(name, email) VALUES(?, ?)", [name, email]);
-    res.status(201).json({ id: result.lastID, name, email });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+	const { name, email } = req.body;
+	try {
+		const result = await db.run("INSERT INTO users(name, email) VALUES(?, ?)", [name, email]);
+		res.status(201).json({ id: result.lastID, name, email });
+	} catch (err) {
+		res.status(500).json({ error: err.message });
+	}
 });
 
 // Read all
 app.get("/users", async (req, res) => {
-  try {
-    const users = await db.all("SELECT * FROM users");
-    res.json(users);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+	try {
+		const users = await db.all("SELECT * FROM users");
+		res.json(users);
+	} catch (err) {
+		res.status(500).json({ error: err.message });
+	}
 });
 
 // Read by ID
 app.get("/users/:id", async (req, res) => {
-  const { id } = req.params;
-  try {
-    const user = await db.get("SELECT * FROM users WHERE id = ?", [id]);
-    if (!user) return res.status(404).json({ error: "User not found" });
-    res.json(user);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+	const { id } = req.params;
+	try {
+		const user = await db.get("SELECT * FROM users WHERE id = ?", [id]);
+		if (!user) return res.status(404).json({ error: "User not found" });
+		res.json(user);
+	} catch (err) {
+		res.status(500).json({ error: err.message });
+	}
 });
 
 // Update
 app.put("/users/:id", async (req, res) => {
-  const { id } = req.params;
-  const { name, email } = req.body;
-  try {
-    const result = await db.run("UPDATE users SET name=?, email=? WHERE id=?", [name, email, id]);
-    if (result.changes === 0) return res.status(404).json({ error: "User not found" });
-    res.json({ id, name, email });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+	const { id } = req.params;
+	const { name, email } = req.body;
+	try {
+		const result = await db.run("UPDATE users SET name=?, email=? WHERE id=?", [name, email, id]);
+		if (result.changes === 0) return res.status(404).json({ error: "User not found" });
+		res.json({ id, name, email });
+	} catch (err) {
+		res.status(500).json({ error: err.message });
+	}
 });
 
 // Delete
 app.delete("/users/:id", async (req, res) => {
-  const { id } = req.params;
-  try {
-    const result = await db.run("DELETE FROM users WHERE id=?", [id]);
-    if (result.changes === 0) return res.status(404).json({ error: "User not found" });
-    res.json({ message: "Deleted successfully" });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+	const { id } = req.params;
+	try {
+		const result = await db.run("DELETE FROM users WHERE id=?", [id]);
+		if (result.changes === 0) return res.status(404).json({ error: "User not found" });
+		res.json({ message: "Deleted successfully" });
+	} catch (err) {
+		res.status(500).json({ error: err.message });
+	}
 });
 
 // Start server
