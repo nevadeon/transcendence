@@ -1,5 +1,5 @@
 import { createBrowserRouter } from "react-router";
-import PrivateRoute from "../components/PrivateRoute";
+import PrivateRoute from "./PrivateRoute";
 import Register from "../pages/Register";
 import Login from "../pages/Login";
 import Home from "../pages/Home";

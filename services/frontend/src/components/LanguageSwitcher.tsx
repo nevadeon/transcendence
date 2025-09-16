@@ -1,5 +1,5 @@
 import type { MouseEventHandler } from "react";
-import { useLanguage } from "./LanguageContext";
+import useLanguage from "../contexts/language/useLanguage";
 
 const languageData = {
 	en: { label: 'English', flagPath: '../assets/locales/en.svg' },
