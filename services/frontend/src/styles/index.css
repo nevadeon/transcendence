@@ -3,8 +3,8 @@
 
 :root {
 	/* CURSOR */
-	--cursor-pistol: url('../assets/rick-pistol.png');
-	/* --cursor-pistol-hover: url('assets/rick-pistol.png'); */
+	--cursor-pistol-hover: url('../assets/cursor/rick-pistol-target.png');
+	--cursor-pistol-active: url('../assets/cursor/rick-pistol-blast.png');
 
 	/* SIZES */
 	--width-desk-screen: 98vw;
@@ -12,6 +12,8 @@
 	--width-mobile-screen: 100dvw;
 	--height-mobile-screen: 100dvh;
 	--width-input: 440px;
+	--width-button: 48px;
+	--height-button: 48px;
 
 	/* SPACES */
 	--margin-label: .75em;
@@ -46,8 +48,11 @@
 	/* YELLOW - INFOS */
 	--color-infos-100: rgb(242, 254, 218);
 	--color-infos-200: rgb(243, 245, 143);
+	--color-infos-600: rgb(162, 163, 49);
 	--color-infos-low-opa-100: rgba(242, 254, 218, 0.5);
+	--color-infos-low-opa-600: rgba(162, 163, 49, 0.5);
 	/* GREY - NEUTRAL */
+	--color-neutral-200: rgb(228, 228, 228);
 	--color-neutral-900: rgb(20, 20, 20);
 	/* BLUE - COMPUTER */
 	--color-computer-600: rgb(33, 66, 65);
@@ -57,11 +62,15 @@
 	-moz-osx-font-smoothing: grayscale; */
 }
 
-*, ::after, ::before {
+*, *::after, *::before {
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
-	cursor: var(--cursor-pistol) 8 8, var(--cursor-pistol) 16 16, var(--cursor-pistol) 32 32, auto !important;
+	cursor: var(--cursor-pistol-hover) 8 8, auto;
+}
+
+*:active {
+	cursor: var(--cursor-pistol-active), pointer;
 }
 
 body {

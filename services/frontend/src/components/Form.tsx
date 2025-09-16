@@ -1,5 +1,6 @@
 import { useState, type ChangeEvent } from "react";
 import { Link } from "react-router";
+import { useLanguage } from "./LanguageContext";
 import type { FormData } from "../interfaces/Form";
 
 export default function Form({ register }: {register: boolean}) {
@@ -8,6 +9,7 @@ export default function Form({ register }: {register: boolean}) {
 		email: '',
 		password: ''
 	});
+	const { messages } = useLanguage();
 
 	function handleInputChange(e: ChangeEvent<HTMLInputElement>): void {
 		const { name, value } = e.target;
@@ -33,7 +35,7 @@ export default function Form({ register }: {register: boolean}) {
 		<form className='auth-form'>
 			<div className='usrname-input'>
 				<label htmlFor="username">
-					NOM UTILISATEUR
+					{messages.register.usrname}
 				</label>
 				<input
 					type="text"
@@ -49,7 +51,7 @@ export default function Form({ register }: {register: boolean}) {
 				register &&
 				<div className='email-input'>
 					<label htmlFor='email'>
-						ADRESSE MAIL
+						{messages.register.email}
 					</label>
 					<input
 						type='email'
@@ -63,7 +65,7 @@ export default function Form({ register }: {register: boolean}) {
 			}
 			<div className='pwd-input'>
 				<label htmlFor="password">
-					MOT DE PASSE
+					{messages.register.pwd}
 				</label>
 				<input
 					type="password"
@@ -75,17 +77,17 @@ export default function Form({ register }: {register: boolean}) {
 				/>
 			</div>
 			<button type='submit' id='submit' className='submit' onClick={handleAudio}>
-				{register ? "S'INSCRIRE" : "SE CONNECTER"}
+				{register ? messages.register.cta : messages.login.cta}
 			</button>
 			<span>
 				{register ?
 					<>
-						Déjà un compte? 
-						<Link to='/login' id='link' className='link'>Connectez-vous</Link>
+						{messages.register.extra}
+						<Link to='/login' id='link' className='link'> {messages.register.link}</Link>
 					</> :
 					<>
-						Pas encore de compte? 
-						<Link to="/register" id='link' className='link'>Enregistrez-vous</Link>
+						{messages.login.extra}
+						<Link to="/register" id='link' className='link'> {messages.login.link}</Link>
 					</>
 				}
 			</span>

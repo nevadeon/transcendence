@@ -1,5 +1,11 @@
+.auth-languages {
+	width: var(--width-button);
+	height: var(--height-button);
+	border: solid 4px var(--color-infos-200);
+	background: var(--color-infos-low-opa-600);
+}
+
 .auth-form {
-	/* width: var(--width-desk-screen); */
 	height: var(--height-desk-screen);
 	background: var(--color-warning-600);
 	background-image: 
@@ -29,4 +35,5 @@
 
 .link {
 	font-family: var(--font-titles);
+	color: var(--color-hologram-400);
 }

@@ -1,7 +1,11 @@
+import Settings from '../components/Settings'
 import Form from '../components/Form'
 
 export default function Register() {
 	return (
-		<Form register={true} />
+		<>
+			<Settings />
+			<Form register={true} />
+		</>
 	)
 }
