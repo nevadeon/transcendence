@@ -1,6 +1,6 @@
 import { useState, type ChangeEvent } from "react";
 import { Link } from "react-router";
-import { useLanguage } from "./LanguageContext";
+import useLanguage from "../contexts/language/useLanguage";
 import type { FormData } from "../interfaces/Form";
 
 export default function Form({ register }: {register: boolean}) {
