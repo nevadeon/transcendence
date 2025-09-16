@@ -1,7 +1,19 @@
 TODO:
 1. sound click events
-2. pistol states(blast(:active), target(:hover))
+2. down docker before modif dockerfiles
 3. screen visual effect(css anim or video background)
+4. authentication forms
+
+separate context.ts, then provider
+context isLoggedIn(boolean) status
+after logged in, sends Token(JWT) -> stores it in local storage
+private routes, check valid tokens, naviguate to /login if not
+nested provider wrapper: AuthProvider > LanguageProvider > SoundProvider > App
+custom hooks call in components
+
+auth logic
+onSubmit, try fetch method: post, headers: app/json, body: JSON.string({usrname, email, pwd...})
+JWT generate from the back
 
 
 MANDATORY:
