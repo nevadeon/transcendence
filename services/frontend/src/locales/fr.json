@@ -1,0 +1,17 @@
+{
+	"register": {
+		"usrname": "NOM UTILISATEUR",
+		"email": "EMAIL",
+		"pwd": "MOT DE PASSE",
+		"cta": "S'INSCRIRE",
+		"extra": "Déjà un compte?",
+		"link": "Connectez-vous"
+	},
+	"login": {
+		"usrname": "NOM UTILISATEUR",
+		"pwd": "MOT DE PASSE",
+		"cta": "SE CONNECTER",
+		"extra": "Pas encore de compte?",
+		"link": "Enregistrez-vous"
+	}
+}

@@ -1,0 +1,17 @@
+{
+	"register": {
+		"usrname": "USERNAME",
+		"email": "EMAIL",
+		"pwd": "PASSWORD",
+		"cta": "SIGN UP",
+		"extra": "Already have an account?",
+		"link": "Log in"
+	},
+	"login": {
+		"usrname": "USERNAME",
+		"pwd": "PASSWORD",
+		"cta": "LOG IN",
+		"extra": "Don't have an account yet?",
+		"link": "Sign up"
+	}
+}
