@@ -22,16 +22,6 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./nginx/ssl:/etc/nginx/ssl
-    command: >
-      sh -c "
-        if [ ! -f /ssl/fullchain.pem ] || [ ! -f /ssl/privkey.pem ]; then
-          openssl req -x509 -nodes -days 365 \
-            -subj '/CN=localhost' \
-            -newkey rsa:2048 \
-            -keyout /ssl/privkey.pem \
-            -out /ssl/fullchain.pem;
-        fi
-      "
     restart: "no"
 
   frontend:
