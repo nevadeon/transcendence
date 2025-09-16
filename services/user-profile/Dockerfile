@@ -1,16 +1,23 @@
 FROM node:20-alpine
+
 WORKDIR /usr/src/app
 
-# Installer outils nécessaires à la compilation de dépendances natives
-RUN apk add --no-cache python3 make g++
-
+# Copier package.json et package-lock.json
 COPY package*.json ./
+
+# Installer dépendances
+RUN npm install fastify@^5.6.0
+RUN npm install @fastify/swagger@^9.5.1
+RUN npm install @fastify/swagger-ui@^5.0.0
+RUN npm install sqlite
+RUN npm install argon2
 RUN npm install
+
+# Copier le reste du code
 COPY . .
 
-# Crée un dossier pour le fichier SQLite
-RUN mkdir -p /data
-ENV DB_PATH=/data/users.sqlite
-
+# Exposer le port
 EXPOSE 3001
-CMD ["node", "src/index.js"]
+
+# Lancer l’app
+CMD ["npm", "start"]
