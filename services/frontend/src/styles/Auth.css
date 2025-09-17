@@ -1,4 +1,7 @@
 .auth-languages {
+	position: absolute;
+	top: 5%;
+	right: 5%;
 	width: var(--width-button);
 	height: var(--height-button);
 	border: solid 4px var(--color-infos-200);
@@ -6,6 +9,11 @@
 }
 
 .auth-form {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
 	height: var(--height-desk-screen);
 	background: var(--color-warning-600);
 	background-image: 

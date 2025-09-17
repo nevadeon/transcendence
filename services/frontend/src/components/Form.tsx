@@ -1,20 +1,14 @@
 import { useState, type ChangeEvent } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import useLanguage from "../contexts/language/useLanguage";
 import type { FormData } from "../interfaces/Form";
+import { useAuth } from "../contexts/auth/useAuth";
 
 export default function Form({ register }: {register: boolean}) {
-	const [data, setData] = useState<FormData>({
-		username: '',
-		email: '',
-		password: ''
-	});
+	const [userData, setUserData] = useState<FormData>({ username: '', email: undefined, password: '' });
+	const naviguate = useNavigate();
+	const { login } = useAuth();
 	const { messages } = useLanguage();
-
-	function handleInputChange(e: ChangeEvent<HTMLInputElement>): void {
-		const { name, value } = e.target;
-		setData((prev: FormData) => ({ ...prev, [name]: value}));
-	}
 
 	async function handleAudio() {
 		try {
@@ -25,60 +19,109 @@ export default function Form({ register }: {register: boolean}) {
 		}
 	}
 
-	// function handleSubmit(e: FormEvent<HTMLFormElement>): void {
-	// 	e.preventDefault()
-	// 	// Handle form submission logic here
-	// 	console.log('Form submitted:', data)
-	// }
+	function handleInputChange(e: ChangeEvent<HTMLInputElement>): void {
+		const { name, value } = e.target;
+		setUserData(( prev: FormData ) => ( { ...prev, [name]: value } ));
+	}
+
+	async function handleSubmit(e: any) {
+		e.preventDefault();
+		if (register) {
+			try {
+				const res = await fetch("https://backendpoint/register", {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify( userData )
+				});
+				const data = await res.json();
+				if (res.ok && data.token) {
+					console.log('Registration successful');
+					login(data.token);
+					naviguate('/board');
+				} else {
+					console.error('Registration failed');
+				}
+			} catch(err) {
+				console.error('Registration error: ', err)
+			}
+		} else {
+			try {
+				const res = await fetch("https://backendpoint/login", {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify( userData )
+				});
+				const data = await res.json();
+				if (res.ok && data.token) {
+					console.log('Login successful');
+					login(data.token);
+					naviguate('/board');
+				} else {
+					console.error('Login failed');
+				}
+			} catch(err) {
+				console.error('Login error: ', err)
+			}
+		}
+	}
 
 	return (
-		<form className='auth-form'>
-			<div className='usrname-input'>
-				<label htmlFor="username">
-					{messages.register.usrname}
-				</label>
-				<input
-					type="text"
-					id="username"
-					name="username"
-					onChange={handleInputChange}
-					value={data.username}
-					required
-					autoComplete='off'
-				/>
-			</div>
-			{
-				register &&
-				<div className='email-input'>
-					<label htmlFor='email'>
-						{messages.register.email}
+		<>
+			<form onSubmit={handleSubmit}>
+				<div className='usrname-input'>
+					<label htmlFor="username">
+						{messages.register.usrname}
 					</label>
 					<input
-						type='email'
-						id='email'
-						name='email'
+						type="text"
+						id="username"
+						name="username"
 						onChange={handleInputChange}
-						value={data.email}
+						value={userData.username}
 						required
+						autoComplete='off'
+						pattern="^[a-zA-Z0-9]{3,24}$"
+            			title="Username must be 3-24 characters long and contain only letters and numbers."
 					/>
 				</div>
-			}
-			<div className='pwd-input'>
-				<label htmlFor="password">
-					{messages.register.pwd}
-				</label>
-				<input
-					type="password"
-					id="password"
-					name="password"
-					onChange={handleInputChange}
-					value={data.password}
-					required
-				/>
-			</div>
-			<button type='submit' id='submit' className='submit' onClick={handleAudio}>
-				{register ? messages.register.cta : messages.login.cta}
-			</button>
+				{
+					register &&
+					<div className='email-input'>
+						<label htmlFor='email'>
+							{messages.register.email}
+						</label>
+						<input
+							type='email'
+							id='email'
+							name='email'
+							onChange={handleInputChange}
+							value={userData.email}
+							required
+							autoComplete='off'
+						/>
+					</div>
+				}
+				<div className='pwd-input'>
+					<label htmlFor="password">
+						{messages.register.pwd}
+					</label>
+					<input
+						type="password"
+						id="password"
+						name="password"
+						onChange={handleInputChange}
+						value={userData.password}
+						required
+						autoComplete='off'
+						minLength={8}
+            			pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
+    					title="Password must contain at least 1 uppercase letter, 1 lowercase letter, 1 number, 1 special character, and be at least 8 characters long."
+					/>
+				</div>
+				<button type='submit' id='submit' className='submit' onClick={handleAudio}>
+					{register ? messages.register.cta : messages.login.cta}
+				</button>
+			</form>
 			<span>
 				{register ?
 					<>
@@ -91,6 +134,6 @@ export default function Form({ register }: {register: boolean}) {
 					</>
 				}
 			</span>
-		</form>
+		</>
 	)
 }
