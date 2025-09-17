@@ -1,12 +1,10 @@
 import { createContext, useState, useEffect } from "react";
-import { useNavigate } from "react-router";
 import type { AuthContextType, AuthProviderProps } from "../../interfaces/Auth";
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: AuthProviderProps) {
 	const [token, setToken] = useState<string | null>(null);
-	// const navigate = useNavigate();
 
 	useEffect(() => {
 		const storedToken = localStorage.getItem('token');
@@ -22,7 +20,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
 	function logout() {
 		localStorage.removeItem('token');
 		setToken(null);
-		// navigate('/login');
 	}
 
 	const isAuth = !!token;
