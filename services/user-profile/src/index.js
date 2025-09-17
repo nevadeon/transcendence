@@ -4,6 +4,7 @@ import fastifySwaggerUi from "@fastify/swagger-ui";
 import sqlite3 from "sqlite3";
 import { open } from "sqlite";
 import argon2 from "argon2";
+import cors from "@fastify/cors";
 
 const fastify = Fastify({logger: true});
 
@@ -30,6 +31,12 @@ await fastify.register(fastifySwaggerUi, {
 	}
 });
 
+await fastify.register(cors, {
+    origin: 'http://localhost:5173', // frontend's URL
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], // all methods allowed
+    allowedHeaders: ['Content-Type', 'Authorization'],
+});
+
 const dbPath = process.env.DB_PATH || "./user-profile.sqlite";
 
 // open the db 
@@ -39,19 +46,23 @@ const db = await open({
 });
 
 // Create users table
+// status need websocket !!!
 await db.exec(`
 	CREATE TABLE IF NOT EXISTS users (
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
-		username TEXT NOT NULL,
-		email TEXT UNIQUE
+		name TEXT NOT NULL,
+		email TEXT UNIQUE,
+		password TEXT NOT NULL,
+		species TEXT DEFAULT 'Human',
+		planet TEXT DEFAULT 'Earth',
+		dimension TEXT DEFAULT 'C-137'
 	)
 `);
 
-
 // Parse JSON
 
-//New user
-fastify.post("/users", {
+//New user from /register
+fastify.post("/register", {
 	schema: {
 		body: {
 			type: "object",
@@ -78,7 +89,7 @@ fastify.post("/users", {
 		"INSERT INTO users(name, email) VALUES(?, ?)",
 		[name, email]
 	);
-	return reply.code(201).send({ id: result.lastID, name, email });
+	return reply.code(201).send({ id: result.lastID, name, email }); //response 201
 });
 
 // Read all
@@ -88,7 +99,7 @@ fastify.get("/users", {
 		tags: ["Users"],
 		response: {
 			200: {
-				description: "Users' list",
+				description: "User's list",
 				type: "array",
 				items: {
 					type: "object",
@@ -255,8 +266,9 @@ fastify.delete("/users/:id",{
 
 // Start server
 const PORT = process.env.PORT || 3001;
+
 try {
-	await fastify.listen({ port: PORT, host: "0.0.0.0" });
+	fastify.listen({ port: PORT, host: "0.0.0.0" });
 	console.log(`Users service running on port ${PORT}`);
 } catch (err) {
 	fastify.log.error(err);

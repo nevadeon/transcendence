@@ -46,7 +46,7 @@
 	border: 8px solid var(--color-neutral-900);
 }
 
-.auth-form form {
+.auth-form form, .auth-form span {
 	z-index: 1;
 }
 
