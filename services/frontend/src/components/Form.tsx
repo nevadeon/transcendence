@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router";
 import useLanguage from "../contexts/language/useLanguage";
 import type { FormData } from "../interfaces/Form";
 import { useAuth } from "../contexts/auth/useAuth";
+import videoSource from "../assets/scanline.mp4";
 
 export default function Form({ register }: {register: boolean}) {
 	const [userData, setUserData] = useState<FormData>({ username: '', email: undefined, password: '' });
@@ -67,6 +68,10 @@ export default function Form({ register }: {register: boolean}) {
 
 	return (
 		<>
+			<video className="video-background" autoPlay loop muted>
+				<source src={videoSource} type="video/mp4" />
+				Your browser does not support the video tag.
+			</video>
 			<form onSubmit={handleSubmit}>
 				<div className='usrname-input'>
 					<label htmlFor="username">
