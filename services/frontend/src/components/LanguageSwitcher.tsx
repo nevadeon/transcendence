@@ -1,10 +1,13 @@
 import type { MouseEventHandler } from "react";
 import useLanguage from "../contexts/language/useLanguage";
+import audioEnSource from "../assets/locales/en.svg";
+import audioFrSource from "../assets/locales/fr.svg";
+import audioEsSource from "../assets/locales/es.svg";
 
 const languageData = {
-	en: { label: 'English', flagPath: '../assets/locales/en.svg' },
-	fr: { label: 'Français', flagPath: '../assets/locales/fr.svg' },
-	es: { label: 'Español', flagPath: '../assets/locales/es.svg' },
+	en: { label: 'English', flagPath: audioEnSource },
+	fr: { label: 'Français', flagPath: audioFrSource },
+	es: { label: 'Español', flagPath: audioEsSource },
 };
 
 export default function LanguageSwitcher() {
