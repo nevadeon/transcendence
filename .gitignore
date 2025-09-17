@@ -1,3 +1,7 @@
 # front dependencies
 /services/frontend/node_modules
+
+# back dependencies
+/services/user-profile/node_modules
+
 /infra/nginx/ssl/*.pem
