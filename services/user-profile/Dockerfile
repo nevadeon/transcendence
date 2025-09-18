@@ -1,23 +1,23 @@
-FROM node:20-alpine
+# Dockerfile
+
+FROM node:20
+
+# Installez les outils de construction nécessaires
+# RUN apk add --no-cache python3 g++ make
 
 WORKDIR /usr/src/app
 
-# Copier package.json et package-lock.json
+# Copiez package.json et package-lock.json pour tirer parti du cache
 COPY package*.json ./
 
-# Installer dépendances
-RUN npm install fastify@^5.6.0
-RUN npm install @fastify/swagger@^9.5.1
-RUN npm install @fastify/swagger-ui@^5.0.0
-RUN npm install sqlite
-RUN npm install argon2
+# Installez toutes les dépendances
 RUN npm install
 
-# Copier le reste du code
+# Copiez le reste du code de l'application
 COPY . .
 
-# Exposer le port
+# Exposer le port de l'application
 EXPOSE 3001
 
-# Lancer l’app
+# Lancer l'application
 CMD ["npm", "start"]

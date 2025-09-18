@@ -1,6 +1,6 @@
 {
 	"register": {
-		"usrname": "NOMBRE DE USUARIO",
+		"name": "NOMBRE DE USUARIO",
 		"email": "CORREO ELECTRÓNICO",
 		"pwd": "CONTRASEÑA",
 		"cta": "REGISTRARSE",
@@ -8,7 +8,7 @@
 		"link": "Inicia sesión"
 	},
 	"login": {
-		"usrname": "NOMBRE DE USUARIO",
+		"name": "NOMBRE DE USUARIO",
 		"pwd": "CONTRASEÑA",
 		"cta": "INICIAR SESIÓN",
 		"extra": "¿Aún no tienes cuenta?",
