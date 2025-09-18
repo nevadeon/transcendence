@@ -1,9 +1,11 @@
 import Fastify from "fastify";
 import fastifySwagger from "@fastify/swagger";
 import fastifySwaggerUi from "@fastify/swagger-ui";
+import cors from "@fastify/cors";
+import jwt from "@fastify/jwt";
 import sqlite3 from "sqlite3";
 import { open } from "sqlite";
-// import argon2 from "argon2";
+import argon2 from "argon2";
 
 const fastify = Fastify({logger: true});
 
@@ -30,6 +32,11 @@ await fastify.register(fastifySwaggerUi, {
 	}
 });
 
+// JWT
+await fastify.register(jwt, {
+	secret: process.env.JWT_SECRET || "super-secret-key" // clé pour signer les tokens
+});
+
 const dbPath = process.env.DB_PATH || "./user-profile.sqlite";
 
 // open the db 
@@ -42,7 +49,7 @@ const db = await open({
 await db.exec(`
 	CREATE TABLE IF NOT EXISTS users (
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
-		name TEXT NOT NULL UNIQUE,
+		nickname TEXT NOT NULL UNIQUE,
 		email TEXT NOT NULL UNIQUE,
 		password TEXT NOT NULL,
 		species TEXT DEFAULT 'Human',
@@ -51,34 +58,18 @@ await db.exec(`
 	)
 `);
 
-fastify.addHook('onRequest', (request, reply, done) => {
-	// Set the Access-Control-Allow-Origin header
-	const allowedOrigins = ['http://127.0.0.1:5173', 'http://localhost:5173'];
-    const origin = request.headers.origin;
-
-    if (allowedOrigins.includes(origin)) {
-        reply.header('Access-Control-Allow-Origin', origin);
-    }
-
-	// Set other common CORS headers
-	reply.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-	reply.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-
-	// Handle preflight requests (OPTIONS method)
-	if (request.method === 'OPTIONS') {
-		reply.status(204).send(); // Respond with 204 No Content for preflight
-		return;
-	}
-	done();
+await fastify.register(cors, {
+	origin: ["https://localhost:8443", "http://localhost:5173"], // autorise toutes les origines
 });
+
 // Parse JSON
 
-//New user
-fastify.post("/users", {
+// Register
+fastify.post("/register", {
 	schema: {
 		body: {
 			type: "object",
-			required: ["name", "email", "password"],
+			required: ["nickname", "email", "password"],
 			properties: {
 				name: { type: "string" },
 				email: { type: "string", format: "email" },
@@ -97,12 +88,31 @@ fastify.post("/users", {
 		}
 	}
 }, async (request, reply) => {
-	const { name, email, password } = request.body;
-	const result = await db.run(
-		"INSERT INTO users(name, email, password) VALUES(?, ?, ?)",
-		[name, email, password]
-	);
-	return reply.code(201).send({ id: result.lastID, name, email });
+	const { nickname, email, password } = request.body;
+	try {
+		const result = await db.run(
+			"INSERT INTO users(nickname, email, password) VALUES(?, ?, ?)",
+			[nickname, email, argon2.hash(password)]
+		);
+		return reply.code(201).send({ id: result.lastID, nickname, email });
+	} catch {
+		return reply.code(500).send({error: err.message});
+	}
+});
+
+// Login
+fastify.post("/login", async (request, reply) => {
+	const { email, password } = request.body;
+
+	const user = await db.get("SELECT * FROM users WHERE nickname = ?", [nickname]);
+	if (!user) return reply.code(401).send({ error: "Invalid nickname or password" });
+
+	const isValid = await argon2.verify(password, user.password);
+	if (!isValid) return reply.code(401).send({ error: "Invalid nickname or password" });
+
+	const token = fastify.jwt.sign({ id: user.id, nickname: user.nickname });
+
+	return { token };
 });
 
 // Read all
@@ -222,15 +232,15 @@ fastify.put("/users/:id",{
 	}
 }, async (request, reply) => {
 	const { id } = request.params;
-	const { name, email } = request.body;
+	const { nickname, email } = request.body;
 	try {
 		const result = await db.run(
-			"UPDATE users SET name=?, email=? WHERE id=?",
-			[name, email, id]
+			"UPDATE users SET nickname=?, email=? WHERE id=?",
+			[nickname, email, id]
 		);
 		if (result.changes === 0)
 			return reply.code(404).send({ error: "User not found" });
-		return { id, name, email };
+		return { id, nickname, email };
 	} catch (err) {
 		return reply.code(500).send({ error: err.message });
 	}
