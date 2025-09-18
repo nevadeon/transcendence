@@ -55,7 +55,11 @@
 	--color-neutral-200: rgb(228, 228, 228);
 	--color-neutral-900: rgb(20, 20, 20);
 	/* BLUE - COMPUTER */
+	--color-computer-400: rgb(0, 255, 247);
+	--color-computer-500: rgb(0, 148, 143);
 	--color-computer-600: rgb(33, 66, 65);
+	--color-computer-low-opa-400: rgba(0, 255, 247, .75);
+	--color-computer-low-opa-600: rgba(33, 66, 65, .75);
 
 	/* WEBKITS */
 	/* -webkit-font-smoothing: antialiased;

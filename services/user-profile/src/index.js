@@ -23,7 +23,7 @@ await fastify.register(fastifySwagger, {
 
 // 🔹 Swagger UI
 await fastify.register(fastifySwaggerUi, {
-	routePrefix: "/docs", // URL => http://localhost:3001/docs
+	routePrefix: "/docs",
 	uiConfig: {
 		docExpansion: "list",
 		deepLinking: false
@@ -58,7 +58,7 @@ fastify.addHook('onRequest', (request, reply, done) => {
 
     if (allowedOrigins.includes(origin)) {
         reply.header('Access-Control-Allow-Origin', origin);
-    } // Replace with your client's URL
+    }
 
 	// Set other common CORS headers
 	reply.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
