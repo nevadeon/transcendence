@@ -3,7 +3,7 @@ import fastifySwagger from "@fastify/swagger";
 import fastifySwaggerUi from "@fastify/swagger-ui";
 import sqlite3 from "sqlite3";
 import { open } from "sqlite";
-import argon2 from "argon2";
+// import argon2 from "argon2";
 
 const fastify = Fastify({logger: true});
 
@@ -42,12 +42,30 @@ const db = await open({
 await db.exec(`
 	CREATE TABLE IF NOT EXISTS users (
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
-		username TEXT NOT NULL,
-		email TEXT UNIQUE
+		name TEXT NOT NULL UNIQUE,
+		email TEXT NOT NULL UNIQUE,
+		password TEXT NOT NULL,
+		species TEXT DEFAULT 'Human',
+		planet TEXT DEFAULT 'Earth',
+		dimension TEXT DEFAULT 'C-137'
 	)
 `);
 
+fastify.addHook('onRequest', (request, reply, done) => {
+	// Set the Access-Control-Allow-Origin header
+	reply.header('Access-Control-Allow-Origin', 'http://127.0.0.1:5173'); // Replace with your client's URL
 
+	// Set other common CORS headers
+	reply.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+	reply.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+	// Handle preflight requests (OPTIONS method)
+	if (request.method === 'OPTIONS') {
+		reply.status(204).send(); // Respond with 204 No Content for preflight
+		return;
+	}
+	done();
+});
 // Parse JSON
 
 //New user
@@ -55,10 +73,11 @@ fastify.post("/users", {
 	schema: {
 		body: {
 			type: "object",
-			required: ["name", "email"],
+			required: ["name", "email", "password"],
 			properties: {
 				name: { type: "string" },
-				email: { type: "string", format: "email" }
+				email: { type: "string", format: "email" },
+				password: { type: "string" },
 			}
 		},
 		response: {
@@ -67,16 +86,16 @@ fastify.post("/users", {
 				properties: {
 					id: { type: "integer" },
 					name: { type: "string" },
-					email: { type: "string" }
+					email: { type: "string" },
 				}
 			}
 		}
 	}
 }, async (request, reply) => {
-	const { name, email } = request.body;
+	const { name, email, password } = request.body;
 	const result = await db.run(
-		"INSERT INTO users(name, email) VALUES(?, ?)",
-		[name, email]
+		"INSERT INTO users(name, email, password) VALUES(?, ?, ?)",
+		[name, email, password]
 	);
 	return reply.code(201).send({ id: result.lastID, name, email });
 });
@@ -201,7 +220,7 @@ fastify.put("/users/:id",{
 	const { name, email } = request.body;
 	try {
 		const result = await db.run(
-			"UPDATE users SET username=?, email=? WHERE id=?",
+			"UPDATE users SET name=?, email=? WHERE id=?",
 			[name, email, id]
 		);
 		if (result.changes === 0)

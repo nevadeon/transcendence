@@ -1,6 +1,6 @@
 {
 	"register": {
-		"usrname": "USERNAME",
+		"name": "USERNAME",
 		"email": "EMAIL",
 		"pwd": "PASSWORD",
 		"cta": "SIGN UP",
@@ -8,7 +8,7 @@
 		"link": "Log in"
 	},
 	"login": {
-		"usrname": "USERNAME",
+		"name": "USERNAME",
 		"pwd": "PASSWORD",
 		"cta": "LOG IN",
 		"extra": "Don't have an account yet?",

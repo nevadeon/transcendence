@@ -4,16 +4,18 @@ import useLanguage from "../contexts/language/useLanguage";
 import type { FormData } from "../interfaces/Form";
 import { useAuth } from "../contexts/auth/useAuth";
 import videoSource from "../assets/scanline.mp4";
+import audioSource from "../assets/start.mp3";
 
 export default function Form({ register }: {register: boolean}) {
-	const [userData, setUserData] = useState<FormData>({ username: '', email: undefined, password: '' });
+	const [userData, setUserData] = useState<FormData>({ name: '', email: '', password: '' });
 	const naviguate = useNavigate();
 	const { login } = useAuth();
 	const { messages } = useLanguage();
 
 	async function handleAudio() {
 		try {
-			const audio = new Audio('/assets/start.mp3');
+			const audio = new Audio(audioSource);
+			audio.volume = .32;
 			await audio.play();
 		} catch (err) {
 			console.log(err);
@@ -29,14 +31,14 @@ export default function Form({ register }: {register: boolean}) {
 		e.preventDefault();
 		if (register) {
 			try {
-				const res = await fetch("https://backendpoint/register", {
+				const res = await fetch("http://localhost:3001/users", {
 					method: 'POST',
 					headers: { 'Content-Type': 'application/json' },
 					body: JSON.stringify( userData )
 				});
 				const data = await res.json();
 				if (res.ok && data.token) {
-					console.log('Registration successful');
+					console.log('Registration successful', data);
 					login(data.token);
 					naviguate('/board');
 				} else {
@@ -47,7 +49,7 @@ export default function Form({ register }: {register: boolean}) {
 			}
 		} else {
 			try {
-				const res = await fetch("https://backendpoint/login", {
+				const res = await fetch("http://localhost:3001/login", {
 					method: 'POST',
 					headers: { 'Content-Type': 'application/json' },
 					body: JSON.stringify( userData )
@@ -75,14 +77,14 @@ export default function Form({ register }: {register: boolean}) {
 			<form onSubmit={handleSubmit}>
 				<div className='usrname-input'>
 					<label htmlFor="username">
-						{messages.register.usrname}
+						{messages.register.name}
 					</label>
 					<input
 						type="text"
-						id="username"
-						name="username"
+						id="name"
+						name="name"
 						onChange={handleInputChange}
-						value={userData.username}
+						value={userData.name}
 						required
 						autoComplete='off'
 						pattern="^[a-zA-Z0-9]{3,24}$"
