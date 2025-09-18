@@ -53,7 +53,12 @@ await db.exec(`
 
 fastify.addHook('onRequest', (request, reply, done) => {
 	// Set the Access-Control-Allow-Origin header
-	reply.header('Access-Control-Allow-Origin', 'http://127.0.0.1:5173'); // Replace with your client's URL
+	const allowedOrigins = ['http://127.0.0.1:5173', 'http://localhost:5173'];
+    const origin = request.headers.origin;
+
+    if (allowedOrigins.includes(origin)) {
+        reply.header('Access-Control-Allow-Origin', origin);
+    } // Replace with your client's URL
 
 	// Set other common CORS headers
 	reply.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');

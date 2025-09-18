@@ -4,7 +4,8 @@ import useLanguage from "../contexts/language/useLanguage";
 import type { FormData } from "../interfaces/Form";
 import { useAuth } from "../contexts/auth/useAuth";
 import videoSource from "../assets/scanline.mp4";
-import audioSource from "../assets/start.mp3";
+import audioSource from "../assets/audios/start_hologram.mp3";
+import audioSource2 from "../assets/audios/[Rick Sanchez]MORTY......T !!!.mp3";
 
 export default function Form({ register }: {register: boolean}) {
 	const [userData, setUserData] = useState<FormData>({ name: '', email: '', password: '' });
@@ -14,9 +15,13 @@ export default function Form({ register }: {register: boolean}) {
 
 	async function handleAudio() {
 		try {
-			const audio = new Audio(audioSource);
-			audio.volume = .32;
-			await audio.play();
+			const audioHolo = new Audio(audioSource);
+			const audioRick = new Audio(audioSource2);
+			audioHolo.volume = .32;
+			audioRick.volume = .72;
+			await audioHolo.play();
+			//timestamp()
+			await audioRick.play();
 		} catch (err) {
 			console.log(err);
 		}
@@ -76,7 +81,7 @@ export default function Form({ register }: {register: boolean}) {
 			</video>
 			<form onSubmit={handleSubmit}>
 				<div className='usrname-input'>
-					<label htmlFor="username">
+					<label htmlFor="name">
 						{messages.register.name}
 					</label>
 					<input
