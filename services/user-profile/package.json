@@ -9,9 +9,11 @@
 	"dependencies": {
 		"@fastify/swagger": "^9.5.1",
 		"@fastify/swagger-ui": "^5.0.0",
-		"bcrypt": "^6.0.0",
+		"@fastify/cors": "^11.1.0",
+		"@fastify/jwt": "^10.0.0",
+		"argon2": "^0.44.0",
 		"fastify": "^5.6.0",
-		"sqlite": "^5.1.1",
-		"sqlite3": "^5.1.7"
+		"sqlite3": "^5.1.7",
+		"sqlite": "^5.1.1"
 	}
 }
