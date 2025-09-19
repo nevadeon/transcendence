@@ -5,13 +5,15 @@
 		"pwd": "CONTRASEÑA",
 		"cta": "REGISTRARSE",
 		"extra": "¿Ya tienes una cuenta?",
-		"link": "Inicia sesión"
+		"link": "Inicia sesión",
+		"oauth2": "Inicia sesión con Google"
 	},
 	"login": {
 		"name": "NOMBRE DE USUARIO",
 		"pwd": "CONTRASEÑA",
 		"cta": "INICIAR SESIÓN",
 		"extra": "¿Aún no tienes cuenta?",
-		"link": "Regístrate"
+		"link": "Regístrate",
+		"oauth2": "Inicia sesión con Google"
 	}
 }

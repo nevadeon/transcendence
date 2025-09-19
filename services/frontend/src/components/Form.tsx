@@ -2,11 +2,13 @@ import { useState, type ChangeEvent } from "react";
 import { Link, useNavigate } from "react-router";
 import { useAuth } from "../contexts/auth/useAuth";
 import useLanguage from "../contexts/language/useLanguage";
-import CustomGoogleButton from "./CustomGoogleOAuth";
 import type { FormData } from "../interfaces/Form";
 import videoSource from "../assets/scanline.mp4";
+// opti calls, filename chars lengths
 import audioSource from "../assets/audios/start_hologram.mp3";
-import audioSource2 from "../assets/audios/[Rick Sanchez]MORTY......T !!!.mp3";
+import audioSource2 from "../assets/audios/keyboard.mp3";
+import audioSource3 from "../assets/audios/Voicy_Rick Sanchez Seriously_.mp3";
+import audioSource4 from "../assets/audios/[Rick Sanchez]MORTY......T !!!.mp3";
 
 export default function Form({ register }: {register: boolean}) {
 	const [userData, setUserData] = useState<FormData>({ name: '', email: '', password: '' });
@@ -16,13 +18,23 @@ export default function Form({ register }: {register: boolean}) {
 
 	async function handleAudio() {
 		try {
-			const audioHolo = new Audio(audioSource);
-			const audioRick = new Audio(audioSource2);
-			audioHolo.volume = .32;
-			audioRick.volume = .72;
-			await audioHolo.play();
-			//timestamp()
-			await audioRick.play();
+			//opti in audios array?
+			const hologram = new Audio(audioSource);
+			const keyboard = new Audio(audioSource2);
+			const rickSeriously = new Audio(audioSource3);
+			const rickTalk = new Audio(audioSource4);
+			hologram.volume = .32;
+			keyboard.volume = 1;
+			rickSeriously.volume = .32;
+			rickTalk.volume = .72;
+			hologram.play();
+			setTimeout(() => {
+				rickSeriously.play();
+			}, 1200);
+			setTimeout(() => {
+				keyboard.play();
+				rickTalk.play();
+			}, 3200);
 		} catch (err) {
 			console.log(err);
 		}
@@ -33,37 +45,11 @@ export default function Form({ register }: {register: boolean}) {
 		setUserData(( prev: FormData ) => ( { ...prev, [name]: value } ));
 	}
 
-	// async function handleOAuthSuccess(credentialResponse: any) {
-	// 	console.log("Token reçu :", credentialResponse.credential);
-	// 	try {
-	// 		const res = await fetch('http://localhost:3001/api/auth/google', { //endpoint in back
-	// 			method: 'POST',
-	// 			headers: {
-	// 			'Content-Type': 'application/json',
-	// 			},
-	// 			body: JSON.stringify({
-	// 				token: credentialResponse.credential,
-	// 			}),
-	// 		});
-	// 		const data = await res.json();
-	// 		if (!res.ok) {
-	// 			throw new Error(data.message || "La connexion a échoué.");
-	// 		}
-	// 		const user = data.user;
-	// 		const token = data.token;
-	// 		localStorage.setItem('user', JSON.stringify(user));
-	// 		localStorage.setItem('token', token);
-	// 		naviguate('/board');
-	// 	} catch (err: any) {
-	// 		console.error("Erreur lors de la connexion avec le backend :", err);
-	// 	}
-	// }
-
 	async function handleSubmit(e: any) {
 		e.preventDefault();
 		if (register) {
 			try {
-				const res = await fetch("http://localhost:3001/users", {
+				const res = await fetch("http://localhost:3001/register", {
 					method: 'POST',
 					headers: { 'Content-Type': 'application/json' },
 					body: JSON.stringify( userData )
@@ -107,19 +93,6 @@ export default function Form({ register }: {register: boolean}) {
 				Your browser does not support the video tag.
 			</video>
 			<form onSubmit={handleSubmit}>
-				<CustomGoogleButton />
-				{/* <GoogleLogin
-					onSuccess={handleOAuthSuccess}
-					onError={() => {
-						console.log('Login Failed');
-					}}
-					theme="outline" // Peut être 'outline' (bordure) ou 'filled_blue' (couleur par défaut)
-					size="large"    // Peut être 'large', 'medium' ou 'small'
-					text="signup_with" // Peut être 'signin_with', 'signup_with', 'continue_with'
-					shape="pill"    // Peut être 'circle', 'rectangle', 'pill'
-					logo_alignment="left" // Peut être 'left' ou 'center'
-					width="300"
-				/> */}
 				<div className='usrname-input'>
 					<label htmlFor="name">
 						{messages.register.name}
@@ -166,8 +139,8 @@ export default function Form({ register }: {register: boolean}) {
 						required
 						autoComplete='off'
 						minLength={8}
-            			pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
-    					title="Password must contain at least 1 uppercase letter, 1 lowercase letter, 1 number, 1 special character, and be at least 8 characters long."
+            			// pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
+    					// title="Password must contain at least 1 uppercase letter, 1 lowercase letter, 1 number, 1 special character, and be at least 8 characters long."
 					/>
 				</div>
 				<button type='submit' id='submit' className='submit' onClick={handleAudio}>
