@@ -11,6 +11,7 @@
 	--height-desk-screen: 90vh;
 	--width-mobile-screen: 100dvw;
 	--height-mobile-screen: 100dvh;
+	--height-input: 71.2px;
 	--width-input: 440px;
 	--width-button: 48px;
 	--height-button: 48px;
@@ -20,6 +21,10 @@
 	--margin-input: 1.5em;
 	--margin-submit: .5em;
 	--padding-input: .96em;
+	--position-form-btns: 2.5em;
+
+	/* RADIUS */
+	--radius-screenbar-corner: .5em;
 
 	/* FONTS */
 	--font-titles: "Orbitron", sans-serif;

@@ -1,17 +1,19 @@
 {
 	"register": {
 		"name": "NOM UTILISATEUR",
-		"email": "EMAIL",
+		"email": "ADRESSE MAIL",
 		"pwd": "MOT DE PASSE",
 		"cta": "S'INSCRIRE",
 		"extra": "Déjà un compte?",
-		"link": "Connectez-vous"
+		"link": "Connectez-vous",
+		"oauth2": "S'inscrire avec Google"
 	},
 	"login": {
 		"name": "NOM UTILISATEUR",
 		"pwd": "MOT DE PASSE",
 		"cta": "SE CONNECTER",
 		"extra": "Pas encore de compte?",
-		"link": "Enregistrez-vous"
+		"link": "Enregistrez-vous",
+		"oauth2": "Se connecter avec Google"
 	}
 }

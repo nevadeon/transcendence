@@ -5,13 +5,15 @@
 		"pwd": "PASSWORD",
 		"cta": "SIGN UP",
 		"extra": "Already have an account?",
-		"link": "Log in"
+		"link": "Log in",
+		"oauth2": "Sign in with Google"
 	},
 	"login": {
 		"name": "USERNAME",
 		"pwd": "PASSWORD",
 		"cta": "LOG IN",
 		"extra": "Don't have an account yet?",
-		"link": "Sign up"
+		"link": "Sign up",
+		"oauth2": "Log in with Google"
 	}
 }

@@ -1,8 +1,11 @@
 import { useGoogleLogin } from '@react-oauth/google';
 import { useNavigate } from 'react-router';
+import useLanguage from '../hooks/useLanguage';
+import googleIcon from "../assets/google.svg";
 
-export default function CustomGoogleButton() {
+export default function CustomGoogleButton({ register } : { register: boolean}) {
 	const naviguate = useNavigate();
+	const { messages } = useLanguage();
 
 	async function handleOAuthSuccess(credentialResponse: any) {
 		console.log("Token reçu :", credentialResponse.credential);
@@ -42,11 +45,9 @@ export default function CustomGoogleButton() {
 			onClick={() => login()} 
 			className="o-auth-google">
 			<img
-				src="https://upload.wikimedia.org/wikipedia/commons/4/4a/Google_Button_Icon_2020.svg"
+				src={googleIcon}
 				alt="Google logo"
-				style={{ marginRight: '10px', height: '20px' }}
 			/>
-			Se connecter avec Google
 		</button>
 	);
 }
