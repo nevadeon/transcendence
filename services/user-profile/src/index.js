@@ -37,6 +37,7 @@ await fastify.register(jwt, {
 	secret: process.env.JWT_SECRET || "super-secret-key" // clé pour signer les tokens
 });
 
+// Db path to open / create tables
 const dbPath = process.env.DB_PATH || "./user-profile.sqlite";
 
 // open the db 
@@ -49,7 +50,7 @@ const db = await open({
 await db.exec(`
 	CREATE TABLE IF NOT EXISTS users (
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
-		nickname TEXT NOT NULL UNIQUE,
+		name TEXT NOT NULL UNIQUE,
 		email TEXT NOT NULL UNIQUE,
 		password TEXT NOT NULL,
 		species TEXT DEFAULT 'Human',
@@ -69,7 +70,7 @@ fastify.post("/register", {
 	schema: {
 		body: {
 			type: "object",
-			required: ["nickname", "email", "password"],
+			required: ["name", "email", "password"],
 			properties: {
 				name: { type: "string" },
 				email: { type: "string", format: "email" },
@@ -82,20 +83,23 @@ fastify.post("/register", {
 				properties: {
 					id: { type: "integer" },
 					name: { type: "string" },
-					email: { type: "string" },
+					species: { type: "string" },
+					planet: { type: "string" },
+					dimension: { type: "string" },
 				}
 			}
 		}
 	}
 }, async (request, reply) => {
-	const { nickname, email, password } = request.body;
+	const { name: name, email, password } = request.body;
 	try {
+		const hashedpassword = await argon2.hash(password);
 		const result = await db.run(
-			"INSERT INTO users(nickname, email, password) VALUES(?, ?, ?)",
-			[nickname, email, argon2.hash(password)]
+			"INSERT INTO users(name, email, password) VALUES(?, ?, ?)",
+			[name, email, hashedpassword]
 		);
-		return reply.code(201).send({ id: result.lastID, nickname, email });
-	} catch {
+		return reply.code(201).send({ id: result.lastID, name: name, email });
+	} catch(err) {
 		return reply.code(500).send({error: err.message});
 	}
 });
@@ -104,13 +108,13 @@ fastify.post("/register", {
 fastify.post("/login", async (request, reply) => {
 	const { email, password } = request.body;
 
-	const user = await db.get("SELECT * FROM users WHERE nickname = ?", [nickname]);
-	if (!user) return reply.code(401).send({ error: "Invalid nickname or password" });
+	const user = await db.get("SELECT * FROM users WHERE name = ?", [name]);
+	if (!user) return reply.code(401).send({ error: "Invalid name or password" });
 
 	const isValid = await argon2.verify(password, user.password);
-	if (!isValid) return reply.code(401).send({ error: "Invalid nickname or password" });
+	if (!isValid) return reply.code(401).send({ error: "Invalid name or password" });
 
-	const token = fastify.jwt.sign({ id: user.id, nickname: user.nickname });
+	const token = fastify.jwt.sign({ id: user.id, name: user.name });
 
 	return { token };
 });
