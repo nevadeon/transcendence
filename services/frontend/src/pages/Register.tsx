@@ -11,7 +11,7 @@ export default function Register() {
 				<Settings />
 				<Form register={true} />
 				<GoogleOAuthProvider clientId='243143343142-2d5inhhfr4coorov0ttctsp05ata8sa1.apps.googleusercontent.com'>
-					<CustomGoogleButton register={true} />
+					<CustomGoogleButton />
 				</GoogleOAuthProvider>
 			</div>
 			<div className='auth-screenbar'></div>
