@@ -63,18 +63,18 @@ await fastify.register(cors, {
 	origin: ["https://localhost:8443", "http://localhost:5173"], // autorise toutes les origines
 });
 
-// Parse JSON
-
 // Register
 fastify.post("/register", {
 	schema: {
+		description: "register user in the db",
+		tags: ["Auth"],
 		body: {
 			type: "object",
 			required: ["name", "email", "password"],
 			properties: {
 				name: { type: "string" },
 				email: { type: "string", format: "email" },
-				password: { type: "string" },
+				password: { type: "string" , minLength: 8},
 			}
 		},
 		response: {
@@ -105,8 +105,36 @@ fastify.post("/register", {
 });
 
 // Login
-fastify.post("/login", async (request, reply) => {
-	const { email, password } = request.body;
+fastify.post("/login", {
+	schema: {
+		description: "user connection and generate JWT",
+		tags: ["Auth"],
+		body: {
+			type: "object",
+			required: ["email", "password"],
+			properties: {
+				email: { type: "string", format: "email" },
+				password: { type: "string", minLength: 8}
+			}
+		},
+		response: {
+			200: {
+				type: "object",
+				properties: {
+					token: { type: "string" }
+				}
+			},
+			401: {
+				type: "object",
+				properties: {
+					error: { type: "string" }
+				}
+			}
+		}
+	}
+}, async (request, reply) => {
+	try {
+		const { email, password } = request.body;
 
 	const user = await db.get("SELECT * FROM users WHERE name = ?", [name]);
 	if (!user) return reply.code(401).send({ error: "Invalid name or password" });
@@ -116,7 +144,10 @@ fastify.post("/login", async (request, reply) => {
 
 	const token = fastify.jwt.sign({ id: user.id, name: user.name });
 
-	return { token };
+		return { token };
+	} catch (err) {
+		return reply.code(500).send({ error: err.message });
+	}
 });
 
 // Read all
