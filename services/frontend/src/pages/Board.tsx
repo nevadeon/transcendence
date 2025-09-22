@@ -1,9 +1,11 @@
-import Header from "../components/Header"
+import SidebarUser from "../components/SidebarUser";
+import SidebarFriendList from "../components/SidebarFriendList";
 
 export default function Board() {
 	return (
-		<>
-			<Header />
-		</>
+		<div>
+			<SidebarUser />
+			<SidebarFriendList />
+		</div>
 	)
 }

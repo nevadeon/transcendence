@@ -2,6 +2,7 @@ import Form from '../components/Form'
 import Settings from '../components/Settings'
 import { GoogleOAuthProvider } from '@react-oauth/google'
 import CustomGoogleButton from '../components/CustomGoogleOAuth'
+import '../styles/Auth.css'
 
 // clientID within .env as a varname !!!
 export default function Register() {

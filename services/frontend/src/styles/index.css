@@ -15,6 +15,10 @@
 	--width-input: 440px;
 	--width-button: 48px;
 	--height-button: 48px;
+	--width-screenbar: 50%;
+	--width-sidebar-user: calc(320px + 5%);
+	--width-user-avatar: 72px;
+	--width-profile-data-extra: 33.33%;
 
 	/* SPACES */
 	--margin-label: .75em;
@@ -32,6 +36,8 @@
 	--font-size-span: .75em;
 	--font-size-text: .75em;
 	--font-size-input: 1.25em;
+	--font-size-profile-card-header: 1.5em;
+	--font-size-button: 2em;
 	--font-weight-regular: 400;
 	--font-weight-bold: 600;
 	--font-weight-black: 900;
@@ -54,17 +60,26 @@
 	--color-infos-100: rgb(242, 254, 218);
 	--color-infos-200: rgb(243, 245, 143);
 	--color-infos-600: rgb(162, 163, 49);
+	--color-infos-vlow-opa-100: rgba(242, 254, 218, 0.25);
 	--color-infos-low-opa-100: rgba(242, 254, 218, 0.5);
 	--color-infos-low-opa-600: rgba(162, 163, 49, 0.5);
 	/* GREY - NEUTRAL */
 	--color-neutral-200: rgb(228, 228, 228);
 	--color-neutral-900: rgb(20, 20, 20);
 	/* BLUE - COMPUTER */
+	--color-computer-300: rgb(135, 254, 254);
 	--color-computer-400: rgb(0, 255, 247);
 	--color-computer-500: rgb(0, 148, 143);
 	--color-computer-600: rgb(33, 66, 65);
+	--color-computer-800: rgb(12, 35, 45);
+	--color-computer-vlow-opa-300: rgba(135, 254, 254, .5);
+	--color-computer-vlow-opa-400: rgba(0, 255, 247, .5);
 	--color-computer-low-opa-400: rgba(0, 255, 247, .75);
 	--color-computer-low-opa-600: rgba(33, 66, 65, .75);
+	/* BLUE - HOLOGRAM */	
+	--color-bhologram-400: #007AFF;
+	--color-bhologram-vlow-opa-400: rgba(0, 166, 255, 0.5);
+	--color-bhologram-low-opa-400: rgba(0, 166, 255, 0.75);
 
 	/* WEBKITS */
 	/* -webkit-font-smoothing: antialiased;
@@ -83,9 +98,10 @@
 }
 
 body {
-	padding: 8px;
+	margin: 0;
 	font-family: var(--font-text);
 	background: var(--color-computer-600);
+	/* overflow: hidden; */
 }
 
 form {
