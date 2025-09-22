@@ -19,7 +19,7 @@ RUN npm run build
 FROM nginx:stable-alpine
 
 # Copier le build Vite dans le dossier Nginx
-COPY --from=build /app/dist /usr/share/nginx/html
+COPY dist/ /usr/share/nginx/html/
 
 # Expose le port 80 à l'intérieur du conteneur
 EXPOSE 80
