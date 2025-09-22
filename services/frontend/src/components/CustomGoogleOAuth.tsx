@@ -1,6 +1,6 @@
 import { useGoogleLogin } from '@react-oauth/google';
 import { useNavigate } from 'react-router';
-import googleIcon from "../assets/google.svg";
+import googleIcon from "../assets/oauth/google.svg";
 
 export default function CustomGoogleButton() {
 	const naviguate = useNavigate();

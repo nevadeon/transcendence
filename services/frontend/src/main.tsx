@@ -5,7 +5,6 @@ import router from './routes/Router.tsx'
 import { AuthProvider } from './contexts/auth/AuthContext.tsx'
 import { LanguageProvider } from './contexts/language/LanguageContext.tsx'
 import './styles/index.css'
-import './styles/Auth.css'
 // import './assets/start.mp3'
 // + <SoundProvider /> => Settings Provider(fusion both?)
 

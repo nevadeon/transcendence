@@ -1,0 +1,16 @@
+.sidebar-friendlist {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	width: var(--width-sidebar-user);
+	height: var(--height-mobile-screen);
+	padding: 24px;
+	background: var(--color-computer-800);
+	background-image:
+		linear-gradient(var(--color-computer-vlow-opa-300) 1px, transparent 1px),
+		linear-gradient(90deg, var(--color-computer-vlow-opa-300) 1px, transparent 1px);
+	box-shadow: inset 0px 0px 24px var(--color-computer-vlow-opa-300);
+	background-size: 96px 96px;
+	border-left: 8px solid black;
+}
