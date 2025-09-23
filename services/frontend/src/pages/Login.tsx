@@ -2,7 +2,7 @@ import Form from '../components/auth/Form';
 import Settings from '../components/Settings';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import CustomGoogleButton from '../components/auth/CustomGoogleOAuth';
-import '../styles/Auth.css'
+import '../styles/auth/Auth.css'
 
 // clientID within .env as a varname !!!
 export default function Login() {
