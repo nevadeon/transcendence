@@ -1,0 +1,5 @@
+.board-page {
+	position: relative;
+	display: flex;
+	width: var(--mobile-screen);
+}

@@ -1,7 +1,7 @@
-import Form from '../components/Form';
+import Form from '../components/auth/Form';
 import Settings from '../components/Settings';
 import { GoogleOAuthProvider } from '@react-oauth/google';
-import CustomGoogleButton from '../components/CustomGoogleOAuth';
+import CustomGoogleButton from '../components/auth/CustomGoogleOAuth';
 import '../styles/Auth.css'
 
 // clientID within .env as a varname !!!

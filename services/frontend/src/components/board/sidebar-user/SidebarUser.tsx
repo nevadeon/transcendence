@@ -2,7 +2,7 @@ import ProfileCard from "./ProfileCard";
 import StatsGraph from "./StatsGraph";
 import StatsButton from "./StatsButton";
 import LogoutButton from "./LogoutButton";
-import "../styles/SidebarUser.css";
+import "../../../styles/SidebarUser.css";
 
 export default function SidebarUser() {
 	return (

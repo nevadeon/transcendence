@@ -7,8 +7,8 @@
 	--cursor-pistol-active: url('../assets/cursor/rick-pistol-blast.png');
 
 	/* SIZES */
-	--width-desk-screen: 98vw;
-	--height-desk-screen: 90vh;
+	--width-desk-screen: 98dvw;
+	--height-desk-screen: 90dvh;
 	--width-mobile-screen: 100dvw;
 	--height-mobile-screen: 100dvh;
 	--height-input: 71.2px;
