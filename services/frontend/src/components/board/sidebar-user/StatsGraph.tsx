@@ -1,9 +1,9 @@
 import StatsBar from "./StatsBar";
-import HealthSource from "../assets/icons/health.svg";
-import StrengthSource from "../assets/icons/strength.svg";
-import IntelligenceSource from "../assets/icons/intelligence.svg";
-import PqSource from "../assets/icons/pq.svg";
-import "../styles/StatsGraph.css";
+import HealthSource from "../../../assets/icons/health.svg";
+import StrengthSource from "../../../assets/icons/strength.svg";
+import IntelligenceSource from "../../../assets/icons/intelligence.svg";
+import PqSource from "../../../assets/icons/pq.svg";
+import "../../../styles/StatsGraph.css";
 
 export default function StatsGraph() {
 	//getRandomValues() from db;

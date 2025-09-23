@@ -1,0 +1,19 @@
+.add-contact {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 64px;
+	margin-bottom: 8px;
+	padding: 8px;
+	font-family: var(--font-titles);
+	font-size: var(--font-size-input);
+	font-weight: var(--font-weight-bold);
+	color: var(--color-computer-300);
+	background: var(--color-bhologram-low-opa-400);
+}
+
+.add-contact img {
+	width: 40px;
+	height: 40px;
+}

@@ -1,8 +1,8 @@
 TODO:
 1. sound click events
 2. down docker before modif dockerfiles
-3. screen visual effect(css anim or video background)
-4. authentication forms
+3. interfaces for all components
+4. classes for all functions components(inheritance)
 
 separate context.ts, then provider
 context isLoggedIn(boolean) status
