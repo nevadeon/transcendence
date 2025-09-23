@@ -1,4 +1,4 @@
-import "../styles/LogoutButton.css";
+import "../../../styles/LogoutButton.css";
 
 export default function LogoutButton() {
 	//...

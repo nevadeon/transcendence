@@ -1,14 +1,14 @@
 import { useState, type ChangeEvent } from "react";
 import { Link, useNavigate } from "react-router";
-import { useAuth } from "../contexts/auth/useAuth";
-import useLanguage from "../contexts/language/useLanguage";
-import type { FormData } from "../interfaces/Form";
-import videoSource from "../assets/scanline.mp4";
+import { useAuth } from "../../contexts/auth/useAuth";
+import useLanguage from "../../contexts/language/useLanguage";
+import type { FormData } from "../../interfaces/Form";
+import videoSource from "../../assets/scanline.mp4";
+import audioSource from "../../assets/audios/start_hologram.mp3";
+import audioSource2 from "../../assets/audios/keyboard.mp3";
+import audioSource3 from "../../assets/audios/Voicy_Rick Sanchez Seriously_.mp3";
+import audioSource4 from "../../assets/audios/[Rick Sanchez]MORTY......T !!!.mp3";
 // opti calls, filename chars lengths
-import audioSource from "../assets/audios/start_hologram.mp3";
-import audioSource2 from "../assets/audios/keyboard.mp3";
-import audioSource3 from "../assets/audios/Voicy_Rick Sanchez Seriously_.mp3";
-import audioSource4 from "../assets/audios/[Rick Sanchez]MORTY......T !!!.mp3";
 
 export default function Form({ register }: {register: boolean}) {
 	const [userData, setUserData] = useState<FormData>({ name: '', email: '', password: '' });

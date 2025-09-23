@@ -1,8 +1,8 @@
-import AvatarSource from "../assets/avatars/avatar_test.png";
-import SpeciesSource from "../assets/icons/species.svg";
-import PlanetSource from "../assets/icons/planet.svg";
-import DimensionSource from "../assets/icons/dimension.svg";
-import '../styles/ProfileCard.css';
+import AvatarSource from "../../../assets/avatars/avatar_test.png";
+import SpeciesSource from "../../../assets/icons/species.svg";
+import PlanetSource from "../../../assets/icons/planet.svg";
+import DimensionSource from "../../../assets/icons/dimension.svg";
+import '../../../styles/ProfileCard.css';
 
 export default function ProfileCard() {
 	// const { username, avatar, species, planet, dimension } = useUserData();
