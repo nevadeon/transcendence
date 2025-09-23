@@ -1,4 +1,5 @@
 TODO:
+0. Pong1vs1.tsx + Game.css
 1. sound click events
 2. down docker before modif dockerfiles
 3. interfaces for all components
