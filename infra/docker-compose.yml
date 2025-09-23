@@ -41,16 +41,18 @@ services:
       context: ../services/user-profile
       dockerfile: Dockerfile
     container_name: user-profile
+    ports:
+      - "3001:3001"
     environment:
       - DB_PATH=/data/user-profile.sqlite
       - PORT=3001
-    ports:
-      - "3001:3001"
+      - JWT_SECRET=super-secret-key
     networks:
       - web
       - backend
     volumes:
-      - user-profile-data:/data
+      - ../services/user-profile/src:/usr/src/app/src   # monte ton code
+      - ../services/user-profile/src/user-profile.sqlite:/data/user-profile.sqlite  # monte la DB
 
   # game:
     # build:

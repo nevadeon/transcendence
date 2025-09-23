@@ -11,4 +11,4 @@ COPY . .
 EXPOSE 3001
 
 # Lancer l'application
-CMD ["npm", "start"]
+CMD ["node", "src/index.js"]
