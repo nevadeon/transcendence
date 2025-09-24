@@ -2,7 +2,6 @@ import Player1Source from "../../assets/avatars/avatar_test.png";
 import Player2Source from "../../assets/avatars/poopy.png";
 import ArenaSource from "../../assets/game/arena.svg";
 import PadSource from "../../assets/game/pad.svg";
-import CenterSource from "../../assets/game/center_mark.svg";
 import BallSrc from "../../assets/game/balls/morty's_head_ball.png";
 
 // /game/1vs1
@@ -10,48 +9,48 @@ export default function Pong1vs1() {
 	return (
 		<div className="pong-1vs1">
 			<div className="pong-1vs1-scores">
-				<div className="profile-card">
+				<span className="pong-result">06</span>
+				<div className="profile-card pong-1vs1-card">
 					<img src={Player1Source} alt="Player Icon" />
 					<div className="player-data">
 						<span>ttaquet</span>
 						<span>N.313</span>
 					</div>
 				</div>
-				<div className="shortcuts">
-					<div className="shortcuts-up">
+				<div className="pong-1vs1-shortcuts">
+					<div className="pong-1vs1-shortcuts-key">
 						<span>A</span>
 						<span>UP</span>
 					</div>
-					<div className="shortcuts-down">
+					<div className="pong-1vs1-shortcuts-key">
 						<span>Q</span>
 						<span>DOWN</span>
 					</div>
 				</div>
 			</div>
 			<div className="pong-1vs1-arena">
-				{/* modif arena svg */}
-				<img src={ArenaSource} alt="" />
+				<img src={ArenaSource} alt="Arena Image" className="pong-1vs1-arena-zone" />
 				<div className="pong-1vs1-arena-playzone">
-					<img src={CenterSource} alt="" />
-					<img src={PadSource} alt="" />
-						<img src={BallSrc} alt="ball" className="ball" />
-					<img src={PadSource} alt="" />
+					<img src={PadSource} alt="Pad Image" className="pad left" />
+					<img src={BallSrc} alt="Morty Ball" className="ball" />
+					<img src={PadSource} alt="Pad Image" className="pad" />
 				</div>
 			</div>
 			<div className="pong-1vs1-scores">
-				<div className="profile-card">
+				<span className="pong-result">04</span>
+				<div className="profile-card pong-1vs1-card">
 					<img src={Player2Source} alt="Player Icon" />
 					<div className="player-data">
-						<span>ttaquet</span>
-						<span>N.313</span>
+						<span>ndavenne</span>
+						<span>N.666</span>
 					</div>
 				</div>
-				<div className="shortcuts">
-					<div className="shortcuts-up">
+				<div className="pong-1vs1-shortcuts">
+					<div className="pong-1vs1-shortcuts-key">
 						<span>A</span>
 						<span>UP</span>
 					</div>
-					<div className="shortcuts-down">
+					<div className="pong-1vs1-shortcuts-key">
 						<span>Q</span>
 						<span>DOWN</span>
 					</div>
