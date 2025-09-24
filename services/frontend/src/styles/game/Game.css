@@ -12,7 +12,87 @@
 
 .pong-1vs1-scores {
 	position: relative;
-	width: 12%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	width: 20%;
+}
+
+.pong-result {
+	margin-bottom: 64px;
+	color: var(--color-computer-300);
+	font-size: var(--font-size-result);
+	font-family: var(--font-titles);
+	text-shadow: 0px 0px 12px var(--color-computer-vlow-opa-400);
+}
+
+.pong-1vs1-card {
+	display: flex;
+	justify-content: start;
+	margin-bottom: 16px;
+	padding: 12px;
+	width: 64%;
+	font-family: var(--font-titles);
+	font-size: var(--font-size-profile-card-header);
+}
+
+.pong-1vs1-card img {
+	width: 56px;
+	height: 56px;
+	margin-right: 8px;
+	border: 1px solid black;
+}
+
+.player-data {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.player-data span {
+	color: var(--color-computer-300);
+	text-shadow: 0px 0px 4px var(--color-infos-vlow-opa-100);
+}
+
+.pong-1vs1-shortcuts {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	width: 100%;
+}
+
+.pong-1vs1-shortcuts-key {
+	display: flex;
+	align-items: center;
+	margin-bottom: 8px;
+	width: 128px;
+	color: var(--color-computer-300);
+}
+
+.pong-1vs1-shortcuts-key span {
+	font-weight: var(--font-weight-bold);
+	text-shadow: 0px 0px 4px var(--color-infos-vlow-opa-100);
+	text-shadow: 0px 0px 4px var(--color-computer-vlow-opa-400);
+	color: var(--color-computer-300);
+}
+
+.pong-1vs1-shortcuts-key span:nth-child(1) {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 48px;
+	height: 48px;
+	margin-right: 16px;
+	font-size: var(--font-size-profile-card-header);
+	font-family: var(--font-titles);
+	background: var(--color-bhologram-low-opa-400);
+	border-radius: 8px;
+}
+
+.pong-1vs1-shortcuts-key span:nth-child(2) {
+	font-size: var(--font-size-input);
 }
 
 .pong-1vs1-arena {
@@ -20,18 +100,37 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	width: 76%;
-	height: 76%;
+	width: 60%;
+}
+
+.pong-1vs1-arena .pong-1vs1-arena-zone {
+	width: 100%;
 }
 
 .pong-1vs1-arena-playzone {
-	width: 90%;
-	height: 100%;
+	position: absolute;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 86%;
+	height: 63%;
+	/* background: red; */
 }
 
-/* .paddle {
+.center-mark {
+	height: 320px;
+}
 
-} */
+.pad {
+	height: 120px;
+}
+
+.left {
+	rotate: 180deg;
+}
 
 .ball {
 	width: 48px;
