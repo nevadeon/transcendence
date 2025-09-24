@@ -1,7 +1,7 @@
 import SidebarUser from "../components/board/sidebar-user/SidebarUser";
 import BodyGames from "../components/board/body-games/BodyGames";
 import SidebarFriendList from "../components/board/sidebar-friendlist/SidebarFriendList";
-import "../styles/BoardPage.css";
+import "../styles/board/BoardPage.css";
 
 export default function Board() {
 	return (

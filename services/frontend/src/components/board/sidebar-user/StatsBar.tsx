@@ -1,5 +1,5 @@
 import type { StatsBarProps } from "../../../interfaces/StatsBar";
-import "../../../styles/StatsBar.css";
+import "../../../styles/board/sidebar-user/StatsBar.css";
 
 export default function StatsBar(props: StatsBarProps) {
 	const { iconUrl, value } = props;

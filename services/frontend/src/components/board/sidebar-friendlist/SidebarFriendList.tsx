@@ -1,5 +1,5 @@
 import FriendList from "./FriendList.tsx";
-import "../../../styles/SidebarFriendList.css";
+import "../../../styles/board/sidebar-friendlist/SidebarFriendList.css";
 
 export default function SidebarFriendList() {
 	return (

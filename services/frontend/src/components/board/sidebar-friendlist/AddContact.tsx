@@ -1,5 +1,5 @@
 import PlusSource from "../../../assets/icons/plus.svg";
-import "../../../styles/AddContact.css";
+import "../../../styles/board/sidebar-friendlist/AddContact.css";
 
 export default function AddContact() {
 	return (

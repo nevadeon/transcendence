@@ -1,4 +1,4 @@
-import "../../../styles/StatsButton.css";
+import "../../../styles/board/sidebar-user/StatsButton.css";
 
 export default function StatsButton() {
 	//...

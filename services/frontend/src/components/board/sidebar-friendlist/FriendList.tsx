@@ -2,7 +2,7 @@ import Contacts from "./Contacts.tsx";
 import AddContact from "./AddContact.tsx";
 import MortySource from "../../../assets/avatars/morty.png";
 import PoopySource from "../../../assets/avatars/poopy.png";
-import "../../../styles/FriendList.css";
+import "../../../styles/board/sidebar-friendlist/FriendList.css";
 
 export default function FriendList() {
 	// const { iconUrl, name, isOnline } = useFriends();
