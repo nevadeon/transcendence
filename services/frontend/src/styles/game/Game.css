@@ -1,35 +1,40 @@
 .game-page {
+	background: var(--color-computer-600);
+}
+
+.pong-1vs1 {
 	position: relative;
 	display: flex;
 	flex-direction: row;
-	background: var(--color-computer-600);
-}
-/*
-.pong-1vs1 {
-	
+	width: 100dvw;
+	height: 100dvh;
 }
 
 .pong-1vs1-scores {
-
-}
-
-.left {
-
-}
-
-.right {
-
+	position: relative;
+	width: 12%;
 }
 
 .pong-1vs1-arena {
-
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 76%;
+	height: 76%;
 }
 
-.paddle {
-
+.pong-1vs1-arena-playzone {
+	width: 90%;
+	height: 100%;
 }
+
+/* .paddle {
+
+} */
 
 .ball {
-
+	width: 48px;
+	height: 48px;
+	border-radius: 48px;
 }
-*/
