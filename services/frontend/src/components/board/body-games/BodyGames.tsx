@@ -1,4 +1,4 @@
-import "../../../styles/BodyGames.css"
+import "../../../styles/board/body-games/BodyGames.css";
 
 export default function BodyGames() {
 	return (

@@ -1,6 +1,6 @@
 import type ContactsProps from "../../../interfaces/Contacts";
 import PhoneSource from "../../../assets/icons/phone.svg";
-import "../../../styles/Contacts.css";
+import "../../../styles/board/sidebar-friendlist/Contacts.css";
 
 export default function Contacts(props: ContactsProps) {
 	const { iconUrl, name, isOnline } = props;

@@ -1,0 +1,35 @@
+.game-page {
+	position: relative;
+	display: flex;
+	flex-direction: row;
+	background: var(--color-computer-600);
+}
+/* 
+.pong-1vs1 {
+
+}
+
+.pong-1vs1-scores {
+
+}
+
+.left {
+
+}
+
+.right {
+
+}
+
+.pong-1vs1-arena {
+
+}
+
+.paddle {
+
+}
+
+.ball {
+
+}
+*/
