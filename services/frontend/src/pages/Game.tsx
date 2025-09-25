@@ -1,4 +1,4 @@
-// import { useParams } from "react-router";
+import { useParams } from "react-router";
 import Pong1vs1 from "../components/game/Pong1vs1";
 import Pong2vs2 from "../components/game/Pong2vs2";
 import Pong1vsIA from "../components/game/Pong1vsIA";
@@ -21,8 +21,7 @@ const backgrounds = [
 
 // /game
 export default function GamePage() {
-	// const { mode } = useParams<{mode: string}>();
-	let mode = "1vs1";
+	const { mode } = useParams<{mode: string}>();
 	const bgPath = mode === '2vs2' ? null : randomBackground();
 
 	function randomBackground() {

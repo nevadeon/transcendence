@@ -1,7 +1,12 @@
 import { useState, useEffect, useRef } from "react";
 import { PAD_SPEED, type PadControls, type PadPositions } from "../interfaces/Pads";
 
-export default function usePadsMove(ctrlPlayer1: PadControls, ctrlPlayer2: PadControls): PadPositions {
+export default function usePadsMove(
+	ctrlPlayer1: PadControls,
+	ctrlPlayer2: PadControls | undefined,
+	ctrlPlayer3: PadControls | undefined,
+	ctrlPlayer4: PadControls | undefined,
+): PadPositions {
 	const [ pad1Pos, setPad1Pos ] = useState<number>(50);
 	const [ pad2Pos, setPad2Pos ] = useState<number>(50);
 	const keysPressed = useRef<{ [key: string]: boolean }>({});
@@ -34,10 +39,12 @@ export default function usePadsMove(ctrlPlayer1: PadControls, ctrlPlayer2: PadCo
 			});
 			setPad2Pos(prevPos => {
 				let newPos = prevPos;
-				if (keysPressed.current[ctrlPlayer2.upKey.toLowerCase()])
-					newPos += PAD_SPEED;
-				if (keysPressed.current[ctrlPlayer2.downKey.toLowerCase()])
-					newPos -= PAD_SPEED;
+				if (ctrlPlayer2) {
+					if (keysPressed.current[ctrlPlayer2.upKey.toLowerCase()])
+						newPos += PAD_SPEED;
+					if (keysPressed.current[ctrlPlayer2.downKey.toLowerCase()])
+						newPos -= PAD_SPEED;
+				}
 				return Math.max(0, Math.min(100, newPos));
 			});
 			animRef.current = requestAnimationFrame(gameLoop);
@@ -46,7 +53,7 @@ export default function usePadsMove(ctrlPlayer1: PadControls, ctrlPlayer2: PadCo
 		return () => {
 			cancelAnimationFrame(animRef.current!);
 		};
-	}, [ctrlPlayer1, ctrlPlayer2]);
+	}, [ctrlPlayer1, ctrlPlayer2, ctrlPlayer3, ctrlPlayer4]);
 
 	return { pad1Pos, pad2Pos };
 }
