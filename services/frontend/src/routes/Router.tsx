@@ -14,6 +14,7 @@ const router = createBrowserRouter([
 		children: [
 			{ path: "/board", element: <Board /> },
 			{ path: "/game", element: <Game /> },
+			{ path: "/game/:mode", element: <Game /> },
 		]
 	},
 ])

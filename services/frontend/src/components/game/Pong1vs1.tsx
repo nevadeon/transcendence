@@ -1,5 +1,5 @@
-import Player1Source from "../../assets/avatars/avatar_test.png";
-import Player2Source from "../../assets/avatars/poopy.png";
+import Avatar1Src from "../../assets/avatars/rick.png";
+import Avatar2Src from "../../assets/avatars/poopy.png";
 import ArenaSource from "../../assets/game/arena.svg";
 import PadSource from "../../assets/game/pad.svg";
 import BallSrc from "../../assets/game/balls/morty's_head_ball.png";
@@ -11,14 +11,14 @@ import usePadsMove from "../../hooks/usePadsMove";
 export default function Pong1vs1() {
 	const ctrl1 = { upKey: 'q', downKey: 'a' };
 	const ctrl2 = { upKey: 'o', downKey: 'l' };
-	const { pad1Pos, pad2Pos } = usePadsMove(ctrl1, ctrl2);
+	const { pad1Pos, pad2Pos } = usePadsMove(ctrl1, ctrl2, undefined, undefined);
 
 	return (
 		<div className="pong-1vs1">
 			<div className="pong-1vs1-scores">
 				<span className="pong-result">06</span>
 				<div className="profile-card pong-1vs1-card">
-					<img src={Player1Source} alt="Player Icon" />
+					<img src={Avatar1Src} alt="Player Icon" />
 					<div className="player-data">
 						<span>ttaquet</span>
 						<span>N.313</span>
@@ -46,7 +46,7 @@ export default function Pong1vs1() {
 			<div className="pong-1vs1-scores">
 				<span className="pong-result">04</span>
 				<div className="profile-card pong-1vs1-card">
-					<img src={Player2Source} alt="Player Icon" />
+					<img src={Avatar2Src} alt="Player Icon" />
 					<div className="player-data">
 						<span>ndavenne</span>
 						<span>N.666</span>
