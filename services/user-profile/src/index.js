@@ -28,12 +28,6 @@ async function startServer() {
 			"dimension" TEXT DEFAULT 'C-137'
 		)
 	`);
-
-	const tables = await db.all(`SELECT name FROM sqlite_master WHERE type='table'`);
-	console.log("📋 Tables dans la DB:", tables.map(t => t.name));
-
-	const columns = await db.all(`PRAGMA table_info(users)`);
-	console.log("🛠 Colonnes de 'users':", columns);
 	
 	const user = await db.get(
 		"SELECT * FROM users WHERE name = ?",
