@@ -3,7 +3,7 @@
 	margin-bottom: var(--margin-submit);
 	padding: var(--padding-input);
 	font-family: var(--font-titles);
-	font-size: var(--font-size-input);
+	font-size: var(--font-size-profile-card-header);
 	font-weight: var(--font-weight-bold);
 	text-shadow: 0px 0px 4px var(--color-infos-low-opa-100);
 	color: var(--color-infos-100);

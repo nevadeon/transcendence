@@ -64,7 +64,7 @@
 	z-index: 1;
 }
 
-.usrname-input, .email-input, .pwd-input {
+.usrname-input, .email-input, .pwd-input, .otp-input {
 	width: var(--width-input);
 }
 
