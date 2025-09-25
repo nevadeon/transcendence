@@ -105,6 +105,13 @@ body {
 	/* overflow: hidden; */
 }
 
+h2, h3 {
+	font-family: var(--font-titles);
+	font-weight: var(--font-weight-black);
+    color: var(--color-computer-300);
+    text-shadow: 0px 0px 4px var(--color-infos-vlow-opa-100);
+}
+
 form {
 	display: flex;
 	flex-direction: column;

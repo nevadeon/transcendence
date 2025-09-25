@@ -6,13 +6,13 @@ import "../../../styles/board/sidebar-user/SidebarUser.css";
 
 export default function SidebarUser() {
 	return (
-		<div className="sidebar-user">
+		<aside className="sidebar-user">
 			<div className="sidebar-user-data">
 				<ProfileCard />
 				<StatsGraph />
 				<StatsButton />
 			</div>
 			<LogoutButton />
-		</div>
+		</aside>
 	);
 }
