@@ -9,6 +9,8 @@ export default function usePadsMove(
 ): PadPositions {
 	const [ pad1Pos, setPad1Pos ] = useState<number>(50);
 	const [ pad2Pos, setPad2Pos ] = useState<number>(50);
+	const [ pad3Pos, setPad3Pos ] = useState<number>(50);
+	const [ pad4Pos, setPad4Pos ] = useState<number>(50);
 	const keysPressed = useRef<{ [key: string]: boolean }>({});
 	const animRef = useRef<number>(0);
 
@@ -47,6 +49,26 @@ export default function usePadsMove(
 				}
 				return Math.max(0, Math.min(100, newPos));
 			});
+			setPad3Pos(prevPos => {
+				let newPos = prevPos;
+				if (ctrlPlayer3) {
+					if (keysPressed.current[ctrlPlayer3.upKey.toLowerCase()])
+						newPos += PAD_SPEED;
+					if (keysPressed.current[ctrlPlayer3.downKey.toLowerCase()])
+						newPos -= PAD_SPEED;
+				}
+				return Math.max(0, Math.min(100, newPos));
+			});
+			setPad4Pos(prevPos => {
+				let newPos = prevPos;
+				if (ctrlPlayer4) {
+					if (keysPressed.current[ctrlPlayer4.upKey.toLowerCase()])
+						newPos -= PAD_SPEED;
+					if (keysPressed.current[ctrlPlayer4.downKey.toLowerCase()])
+						newPos += PAD_SPEED;
+				}
+				return Math.max(0, Math.min(100, newPos));
+			});
 			animRef.current = requestAnimationFrame(gameLoop);
 		};
 		animRef.current = requestAnimationFrame(gameLoop);
@@ -55,5 +77,5 @@ export default function usePadsMove(
 		};
 	}, [ctrlPlayer1, ctrlPlayer2, ctrlPlayer3, ctrlPlayer4]);
 
-	return { pad1Pos, pad2Pos };
+	return { pad1Pos, pad2Pos, pad3Pos, pad4Pos };
 }

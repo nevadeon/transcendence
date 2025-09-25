@@ -8,4 +8,6 @@ export interface PadControls {
 export interface PadPositions {
 	pad1Pos: number;
 	pad2Pos: number;
+	pad3Pos: number;
+	pad4Pos: number;
 }

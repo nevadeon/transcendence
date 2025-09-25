@@ -13,7 +13,7 @@ export default function Pong1vsIA() {
 	const { pad1Pos, pad2Pos } = usePadsMove(ctrl1, undefined, undefined, undefined);
 
 	return (
-		<div className="pong-1vs1">
+		<div className="pong">
 			<div className="pong-1vs1-scores">
 				<span className="pong-result">06</span>
 				<div className="profile-card pong-1vs1-card">
