@@ -1,7 +1,7 @@
 <svg width="1305" height="817" viewBox="0 0 1305 817" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g filter="url(#filter0_d_189_6)">
-<path d="M51.5 51.5L87 16L652.5 16H1217.5L1254.29 50.5L1289 84.5V408.5V731.5L1254 766L1217.5 801H652.5H87L50.5 766.5L16 731.5V408.5V88L51.5 51.5Z" fill="#00A6FF" fill-opacity="0.75" shape-rendering="crispEdges"/>
-<path d="M1216.71 18L1252.92 51.959L1287 85.3398V730.662L1252.6 764.575L1216.7 799H87.7959L51.9121 765.083L18 730.679V88.8115L52.9336 52.8945L87.8281 18H1216.71Z" stroke="#87FEFE" stroke-width="4" shape-rendering="crispEdges"/>
+<path d="M40 44.5718L87 16L652.5 16H1217.5L1259.77 41L1289 58.5V408.5V759L1262.5 774.5L1217.5 801H652.5H87L43 774L16 757.5V408.5V59.5L40 44.5718Z" fill="#00A6FF" fill-opacity="0.75" shape-rendering="crispEdges"/>
+<path d="M1216.95 18L1258.76 42.7217L1287 59.6328V757.853L1261.49 772.773L1261.49 772.776L1216.96 799H87.5654L44.0459 772.295L44.043 772.293L18 756.377V60.6113L41.0391 46.2812L87.5605 18H1216.95Z" stroke="#87FEFE" stroke-width="4" shape-rendering="crispEdges"/>
 </g>
 <line x1="89" y1="16" x2="89" y2="796" stroke="#87FEFE" stroke-width="2"/>
 <line x1="1218" y1="20" x2="1218" y2="797" stroke="#87FEFE" stroke-width="2"/>

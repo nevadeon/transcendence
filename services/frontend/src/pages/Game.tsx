@@ -4,6 +4,7 @@ import Pong2vs2 from "../components/game/Pong2vs2";
 import Pong1vsIA from "../components/game/Pong1vsIA";
 import Tournament from "../components/game/Tournament";
 import GameBackground from "../components/game/GameBackground";
+import CitadelClashSrc from "../assets/game/backgrounds/planet8_bg.png";
 import "../styles/game/Game.css";
 
 const backgrounds = [
@@ -14,7 +15,6 @@ const backgrounds = [
 	() => import("../assets/game/backgrounds/planet5_bg.png"),
 	() => import("../assets/game/backgrounds/planet6_bg.png"),
 	() => import("../assets/game/backgrounds/planet7_bg.png"),
-	() => import("../assets/game/backgrounds/planet8_bg.png"),
 	() => import("../assets/game/backgrounds/planet9_bg.png"),
 	() => import("../assets/game/backgrounds/planet10_bg.png"),
 ];
@@ -49,7 +49,7 @@ export default function GamePage() {
 					{renderMode()}
 				</GameBackground>
       		) : (
-				<div className="game-page" style={{ background: 'url(planet8_bg.png)' }}>
+				<div className="game-page" style={{ background: `url(${CitadelClashSrc})` }}>
 					{renderMode()}
 				</div>
 	  		)}
