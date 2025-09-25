@@ -2,7 +2,7 @@
 	background: var(--color-computer-600);
 }
 
-.pong-1vs1 {
+.pong {
 	position: relative;
 	display: flex;
 	flex-direction: row;
@@ -123,7 +123,7 @@
 }
 
 .double {
-	width: 95%;
+	width: 94%;
 }
 
 .pad {
