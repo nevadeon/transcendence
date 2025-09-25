@@ -6,6 +6,7 @@
 	position: relative;
 	display: flex;
 	flex-direction: row;
+	align-items: center;
 	width: 100dvw;
 	height: 100dvh;
 }
@@ -51,6 +52,7 @@
 }
 
 .player-data span {
+	font-weight: var(--font-weight-bold);
 	color: var(--color-computer-300);
 	text-shadow: 0px 0px 4px var(--color-infos-vlow-opa-100);
 }
@@ -101,6 +103,7 @@
 	align-items: center;
 	justify-content: center;
 	width: 60%;
+	height: fit-content;
 }
 
 .pong-1vs1-arena .pong-1vs1-arena-zone {
@@ -111,21 +114,16 @@
 	position: absolute;
 	display: flex;
 	align-items: center;
-	justify-content: center;
+	justify-content: space-between;
 	top: 50%;
 	left: 50%;
+	width: 91%;
+	height: 96%;
 	transform: translate(-50%, -50%);
-	width: 86%;
-	height: 63%;
-	/* background: red; */
-}
-
-.center-mark {
-	height: 320px;
 }
 
 .pad {
-	height: 120px;
+	max-height: 120px;
 }
 
 .left {
