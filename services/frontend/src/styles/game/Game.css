@@ -122,6 +122,10 @@
 	transform: translate(-50%, -50%);
 }
 
+.double {
+	width: 95%;
+}
+
 .pad {
 	max-height: 120px;
 }
@@ -134,4 +138,13 @@
 	width: 48px;
 	height: 48px;
 	border-radius: 48px;
+}
+
+.vs2 {
+	margin: 24px 0 40px 0;
+}
+
+.bot {
+	margin-top: 8px;
+	margin-bottom: 0px;
 }
