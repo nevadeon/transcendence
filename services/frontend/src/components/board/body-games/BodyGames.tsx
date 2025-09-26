@@ -1,11 +1,14 @@
 import { useState } from "react";
 import Modal from "./Modal";
 import Profile from "./Profile";
+import Stats from "./Stats";
 import PortraitSrc from "../../../assets/avatars/big-rick.png";
 import "../../../styles/board/body-games/BodyGames.css";
 
 export default function BodyGames() {
 	const [isOpen, setIsOpen] = useState<boolean>(true);
+	const [isProfile, setIsProfile] = useState<boolean>(false);
+	const [isStats, setIsStats] = useState<boolean>(false);
 
 	function handleCloseModal() {
 		setIsOpen(false);
@@ -15,7 +18,11 @@ export default function BodyGames() {
 		<main className="body-games">
 			{ isOpen && (
 				<Modal onClose={handleCloseModal}>
-					{<Profile portraitSrc={PortraitSrc} />}
+					{
+						isProfile ?
+						<Profile portraitSrc={PortraitSrc} /> :
+						<Stats />
+					}
 				</Modal>
 			)}
 			<button className="body-games-btn 1vs1">

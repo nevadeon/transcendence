@@ -98,18 +98,26 @@ export default function Form(props: FormProps) {
 					>
 						{messages.register.name}
 					</label>
-					<input
-						type="text"
-						id="name"
-						name="name"
-						className={profile ? "profile-input" : ""}
-						onChange={handleInputChange}
-						value={userData.name}
-						required
-						autoComplete='off'
-						pattern="^[a-zA-Z0-9]{3,24}$"
-            			title="Username must be 3-24 characters long and contain only letters and numbers."
-					/>
+					<div className="in-line">
+						<input
+							type="text"
+							id="name"
+							name="name"
+							className={profile ? "profile-input" : ""}
+							onChange={handleInputChange}
+							value={userData.name}
+							required
+							autoComplete='off'
+							pattern="^[a-zA-Z0-9]{3,24}$"
+							title="Username must be 3-24 characters long and contain only letters and numbers."
+						/>
+						{
+							profile &&
+							<button className="profile-btn">
+								<img src={ModifSrc} alt="Modif Icon" />
+							</button>
+						}
+					</div>
 				</div>
 				{
 					register &&
@@ -120,16 +128,24 @@ export default function Form(props: FormProps) {
 						>
 							{messages.register.email}
 						</label>
-						<input
-							type='email'
-							id='email'
-							name='email'
-							className={profile ? "profile-input" : ""}
-							onChange={handleInputChange}
-							value={userData.email}
-							required
-							autoComplete='off'
-						/>
+						<div className="in-line">
+							<input
+								type='email'
+								id='email'
+								name='email'
+								className={profile ? "profile-input" : ""}
+								onChange={handleInputChange}
+								value={userData.email}
+								required
+								autoComplete='off'
+							/>
+							{
+								profile &&
+								<button className="profile-btn">
+									<img src={ModifSrc} alt="Modif Icon" />
+								</button>
+							}
+						</div>
 					</div>
 				}
 				<div className='pwd-input'>
@@ -139,19 +155,27 @@ export default function Form(props: FormProps) {
 					>
 						{messages.register.pwd}
 					</label>
-					<input
-						type="password"
-						id="password"
-						name="password"
-						className={profile ? "profile-input" : ""}
-						onChange={handleInputChange}
-						value={userData.password}
-						required
-						autoComplete='off'
-						minLength={8}
-            			// pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
-    					// title="Password must contain at least 1 uppercase letter, 1 lowercase letter, 1 number, 1 special character, and be at least 8 characters long."
-					/>
+					<div className="in-line">
+						<input
+							type="password"
+							id="password"
+							name="password"
+							className={profile ? "profile-input" : ""}
+							onChange={handleInputChange}
+							value={userData.password}
+							required
+							autoComplete='off'
+							minLength={8}
+							// pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
+							// title="Password must contain at least 1 uppercase letter, 1 lowercase letter, 1 number, 1 special character, and be at least 8 characters long."
+						/>
+						{
+							profile &&
+							<button className="profile-btn">
+								<img src={ModifSrc} alt="Modif Icon" />
+							</button>
+						}
+					</div>
 				</div>
 				{
 					profile &&
@@ -162,7 +186,7 @@ export default function Form(props: FormProps) {
 						>
 							2FA AUTH
 						</label>
-						<div>
+						<div className="in-line">
 							<input
 								type='text'
 								id="otp-code"

@@ -38,6 +38,7 @@
 	--font-size-input: 1.25em;
 	--font-size-profile-card-header: 1.5em;
 	--font-size-button: 2em;
+	--font-size-totals: 3em;
 	--font-size-result: 7em;
 	--font-weight-regular: 400;
 	--font-weight-bold: 600;
@@ -140,6 +141,7 @@ input {
 	background: var(--color-hologram-low-opa-600);
 	box-shadow: 0px 0px 16px var(--color-hologram-low-opa-400);
 	border: solid 4px var(--color-hologram-400);
+	border-radius: 8px;
 }
 
 input:focus {

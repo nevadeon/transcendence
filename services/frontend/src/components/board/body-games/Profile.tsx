@@ -9,9 +9,8 @@ export default function Profile(props: ProfileProps) {
 		<div className="profile">
 			<h2>PROFILE</h2>
 			<div className="profile-data">
-				{/* shadow effect to rm on img */}
-				<img src={portraitSrc} alt="Profile Portrait" />
-				<Form register profile />
+				<img src={portraitSrc} alt="Profile Portrait" className="profile-data-portrait" />
+				<Form register={true} profile={true} />
 			</div>
 		</div>
 	);
