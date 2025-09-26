@@ -1,0 +1,111 @@
+.stats table {
+    width: 100%;
+    margin: 16px 0 24px 0;
+    color: var(--color-computer-300);
+    font-weight: var(--font-weight-bold);
+    border: 2px solid;
+    border-collapse: collapse;
+}
+
+.stats table thead {
+    font-family: var(--font-titles);
+    font-size: var(--font-size-input);
+}
+
+.stats table th {
+    padding: 12px;
+    border-right: 2px solid var(--color-computer-300);
+}
+
+.stats table tr td {
+    padding: 12px;
+    text-align: center;
+    border: 2px solid var(--color-computer-300);
+}
+
+.stats table td span {
+    color: var(--color-computer-300);
+}
+
+.stats table td .opponents-container {
+    display: flex;
+    align-items: center;
+}
+
+.stats table td div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: start;
+}
+
+.stats table td .opponent1 {
+    margin-right: 16px;
+}
+
+.stats table td .opponent2 span:nth-child(1) {
+    font-size: var(--font-size-input);
+    margin-right: 16px;
+}
+
+.stats table td div img {
+    width: 48px;
+    height: 48px;
+    margin-right: 8px;
+    border: 1px solid var(--color-computer-300);
+}
+
+.stats .stats-data-cards {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.stats .stats-data-cards .card-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 22%;
+    padding: 16px;
+    background: var(--color-computer-300);
+    box-shadow: 0px 0px 8px var(--color-computer-vlow-opa-400);
+}
+
+.stats .stats-data-cards .card-container h3 {
+    color: var(--color-bhologram-400);
+    padding-bottom: 12px;
+}
+
+.stats .stats-data-cards .card-container-totals {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    border-top: 2px solid var(--color-bhologram-400);
+}
+
+.wins {
+    margin-right: 24px;
+}
+
+.wins,
+.loses {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 8px;
+}
+
+.wins span, .loses span {
+    color: var(--color-bhologram-400);
+}
+
+.wins span:nth-child(1), .loses span:nth-child(1) {
+    font-family: var(--font-titles);
+    font-size: var(--font-size-totals);
+}
+
+.wins span:nth-child(2), .loses span:nth-child(2) {
+    font-size: var(--font-size-);
+    font-weight: var(--font-weight-bold);
+}
