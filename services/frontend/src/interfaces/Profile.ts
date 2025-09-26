@@ -1,3 +1,3 @@
 export interface ProfileProps {
-	portraitSrc: string,
+	avatar: string,
 }

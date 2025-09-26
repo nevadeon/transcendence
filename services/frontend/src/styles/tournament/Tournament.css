@@ -1,0 +1,34 @@
+.tournament-page {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-repeat: no-repeat;
+    background-position: center center;
+	background-size: cover;
+}
+
+.tournament-board {
+	display: flex;
+	height: var(--height-mobile-screen);
+}
+
+.demis, .finals, .winner {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	margin-right: 10%;
+}
+
+.demis .match, .finals .match {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	height: 28%;
+}
+.demis .match:nth-child(1) {
+	margin-bottom: 64%;
+}
+
+.tournament-input {
+	margin: 0 5%;
+}
