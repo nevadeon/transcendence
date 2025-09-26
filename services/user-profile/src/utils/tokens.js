@@ -1,0 +1,10 @@
+export async function saveToken(db, username, token) {
+	await db.run(
+		"INSERT INTO tokens (username, token, expires_at) VALUES (?, ?, datetime('now', '+1 hour'))",
+		[username, token]
+	);
+}
+
+export async function deleteToken(db, token) {
+	await db.run("DELETE FROM tokens WHERE token = ?", [token]);
+}
