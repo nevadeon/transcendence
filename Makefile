@@ -17,3 +17,5 @@ logs :
 
 exec :
 	docker exec -it $(SERVICE) sh
+
+re : down build up
