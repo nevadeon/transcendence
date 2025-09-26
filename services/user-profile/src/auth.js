@@ -2,10 +2,10 @@ import Fastify from "fastify";
 import fastifySwagger from "@fastify/swagger";
 import fastifySwaggerUi from "@fastify/swagger-ui";
 import cors from "@fastify/cors";
-import jwt from "@fastify/jwt";
 import sqlite3 from "sqlite3";
 import { open } from "sqlite";
 import argon2 from "argon2";
+import { GenerateToken, saveToken } from "./tokenService";
 
 
 async function startServer() {
@@ -25,10 +25,16 @@ async function startServer() {
 			"password" TEXT NOT NULL,
 			"species" TEXT DEFAULT 'Human',
 			"planet" TEXT DEFAULT 'Earth',
-			"dimension" TEXT DEFAULT 'C-137'
+			"dimension" TEXT DEFAULT 'C-137',
+			"avatar" TEXT DEFAULT 'defaults/poopy.png'
 		)
 	`);
-	
+
+	await db.run(`
+	INSERT INTO users (name, email, password)
+	VALUES (?, ?, ?)
+	`, ["Rick", "rick@example.com", "supersecret"]);
+
 	const user = await db.get(
 		"SELECT * FROM users WHERE name = ?",
 		["Rick"]
@@ -85,6 +91,7 @@ async function startServer() {
 					properties: {
 						id: { type: "integer" },
 						name: { type: "string" },
+						email: { type: "string" },
 						species: { type: "string" },
 						planet: { type: "string" },
 						dimension: { type: "string" },
@@ -100,7 +107,7 @@ async function startServer() {
 				"INSERT INTO users(name, email, password) VALUES(?, ?, ?)",
 				[name, email, hashedpassword]
 			);
-			return reply.code(201).send({ id: result.lastID, name: name, email });
+			return reply.code(201).send({ id: result.lastID, name: name, email: email });
 		} catch(err) {
 			return reply.code(500).send({error: err.message});
 		}
@@ -123,7 +130,13 @@ async function startServer() {
 				200: {
 					type: "object",
 					properties: {
-						token: { type: "string" }
+						token: { type: "string" },
+						id: { type: "integer" },
+						name: { type: "string" },
+						email: { type: "string" },
+						planet: { type: "string" },
+						species: { type: "string" },
+						dimension: { type: "string" },
 					}
 				},
 				401: {
@@ -143,7 +156,7 @@ async function startServer() {
 		}
 	}, async (request, reply) => {
 		try {
-			const { email, password } = request.body;
+			const { name, password } = request.body;
 
 			const user = await db.get("SELECT * FROM users WHERE name = ?", [name]);
 			if (!user) return reply.code(401).send({ error: "Invalid name or password" });
@@ -151,8 +164,9 @@ async function startServer() {
 			const isValid = await argon2.verify(password, user.password);
 			if (!isValid) return reply.code(401).send({ error: "Invalid name or password" });
 
-			const token = fastify.jwt.sign({ id: user.id, name: user.name });
-			return reply.code(200).send({ token: token });
+			const token = GenerateToken(name);
+			saveToken(name, token)
+			return reply.code(200).send(await db.get("SELECT * FROM users WHERE name = ?", [name]));
 		} catch (err) {
 			return reply.code(500).send({ error: err.message });
 		}
@@ -208,7 +222,10 @@ async function startServer() {
 						properties: {
 							id: { type: "integer" },
 							name: { type: "string" },
-							email: { type: "string" }
+							email: { type: "string" },
+							planet: { type: "string" },
+							species: { type: "string" },
+							dimension: { type: "string" },
 						}
 					}
 				},
