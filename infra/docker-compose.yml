@@ -51,7 +51,7 @@ services:
       - backend
     volumes:
       - ../services/user-profile/src:/usr/src/app/src   # monte ton code
-      - ../services/user-profile/src/user-profile.sqlite:/data/user-profile.sqlite  # monte la DB
+      - ../services/user-profile/src/data/user-profile.sqlite:/data/user-profile.sqlite  # monte la DB
 
   # game:
     # build:
