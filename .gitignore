@@ -6,3 +6,5 @@
 
 # server ssl
 /infra/nginx/ssl/*.pem
+
+*.sqlite
