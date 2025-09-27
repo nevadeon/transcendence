@@ -12,7 +12,12 @@ import userRoutes from "./routes/users.js";
 const fastify = Fastify({ logger: true });
 
 async function start() {
-	await fastify.register(cors, { origin: ["http://localhost:5173"] });
+	await fastify.register(cors, {
+		origin: ["http://localhost:5173", "https://localhost:8443"],
+		methode: ["POST, GET, DELETE"],
+		credentials: true,
+	}
+	);
 	await fastify.register(swagger, {
 		openapi: {
 			info: { title: "Users API", version: "1.0.0" },
