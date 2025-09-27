@@ -1,22 +1,22 @@
-import { useState } from "react";
-import Modal from "./Modal";
-import Profile from "./Profile";
-import Stats from "./Stats";
-import PortraitSrc from "../../../assets/avatars/big-rick.png";
+// import { useState } from "react";
+// import Modal from "./Modal";
+// import Profile from "./Profile";
+// import Stats from "./Stats";
+// import PortraitSrc from "../../../assets/avatars/big-rick.png";
 import "../../../styles/board/body-games/BodyGames.css";
 
 export default function BodyGames() {
-	const [isOpen, setIsOpen] = useState<boolean>(true);
-	const [isProfile, setIsProfile] = useState<boolean>(false);
-	const [isStats, setIsStats] = useState<boolean>(false);
+	// const [isOpen, setIsOpen] = useState<boolean>(true);
+	// const [isProfile, setIsProfile] = useState<boolean>(false);
+	// const [isStats, setIsStats] = useState<boolean>(false);
 
-	function handleCloseModal() {
-		setIsOpen(false);
-	}
+	// function handleCloseModal() {
+	// 	setIsOpen(false);
+	// }
 
 	return (
 		<main className="body-games">
-			{ isOpen && (
+			{/* { isOpen && (
 				<Modal onClose={handleCloseModal}>
 					{
 						isProfile ?
@@ -24,7 +24,7 @@ export default function BodyGames() {
 						<Stats />
 					}
 				</Modal>
-			)}
+			)} */}
 			<button className="body-games-btn 1vs1">
 				DIMENSION DUEL
 			</button>

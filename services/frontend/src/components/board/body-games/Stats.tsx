@@ -1,4 +1,4 @@
-import type { StatsProps } from "../../../interfaces/Stats.ts";
+// import type { StatsProps } from "../../../interfaces/Stats.ts";
 import MeeseeksSrc from "../../../assets/avatars/meeseeks.png";
 import SquanchySrc from "../../../assets/avatars/squanchy.png";
 import PoopySrc from "../../../assets/avatars/poopy.png";
