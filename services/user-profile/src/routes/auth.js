@@ -9,7 +9,7 @@ async function authRoutes(fastify) {
 		const { name, email, password } = req.body;
 		try {
 			const hashed = await argon2.hash(password);
-			const result = await db.run(
+			await db.run(
 				"INSERT INTO users(name, email, password) VALUES(?, ?, ?)",
 				[name, email, hashed]
 			);
@@ -33,8 +33,13 @@ async function authRoutes(fastify) {
 			const token = auth.generateToken(user);
 			await saveToken(db, name, token);
 
-			return { ...user, token };
+			const user_data = await db.get("SELECT id, name, email, species, planet, dimension, avatar FROM users WHERE name = ?", [name], 
+				await db.get("SELECT token FROM tokens, WHERE")
+			);
+			console.log(user_data, );
+			return reply.code(201).send(user_data, token);
 		} catch (err) {
+			console.error("Erreur SQL :", err.message);
 			return reply.code(500).send({ error: err.message });
 		}
 	});

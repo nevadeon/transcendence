@@ -8,13 +8,14 @@ import dbPlugin from "./plugins/db.js";
 import jwtPlugin from "./plugins/jwt.js";
 import authRoutes from "./routes/auth.js";
 import userRoutes from "./routes/users.js";
+import { deleteToken, saveToken } from "./utils/tokens.js";
 
 const fastify = Fastify({ logger: true });
 
 async function start() {
 	await fastify.register(cors, {
 		origin: ["http://localhost:5173", "https://localhost:8443"],
-		methode: ["POST, GET, DELETE"],
+		methods: ["POST", "GET", "DELETE", "OPTION"],
 		credentials: true,
 	}
 	);
@@ -24,7 +25,10 @@ async function start() {
 			servers: [{ url: `http://localhost:${config.port}` }],
 		},
 	});
-	await fastify.register(swaggerUi, { routePrefix: "/docs" });
+	await fastify.register(swaggerUi, {
+		routePrefix: "/docs",
+		uiConfig: { docExpansion: "list", deepLinking: false },
+	});
 
 	await fastify.register(dbPlugin);
 	await fastify.register(jwtPlugin);
@@ -32,8 +36,13 @@ async function start() {
 	await fastify.register(authRoutes);
 	await fastify.register(userRoutes);
 
-	await fastify.listen({ port: config.port, host: "0.0.0.0" });
-	console.log(`🚀 Server running at http://localhost:${config.port}`);
+	try {
+		await fastify.listen({ port: config.port, host: "0.0.0.0" });
+		console.log(`🚀 Server running at http://localhost:${config.port}`);
+	} catch (err) {
+		fastify.log.error(err);
+		process.exit(1);
+	}
 }
 
 start();

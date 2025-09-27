@@ -26,7 +26,7 @@ async function dbPlugin(fastify) {
 	await db.exec(`
 		CREATE TABLE IF NOT EXISTS tokens (
 			id INTEGER PRIMARY KEY AUTOINCREMENT,
-			username TEXT NOT NULL,
+			username TEXT NOT NULL UNIQUE,
 			token TEXT NOT NULL UNIQUE,
 			created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 			expires_at DATETIME,
