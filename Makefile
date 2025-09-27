@@ -1,4 +1,8 @@
-all : build up
+all : init-db build up
+
+init-db :
+	mkdir -p services/user-profile/src/data
+	touch services/user-profile/src/data/user-profile.sqlite
 
 up :
 	docker compose -f infra/docker-compose.yml up -d
@@ -18,4 +22,4 @@ logs :
 exec :
 	docker exec -it $(SERVICE) sh
 
-re : down build up
+re : down all
