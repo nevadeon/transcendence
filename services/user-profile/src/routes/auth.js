@@ -13,7 +13,8 @@ async function authRoutes(fastify) {
 				"INSERT INTO users(name, email, password) VALUES(?, ?, ?)",
 				[name, email, hashed]
 			);
-			return reply.code(201).send({ id: result.lastID, name, email });
+			const user = await db.get("SELECT id, name, email, species, planet, dimension, avatar FROM users WHERE name = ?", [name]);
+			return reply.code(201).send(user);
 		} catch (err) {
 			return reply.code(500).send({ error: err.message });
 		}
