@@ -15,7 +15,7 @@ export default function Login() {
 					<source src={videoSource} type="video/mp4" />
 					Your browser does not support the video tag.
 				</video>
-				<Form register={false} />
+				<Form register={false} profile={false} />
 				<GoogleOAuthProvider clientId='243143343142-2d5inhhfr4coorov0ttctsp05ata8sa1.apps.googleusercontent.com'>
 					<CustomGoogleButton />
 				</GoogleOAuthProvider>

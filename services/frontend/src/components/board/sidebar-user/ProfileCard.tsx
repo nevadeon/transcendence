@@ -1,4 +1,4 @@
-import AvatarSource from "../../../assets/avatars/rick.png";
+// import AvatarSource from "../../../assets/avatars/rick.png";
 import SpeciesSource from "../../../assets/icons/species.svg";
 import PlanetSource from "../../../assets/icons/planet.svg";
 import DimensionSource from "../../../assets/icons/dimension.svg";
