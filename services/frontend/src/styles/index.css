@@ -53,6 +53,7 @@
 	--color-warning-400: rgb(178, 53, 33);
 	--color-warning-600: rgb(89, 0, 1);
 	--color-warning-low-opa-300: rgba(228, 79, 74, .75);
+	--color-warning-low-opa-600: rgba(89, 0, 1, .75);
 	/* GREEN - HOLOGRAM */
 	--color-hologram-400: rgb(128, 255, 0);
 	--color-hologram-600: rgb(42, 99, 28);

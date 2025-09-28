@@ -1,0 +1,25 @@
+.portal-gun-input {
+	position: absolute;
+	bottom: 0;
+	padding: 24px 32px 32px;
+	background: white;
+	border: 4px solid black;
+	z-index: 2;
+}
+
+.portal-gun-input .labels {
+	display: flex;
+	justify-content: space-between;
+}
+
+.portal-gun-input label {
+	color: black;
+}
+
+.portal-gun-input input {
+	margin-bottom: 0;
+	background: var(--color-warning-low-opa-600);
+	box-shadow: none;
+	border: 2px solid black;
+	border-radius: 0;
+}

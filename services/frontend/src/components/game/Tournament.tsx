@@ -13,17 +13,23 @@ export default function Tournament() {
 			<div className="demis">
 				<div className="match">
 					<ProfileCard id={1} avatar={AvatarSrc} username="ttaquet" ingame={true} isElim={true} />
+					{/* <div className="progressive-line-demis player1 top"></div> */}
 					<ProfileCard id={1} avatar={Avatar2Src} username="agilles" ingame={true} isElim={false} />
+					<div className="progressive-line-demis player2 top"></div>
 				</div>
 				<div className="match">
 					<ProfileCard id={1} avatar={Avatar3Src} username="ndavenne" ingame={true} isElim={true} />
+					{/* <div className="progressive-line-demis player3 bot"></div> */}
 					<ProfileCard id={1} avatar={Avatar4Src} username="bchedru" ingame={true} isElim={false} />
+					<div className="progressive-line-demis player4 bot"></div>
 				</div>
 			</div>
 			<div className="finals">
 				<div className="match">
 					<ProfileCard id={1} avatar={Avatar2Src} username="agilles" ingame={true} isElim={true} />
+					{/* <div className="progressive-line-finals player1-game3 mid"></div> */}
 					<ProfileCard id={1} avatar={Avatar4Src} username="bchedru" ingame={true} isElim={false} />
+					<div className="progressive-line-finals player2-game3 mid"></div>
 				</div>
 				{/* <EmptyCard />
 				<EmptyCard /> */}

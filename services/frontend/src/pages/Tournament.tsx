@@ -1,11 +1,23 @@
 import { useState, type ChangeEvent } from "react";
 import Tournament from "../components/game/Tournament.tsx";
+import UsernameInput from "../components/game/UsernameInput.tsx";
 import type { FormData } from "../interfaces/Form.ts";
 import TeleportSrc from "../assets/tournament/teleport-bg.png";
 import "../styles/tournament/Tournament.css";
 
 export default function TournamentPage() {
 	const [userData, setUserData] = useState<FormData>({ name: '', email: '', password: '' });
+	const backgroundStyle = {
+		display: 'flex',
+		alignItems: 'center',
+		justifyContent: 'center',
+		width: '100vw',
+		height: '100vh',
+		backgroundImage: `url(${TeleportSrc})`,
+		backgroundRepeat: 'no-repeat',
+		backgroundPosition: 'center center',
+		backgroundSize: 'cover',
+	};
 
 	function handleInputChange(e: ChangeEvent<HTMLInputElement>): void {
 		const { name, value } = e.target;
@@ -13,21 +25,10 @@ export default function TournamentPage() {
 	}
 
 	return (
-		<div className="tournament-page" style={{ background: `url(${TeleportSrc})` }}>
-			<div className="usrname-input tournament-input">
-				<input
-					type="text"
-					id="name"
-					name="name"
-					onChange={handleInputChange}
-					value={userData.name}
-					required
-					autoComplete='off'
-					pattern="^[a-zA-Z0-9]{3,24}$"
-					title="Username must be 3-24 characters long and contain only letters and numbers."
-				/>
-			</div>
+		<div className="tournament-page" style={backgroundStyle}>
+			<UsernameInput data={userData} onChange={handleInputChange} />
 			<Tournament />
+			<div style={{position: 'absolute', top: '0', left: '0', width: '100%', height: '100%', background: '#214241', opacity: '50%'}}></div>
 		</div>
 	);
 }
