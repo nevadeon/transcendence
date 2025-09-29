@@ -7,5 +7,7 @@
 # server ssl
 /infra/nginx/ssl/*.pem
 
+.env
+
 services/*/*/data
 services/*/data
