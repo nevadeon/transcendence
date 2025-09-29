@@ -1,13 +1,10 @@
-import { useState, type ChangeEvent } from "react";
 import Tournament from "../components/game/Tournament.tsx";
-import UsernameInput from "../components/game/UsernameInput.tsx";
-import type { FormData } from "../interfaces/Form.ts";
+// import UsernameInput from "../components/game/UsernameInput.tsx";
 import useLanguage from "../hooks/useLanguage";
 import TeleportSrc from "../assets/tournament/teleport-bg.png";
 import "../styles/tournament/Tournament.css";
 
 export default function TournamentPage() {
-	const [userData, setUserData] = useState<FormData>({ name: '', email: '', password: '' });
 	const words = useLanguage();
 
 	const backgroundStyle = {
@@ -22,14 +19,9 @@ export default function TournamentPage() {
 		backgroundSize: 'cover',
 	};
 
-	function handleInputChange(e: ChangeEvent<HTMLInputElement>): void {
-		const { name, value } = e.target;
-		setUserData(( prev: FormData ) => ( { ...prev, [name]: value } ));
-	}
-
 	return (
 		<div className="tournament-page" style={backgroundStyle}>
-			<UsernameInput data={userData} onChange={handleInputChange} words={words} />
+			{/* <UsernameInput onSubmit={} words={words} /> */}
 			<Tournament words={words} />
 			<div style={{position: 'absolute', top: '0', left: '0', width: '100%', height: '100%', background: '#214241', opacity: '50%'}}></div>
 		</div>

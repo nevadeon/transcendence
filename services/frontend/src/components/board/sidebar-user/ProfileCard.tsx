@@ -1,19 +1,22 @@
-// import AvatarSource from "../../../assets/avatars/rick.png";
+import useBoard from "../../../hooks/useBoard";
 import SpeciesSource from "../../../assets/icons/species.svg";
 import PlanetSource from "../../../assets/icons/planet.svg";
 import DimensionSource from "../../../assets/icons/dimension.svg";
 import type { ProfileCardProps } from "../../../interfaces/ProfileCard";
 import '../../../styles/board/sidebar-user/ProfileCard.css';
+// import useProfile from "../../../hooks/useBoard";
+// import AvatarSource from "../../../assets/avatars/rick.png";
 
 export default function ProfileCard( props: ProfileCardProps ) {
 	const { avatar, username, ingame, isElim, words } = props;
+	const { toggleElement } = useBoard();
 
 	function randomID(max: number) {
 		return Math.floor(Math.random() * max);
 	}
 
 	return (
-		<div className={ingame ? "profile-card-ingame" : "profile-card"}>
+		<div className={ingame ? "profile-card-ingame" : "profile-card"} onClick={() => toggleElement('profile')}>
 			{
 				isElim && <div className="eliminated">{words.messages.tournament.eliminated}</div>
 			}
