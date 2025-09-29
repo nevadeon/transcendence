@@ -2,10 +2,14 @@ import fp from "fastify-plugin";
 import sqlite3 from "sqlite3";
 import { open } from "sqlite";
 import config from "../config.js";
+import { getVaultSecret } from "./vault.js";
 
 async function dbPlugin(fastify) {
+	
+	const DB_PATH = await getVaultSecret("user-profile/config", "USER_DB_PATH");
+
 	const db = await open({
-		filename: config.dbPath,
+		filename: DB_PATH,
 		driver: sqlite3.Database,
 	});
 

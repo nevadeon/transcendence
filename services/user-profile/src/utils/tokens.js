@@ -10,3 +10,7 @@ export async function saveToken(db, username, token) {
 export async function deleteToken(db, token) {
 	await db.run("DELETE FROM tokens WHERE token = ?", [token]);
 }
+
+export async function updateToken(db, token) {
+	await db.run("UPDATE token FROM tokens WHERE token = ?", [token]);
+}

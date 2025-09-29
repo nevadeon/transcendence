@@ -1,5 +1,5 @@
 export default {
-	dbPath: process.env.DB_PATH || "./data/user-profile.sqlite",
-	jwtSecret: process.env.JWT_SECRET || "super-secret-key",
-	port: process.env.PORT || 3001,
+	VAULT_ADDR: process.env.VAULT_ADDR,
+	VAULT_TOKEN: process.env.VAULT_TOKEN,
+	// DB_PATH: process.env.USER_DB_PATH
 };

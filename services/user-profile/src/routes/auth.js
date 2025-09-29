@@ -14,8 +14,10 @@ async function authRoutes(fastify) {
 				[name, email, hashed]
 			);
 			const user = await db.get("SELECT id, name, email, species, planet, dimension, avatar FROM users WHERE name = ?", [name]);
+			console.log(user);
 			return reply.code(201).send(user);
 		} catch (err) {
+			console.log("D\n");
 			return reply.code(500).send({ error: err.message });
 		}
 	});
@@ -36,6 +38,7 @@ async function authRoutes(fastify) {
 			const user_data = await db.get("SELECT id, name, email, species, planet, dimension, avatar FROM users WHERE name = ?", [name],
 				await db.get("SELECT token FROM tokens WHERE username = ?", [name])
 			);
+			console.log(user_data);
 			return reply.code(201).send({ ...user_data, token });
 		} catch (err) {
 			console.error("Erreur SQL :", err.message);
