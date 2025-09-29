@@ -1,13 +1,14 @@
+import type { UsernameInputProps } from "../../interfaces/UsernameInput";
 import "../../styles/tournament/UsernameInput.css";
 
-export default function UsernameInput(props: any) {
-	const { data, onChange } = props;
+export default function UsernameInput(props: UsernameInputProps) {
+	const { data, onChange, words } = props;
 
 	return (
 		<div className="portal-gun-input">
 			<div className="labels">
-				<label htmlFor="name">USERNAME</label>
-				<label htmlFor="name">PARTICIPANTS</label>
+				<label htmlFor="name">{words.messages["portal-gun"].username}</label>
+				<label htmlFor="name">{words.messages["portal-gun"].challengers}</label>
 			</div>
 			<input
 				type="text"

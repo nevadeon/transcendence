@@ -15,5 +15,74 @@
 		"extra": "Pas encore de compte?",
 		"link": "Enregistrez-vous",
 		"oauth2": "Se connecter avec Google"
+	},
+	"board": {
+		"profile-card": {
+			"species": "Humain",
+			"planet": "Terre"
+		},
+		"stats": "STATISTIQUES",
+		"logout": "DECONNEXION",
+		"1vs1": "DUEL DIMENSIONNEL",
+		"2vs2": "CLASH CITADEL",
+		"1vsia": "VS MR.MEESEEKS",
+		"tournament": "COUPE RICK CORNICHON",
+		"friend-list": {
+			"title": "Liste de Contacts",
+			"infos": "Tel . Dim 01:17"
+		}
+	},
+	"profile": {
+		"title": "PROFILE",
+		"name": "NOM UTILISATEUR",
+		"email": "ADRESSE MAIL",
+		"pwd": "MOT DE PASSE",
+		"2fa": "2FA AUTH"
+	},
+	"statistics": {
+		"title": "HISTORIQUE DES MATCHS",
+		"table": {
+			"modes": "MODES",
+			"scores": "SCORES",
+			"opponents": "ADVERSAIRES",
+			"ally": "ALLIÉ",
+			"date": "DATE"
+		},
+		"cards": {
+			"1vs1": {
+				"title": "1VS1",
+				"wins": "Victoires",
+				"loses": "Defaites"
+			},
+			"1vsia": {
+				"title": "1VSIA",
+				"wins": "Victoires",
+				"loses": "Defaites"
+			},
+			"2vs2": {
+				"title": "2VS2",
+				"wins": "Victoires",
+				"loses": "Defaites"
+			},
+			"tournament": {
+				"title": "TOURNOI",
+				"wins": "Victoires",
+				"loses": "Defaites"
+			}
+		}
+	},
+	"games": {
+		"keys": {
+			"up": "HAUT",
+			"down": "BAS"
+		}
+	},
+	"tournament": {
+		"winner": "VAINQUEUR",
+		"eliminated": "ÉLIMINÉ"
+	},
+	"portal-gun": {
+		"username": "NOM UTILISATEUR",
+		"challengers": "PARTICIPANTS"
 	}
 }
