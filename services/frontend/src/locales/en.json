@@ -15,5 +15,74 @@
 		"extra": "Don't have an account yet?",
 		"link": "Sign up",
 		"oauth2": "Log in with Google"
-	}
+	},
+	"board": {
+        "profile-card": {
+            "species": "Human",
+            "planet": "Earth"
+        },
+        "stats": "STATISTICS",
+        "logout": "LOGOUT",
+        "1vs1": "DIMENSIONAL DUEL",
+        "2vs2": "CITADEL CLASH",
+        "1vsia": "VS MR.MEESEEKS",
+        "tournament": "PICKLE RICK CUP",
+        "friend-list": {
+            "title": "Contact List",
+            "infos": "Mobile . Sun 01:17"
+        }
+    },
+    "profile": {
+        "title": "PROFILE",
+        "name": "USERNAME",
+        "email": "EMAIL",
+        "pwd": "PASSWORD",
+        "2fa": "2FA AUTH"
+    },
+    "statistics": {
+        "title": "MATCH HISTORY",
+        "table": {
+            "modes": "MODES",
+            "scores": "SCORES",
+            "opponents": "OPPONENTS",
+            "ally": "ALLY",
+            "date": "DATE"
+        },
+        "cards": {
+            "1vs1": {
+                "title": "1VS1",
+                "wins": "Wins",
+                "loses": "Losses"
+            },
+            "1vsia": {
+                "title": "1VSIA",
+                "wins": "Wins",
+                "loses": "Losses"
+            },
+            "2vs2": {
+                "title": "2VS2",
+                "wins": "Wins",
+                "loses": "Losses"
+            },
+            "tournament": {
+                "title": "TOURNAMENT",
+                "wins": "Wins",
+                "loses": "Losses"
+            }
+        }
+    },
+    "games": {
+        "keys": {
+            "up": "UP",
+            "down": "DOWN"
+        }
+    },
+    "tournament": {
+        "winner": "WINNER",
+        "eliminated": "ELIMINATED"
+    },
+    "portal-gun": {
+        "username": "USERNAME",
+        "challengers": "CHALLENGERS"
+    }
 }

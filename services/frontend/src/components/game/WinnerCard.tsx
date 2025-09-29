@@ -1,10 +1,13 @@
+import type { WinnerCardProps } from "../../interfaces/WinnerCard";
 import AvatarSrc from "../../assets/avatars/squanchy.png";
 import "../../styles/tournament/WinnerCard.css";
 
-export default function WinnerCard() {
+export default function WinnerCard(props: WinnerCardProps) {
+	const { words } = props;
+
 	return (
 		<div className="winner-card">
-			<span>WINNER</span>
+			<span>{words.messages.tournament.winner}</span>
 			<img src={AvatarSrc} alt="Winner Portrait" />
 		</div>
 	);

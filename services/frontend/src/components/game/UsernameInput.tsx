@@ -6,6 +6,7 @@ import "../../styles/tournament/UsernameInput.css";
 export default function UsernameInput(props: UsernameInputProps) {
 	const [username, setUsername] = useState<string>("");
 	const { mode, onSubmit } = props;
+	const { words } = props;
 	// UserContext();
 
 	function handleInputChange(e: ChangeEvent<HTMLInputElement>): void {
@@ -25,8 +26,8 @@ export default function UsernameInput(props: UsernameInputProps) {
 	return (
 		<form className="portal-gun-input" onSubmit={handleSubmit}>
 			<div className="labels">
-				<label htmlFor="name">USERNAME</label>
-				<label htmlFor="name">PARTICIPANTS</label>
+				<label htmlFor="name">{words.messages["portal-gun"].username}</label>
+				<label htmlFor="name">{words.messages["portal-gun"].challengers}</label>
 			</div>
 			<input
 				type="text"

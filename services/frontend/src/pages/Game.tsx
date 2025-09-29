@@ -2,8 +2,9 @@ import { useParams } from "react-router";
 import Pong1vs1 from "../components/game/Pong1vs1";
 import Pong2vs2 from "../components/game/Pong2vs2";
 import Pong1vsIA from "../components/game/Pong1vsIA";
-import Tournament from "../components/game/Tournament";
+// import Tournament from "../components/game/Tournament";
 import GameBackground from "../components/game/GameBackground";
+import useLanguage from "../hooks/useLanguage";
 import CitadelClashSrc from "../assets/game/backgrounds/planet8_bg.png";
 import "../styles/game/Game.css";
 
@@ -22,6 +23,7 @@ const backgrounds = [
 // /game
 export default function GamePage() {
 	const { mode } = useParams<{mode: string}>();
+	const words = useLanguage();
 	const bgPath = mode === '2vs2' ? null : randomBackground();
 
 	function randomBackground() {
@@ -32,13 +34,13 @@ export default function GamePage() {
 	function renderMode() {
 		switch(mode) {
 			case '1vs1':
-				return <Pong1vs1 />;
+				return <Pong1vs1 words={words} />;
 			case '2vs2':
-				return <Pong2vs2 />;
+				return <Pong2vs2 words={words} />;
 			case '1vsia':
-				return <Pong1vsIA />;
+				return <Pong1vsIA words={words} />;
 			default:
-				return <Tournament />;
+				return ; //<Tournament words={words} /> ???
 		}
 	}
 

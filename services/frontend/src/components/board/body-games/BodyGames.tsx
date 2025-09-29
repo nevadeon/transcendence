@@ -8,10 +8,11 @@ import "../../../styles/board/body-games/BodyGames.css";
 import useBoard from "../../../hooks/useBoard";
 import UsernameInput from "../../game/UsernameInput";
 
-export default function BodyGames() {
+export default function BodyGames(props: BodyGamesProps) {
 	const [modeToLaunch, setModeToLaunch] = useState<string | null>(null);
 	const { openElement, toggleElement } = useBoard();
 	const navigate = useNavigate();
+  const { words } = props;
 
 	const handleGameSelect = (mode: string) => {
 		if (mode === 'tournament') {
@@ -36,8 +37,8 @@ export default function BodyGames() {
 				openElement === "profile" || openElement === "stats" ?
 				(
 					<Modal>
-						<Profile avatar={PortraitSrc} />
-						<Stats />
+						<Profile avatar={PortraitSrc} words={words} />
+						<Stats words={words} />
 					</Modal>
 				) :
 				(
@@ -46,16 +47,16 @@ export default function BodyGames() {
 				
 			}
 			<button className="body-games-btn 1vs1" onClick={() => handleGameSelect('1vs1')}>
-				DIMENSION DUEL
+				{words.messages.board["1vs1"]}
 			</button>
 			<button className="body-games-btn 2vs2" onClick={() => handleGameSelect('2vs2')}>
-				CITADEL CLASH
+				{words.messages.board["2vs2"]}
 			</button>
 			<button className="body-games-btn 1vs1" onClick={() => handleGameSelect('1vsIA')}>
-				VS MR.MEESEEKS
+				{words.messages.board["1vsia"]}
 			</button>
 			<button className="body-games-btn 1vs1" onClick={() => handleGameSelect('tournament')}>
-				PICKLE RICK CUP
+				{words.messages.board.tournament}
 			</button>
 		</main>
 	);

@@ -1,11 +1,12 @@
+import type { LogoutButtonProps } from "../../../interfaces/LogoutButton";
 import "../../../styles/board/sidebar-user/LogoutButton.css";
 
-export default function LogoutButton() {
-	//...
+export default function LogoutButton(props: LogoutButtonProps) {
+	const { words } = props;
 
 	return (
 		<button className="logout-btn">
-			LOG OUT
+			{words.messages.board.logout}
 		</button>
 	);
 }

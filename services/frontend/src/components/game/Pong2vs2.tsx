@@ -7,14 +7,16 @@ import DuoArenaSource from "../../assets/game/2vs2-terrain.svg";
 import ThinPadSource from "../../assets/game/thin-pad.svg";
 import BallSrc from "../../assets/game/balls/morty's_head_ball.png";
 import usePadsMove from "../../hooks/usePadsMove";
+import type { Pong2vs2Props } from "../../interfaces/Pong2vs2";
 
 // /game/2vs2
-export default function Pong2vs2() {
+export default function Pong2vs2(props: Pong2vs2Props) {
 	const ctrl1 = { upKey: 'q', downKey: 'a' };
 	const ctrl2 = { upKey: 'f', downKey: 'v' };
 	const ctrl3 = { upKey: 'k', downKey: 'm' };
 	const ctrl4 = { upKey: '\'', downKey: ']' };
 	const { pad1Pos, pad2Pos, pad3Pos, pad4Pos } = usePadsMove(ctrl1, ctrl2, ctrl3, ctrl4);
+	const { words } = props;
 
 	return (
 		<div className="pong">
@@ -27,6 +29,7 @@ export default function Pong2vs2() {
 				ctrl={ctrl1}
 				ctrl2={ctrl2}
 				is2vs2={true}
+				words={words}
 			/>
 			<div className="pong-1vs1-arena">
 				<img src={DuoArenaSource} alt="Arena Image" className="pong-1vs1-arena-zone" />
@@ -51,6 +54,7 @@ export default function Pong2vs2() {
 				ctrl={ctrl3}
 				ctrl2={ctrl4}
 				is2vs2={true}
+				words={words}
 			/>
 		</div>
 	);

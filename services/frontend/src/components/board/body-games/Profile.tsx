@@ -8,6 +8,7 @@ export default function Profile(props: ProfileProps) {
 	const { avatar } = props;
 	const { openElement, toggleElement } = useBoard();
 	const isOpen = openElement === 'profile';
+  const { avatar, words } = props;
 
 	function handleClose() {
 		toggleElement(null);
@@ -19,7 +20,7 @@ export default function Profile(props: ProfileProps) {
 	return (
 		<div className="profile">
 			<div className="profile-header">
-				<h2>PROFILE</h2>
+				<h2>{words.messages.profile.title}</h2>
 				<button className="modal-close-button" onClick={handleClose}>
 					<img src={CrossSrc} alt="Close Icon" />
 				</button>
