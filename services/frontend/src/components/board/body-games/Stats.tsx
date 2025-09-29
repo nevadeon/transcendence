@@ -1,9 +1,11 @@
 // import type { StatsProps } from "../../../interfaces/Stats.ts";
+import CrossSrc from "../../../assets/icons/cross.svg";
 import MeeseeksSrc from "../../../assets/avatars/meeseeks.png";
 import SquanchySrc from "../../../assets/avatars/squanchy.png";
 import PoopySrc from "../../../assets/avatars/poopy.png";
 import MortySrc from "../../../assets/avatars/morty.png";
 import "../../../styles/board/body-games/Stats.css";
+import useBoard from "../../../hooks/useBoard";
 
 // curr.user === score1 + 4 <tr> max, then scrollbar !!!
 const games = [
@@ -48,6 +50,9 @@ interface ModeStats {
 type StatsByMode = { [key: string]: ModeStats };
 
 export default function Stats() {
+	const {openElement, toggleElement} = useBoard();
+	const isOpen = openElement === 'stats';
+
 	const statsByMode = games.reduce((acc: StatsByMode, curr) => {
 		const mode = curr.mode;
 		if (!acc[mode])
@@ -64,9 +69,21 @@ export default function Stats() {
 		...stats,
 	}));
 
+	function handleClose() {
+		toggleElement(null);
+	}
+
+	if (!isOpen)
+		return null;
+
 	return (
 		<div className="stats">
-			<h2>GAME HISTORY</h2>
+			<div className="stats-header">
+				<h2>GAME HISTORY</h2>
+				<button className="modal-close-button" onClick={handleClose}>
+					<img src={CrossSrc} alt="Close Icon" />
+				</button>
+			</div>
 			<div className="stats-data">
 				<table className="stats-data-table">
 					<thead>
