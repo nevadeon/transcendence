@@ -8,6 +8,7 @@ RUN npm install
 
 COPY . .
 
+
 EXPOSE 3001
 
 # Lancer l'application

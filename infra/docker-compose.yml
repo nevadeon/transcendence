@@ -20,9 +20,38 @@ services:
     build:
       context: ./nginx
       dockerfile: Dockerfile
+    networks:
+      - web
+      - backend
     volumes:
       - ./nginx/ssl:/etc/nginx/ssl
     restart: "no"
+
+  vault:
+    build:
+      context: ./vault
+      dockerfile: Dockerfile
+    container_name: vault
+    healthcheck:
+      test: ["CMD", "vault", "status"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    cap_add:
+      - IPC_LOCK
+    environment:
+    - VAULT_ADDR=http://0.0.0.0:8200
+    - VAULT_TOKEN=root
+    env_file:
+      - .env
+    ports:
+      - "8200:8200"
+    volumes:
+      - ./vault/policies:/vault/policies
+      - ./vault/init.sh:/vault/init.sh
+    networks:
+      - backend
 
   frontend:
     build:
@@ -42,25 +71,25 @@ services:
     container_name: user-profile
     ports:
       - "3001:3001"
-    environment:
-      - DB_PATH=/data/user-profile.sqlite
-      - PORT=3001
-      - JWT_SECRET=super-secret-key
+    env_file:
+      - .env
     networks:
       - web
       - backend
     volumes:
       - ../services/user-profile/src:/usr/src/app/src   # monte ton code
       - ../services/user-profile/src/data/user-profile.sqlite:/data/user-profile.sqlite  # monte la DB
+    depends_on:
+      vault:
+        condition: service_healthy
 
   # game:
     # build:
       # context: ../services/game
       # dockerfile: Dockerfile
     # container_name: game
-    # environment:
-      # - DB_PATH=/data/game.sqlite
-      # - PORT=3002
+    # env_file:
+      # - .env
     # expose:
       # - 3002
     # networks:
