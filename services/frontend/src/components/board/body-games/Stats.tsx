@@ -1,4 +1,7 @@
+// import type { StatsProps } from "../../../interfaces/Stats.ts";
+import useBoard from "../../../hooks/useBoard";
 import type { StatsProps } from "../../../interfaces/Stats.ts";
+import CrossSrc from "../../../assets/icons/cross.svg";
 import MeeseeksSrc from "../../../assets/avatars/meeseeks.png";
 import SquanchySrc from "../../../assets/avatars/squanchy.png";
 import PoopySrc from "../../../assets/avatars/poopy.png";
@@ -48,6 +51,8 @@ interface ModeStats {
 type StatsByMode = { [key: string]: ModeStats };
 
 export default function Stats(props: StatsProps) {
+	const {openElement, toggleElement} = useBoard();
+	const isOpen = openElement === 'stats';
 	const { words } = props;
 
 	const statsByMode = games.reduce((acc: StatsByMode, curr) => {
@@ -66,9 +71,21 @@ export default function Stats(props: StatsProps) {
 		...stats,
 	}));
 
+	function handleClose() {
+		toggleElement(null);
+	}
+
+	if (!isOpen)
+		return null;
+
 	return (
 		<div className="stats">
-			<h2>{words.messages.statistics.title}</h2>
+			<div className="stats-header">
+				<h2>{words.messages.statistics.title}</h2>
+				<button className="modal-close-button" onClick={handleClose}>
+					<img src={CrossSrc} alt="Close Icon" />
+				</button>
+			</div>
 			<div className="stats-data">
 				<table className="stats-data-table">
 					<thead>

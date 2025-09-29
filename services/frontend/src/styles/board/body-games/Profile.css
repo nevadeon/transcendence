@@ -3,6 +3,11 @@
 	width: 100%;
 }
 
+.profile-header {
+    display: flex;
+    justify-content: space-between;
+}
+
 .profile-data {
 	display: flex;
     margin-top: 24px;
