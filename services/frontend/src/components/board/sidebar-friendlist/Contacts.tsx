@@ -3,7 +3,7 @@ import PhoneSource from "../../../assets/icons/phone.svg";
 import "../../../styles/board/sidebar-friendlist/Contacts.css";
 
 export default function Contacts(props: ContactsProps) {
-	const { iconUrl, name, isOnline } = props;
+	const { iconUrl, name, isOnline, words } = props;
 
 	return (
 		<div className="contacts">
@@ -16,7 +16,7 @@ export default function Contacts(props: ContactsProps) {
 					</div>
 					<div className="contacts-data-extra">
 						{/* <img src="Inner/Outer Call" alt="Call Icon" /> */}
-						<span>Mobile . Sun 01:17</span>
+						<span>{words.messages.board["friend-list"].infos}</span>
 					</div>
 				</div>
 				<img src={PhoneSource} alt="Phone Icon" />

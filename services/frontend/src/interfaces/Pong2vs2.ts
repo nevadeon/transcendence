@@ -1,6 +1,5 @@
 import type { LanguageContextType } from "./Language";
 
-export interface ProfileProps {
-	avatar: string,
+export interface Pong2vs2Props {
 	words: LanguageContextType
 }

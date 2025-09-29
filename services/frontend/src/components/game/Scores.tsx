@@ -1,5 +1,7 @@
-export default function Scores(props: any) {
-	const { avatar, avatar2, name, name2, result, ctrl, ctrl2, is2vs2 } = props;
+import type { ScoresProps } from "../../interfaces/ScoresProps";
+
+export default function Scores(props: ScoresProps) {
+	const { avatar, avatar2, name, name2, result, ctrl, ctrl2, is2vs2, words } = props;
 
 	return (
 		<div className="pong-1vs1-scores">
@@ -15,11 +17,11 @@ export default function Scores(props: any) {
 				<div className="pong-1vs1-shortcuts">
 					<div className="pong-1vs1-shortcuts-key">
 						<span>{ctrl.upKey.toUpperCase()}</span>
-						<span>UP</span>
+						<span>{words.messages.games.keys.up}</span>
 					</div>
 					<div className="pong-1vs1-shortcuts-key">
 						<span>{ctrl.downKey.toUpperCase()}</span>
-						<span>DOWN</span>
+						<span>{words.messages.games.keys.down}</span>
 					</div>
 				</div>
 			</>
@@ -31,12 +33,12 @@ export default function Scores(props: any) {
 				is2vs2 &&
 				<div className="pong-1vs1-shortcuts">
 					<div className="pong-1vs1-shortcuts-key">
-						<span>{ctrl2.upKey.toUpperCase()}</span>
-						<span>UP</span>
+						<span>{ctrl2?.upKey.toUpperCase()}</span>
+						<span>{words.messages.games.keys.up}</span>
 					</div>
 					<div className="pong-1vs1-shortcuts-key">
-						<span>{ctrl2.downKey.toUpperCase()}</span>
-						<span>DOWN</span>
+						<span>{ctrl2?.downKey.toUpperCase()}</span>
+						<span>{words.messages.games.keys.down}</span>
 					</div>
 				</div>
 			}
@@ -52,11 +54,11 @@ export default function Scores(props: any) {
 				<div className="pong-1vs1-shortcuts">
 					<div className="pong-1vs1-shortcuts-key">
 						<span>{ctrl.upKey.toUpperCase()}</span>
-						<span>UP</span>
+						<span>{words.messages.games.keys.up}</span>
 					</div>
 					<div className="pong-1vs1-shortcuts-key">
 						<span>{ctrl.downKey.toUpperCase()}</span>
-						<span>DOWN</span>
+						<span>{words.messages.games.keys.down}</span>
 					</div>
 				</div>
 			}

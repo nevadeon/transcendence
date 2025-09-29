@@ -6,7 +6,7 @@ import type { ProfileCardProps } from "../../../interfaces/ProfileCard";
 import '../../../styles/board/sidebar-user/ProfileCard.css';
 
 export default function ProfileCard( props: ProfileCardProps ) {
-	const { avatar, username, ingame, isElim } = props;
+	const { avatar, username, ingame, isElim, words } = props;
 
 	function randomID(max: number) {
 		return Math.floor(Math.random() * max);
@@ -15,7 +15,7 @@ export default function ProfileCard( props: ProfileCardProps ) {
 	return (
 		<div className={ingame ? "profile-card-ingame" : "profile-card"}>
 			{
-				isElim && <div className="eliminated">ELIMINATED</div>
+				isElim && <div className="eliminated">{words.messages.tournament.eliminated}</div>
 			}
 			<img src={avatar} alt="Profile Avatar" className={ingame ? "profile-card-avatar-ingame" : "profile-card-avatar"} />
 			<div className="profile-card-data">
@@ -28,11 +28,11 @@ export default function ProfileCard( props: ProfileCardProps ) {
 					<div className="profile-card-data-extra">
 						<div>
 							<img src={SpeciesSource} alt="Species Icon" />
-							<span>Human</span>
+							<span>{words.messages.board["profile-card"].species}</span>
 						</div>
 						<div>
 							<img src={PlanetSource} alt="Planet Icon" />
-							<span>Earth</span>
+							<span>{words.messages.board["profile-card"].planet}</span>
 						</div>
 						<div>
 							<img src={DimensionSource} alt="Dimension Icon" />

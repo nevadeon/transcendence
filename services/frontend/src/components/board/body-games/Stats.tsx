@@ -1,4 +1,4 @@
-// import type { StatsProps } from "../../../interfaces/Stats.ts";
+import type { StatsProps } from "../../../interfaces/Stats.ts";
 import MeeseeksSrc from "../../../assets/avatars/meeseeks.png";
 import SquanchySrc from "../../../assets/avatars/squanchy.png";
 import PoopySrc from "../../../assets/avatars/poopy.png";
@@ -47,7 +47,9 @@ interface ModeStats {
 
 type StatsByMode = { [key: string]: ModeStats };
 
-export default function Stats() {
+export default function Stats(props: StatsProps) {
+	const { words } = props;
+
 	const statsByMode = games.reduce((acc: StatsByMode, curr) => {
 		const mode = curr.mode;
 		if (!acc[mode])
@@ -66,25 +68,25 @@ export default function Stats() {
 
 	return (
 		<div className="stats">
-			<h2>GAME HISTORY</h2>
+			<h2>{words.messages.statistics.title}</h2>
 			<div className="stats-data">
 				<table className="stats-data-table">
 					<thead>
 						<tr>
 							<th>
-								MODES
+								{words.messages.statistics.table.modes}
 							</th>
 							<th>
-								SCORES
+								{words.messages.statistics.table.scores}
 							</th>
 							<th>
-								OPPONENTS
+								{words.messages.statistics.table.opponents}
 							</th>
 							<th>
-								ALLY
+								{words.messages.statistics.table.ally}
 							</th>
 							<th>
-								DATE
+								{words.messages.statistics.table.date}
 							</th>
 						</tr>
 					</thead>
@@ -141,11 +143,11 @@ export default function Stats() {
 							<div className="card-container-totals">
 								<div className="wins">
 									<span>{game.wins < 10 ? "0" + game.wins : game.wins}</span>
-									<span>Wins</span>
+									<span>{words.messages.statistics.cards["1vs1"].wins}</span>
 								</div>
 								<div className="loses">
 									<span>{game.loses < 10 ? "0" + game.loses : game.loses}</span>
-									<span>Loses</span>
+									<span>{words.messages.statistics.cards["1vs1"].loses}</span>
 								</div>
 							</div>
 						</div>

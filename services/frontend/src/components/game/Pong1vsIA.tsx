@@ -1,3 +1,5 @@
+import usePadsMove from "../../hooks/usePadsMove";
+import type { Pong1vsIAProps } from "../../interfaces/Pong1vsIA";
 import Avatar1Source from "../../assets/avatars/rick.png";
 import Avatar2Source from "../../assets/avatars/meeseeks.png";
 import ArenaSource from "../../assets/game/arena.svg";
@@ -5,12 +7,12 @@ import PadSource from "../../assets/game/pad.svg";
 import BallSrc from "../../assets/game/balls/morty's_head_ball.png";
 import ArrowUpSrc from "../../assets/game/keybinds/arrow-up.svg";
 import ArrowDownSrc from "../../assets/game/keybinds/arrow-down.svg";
-import usePadsMove from "../../hooks/usePadsMove";
 
 // /game/1vsia
-export default function Pong1vsIA() {
+export default function Pong1vsIA(props: Pong1vsIAProps) {
 	const ctrl1 = { upKey: 'q', downKey: 'a' };
 	const { pad1Pos, pad2Pos } = usePadsMove(ctrl1, undefined, undefined, undefined);
+	const { words } = props;
 
 	return (
 		<div className="pong">
@@ -26,11 +28,11 @@ export default function Pong1vsIA() {
 				<div className="pong-1vs1-shortcuts">
 					<div className="pong-1vs1-shortcuts-key">
 						<span>A</span>
-						<span>UP</span>
+						<span>{words.messages.games.keys.up}</span>
 					</div>
 					<div className="pong-1vs1-shortcuts-key">
 						<span>Q</span>
-						<span>DOWN</span>
+						<span>{words.messages.games.keys.down}</span>
 					</div>
 				</div>
 			</div>
@@ -56,13 +58,13 @@ export default function Pong1vsIA() {
 						<span>
 							<img src={ArrowUpSrc} alt="Arrow Up Icon" />
 							</span>
-						<span>UP</span>
+						<span>{words.messages.games.keys.up}</span>
 					</div>
 					<div className="pong-1vs1-shortcuts-key">
 						<span>
 							<img src={ArrowDownSrc} alt="Arrow Down Icon" />
 						</span>
-						<span>DOWN</span>
+						<span>{words.messages.games.keys.down}</span>
 					</div>
 				</div>
 			</div>
