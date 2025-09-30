@@ -83,6 +83,7 @@
     },
     "portal-gun": {
         "username": "USERNAME",
-        "challengers": "CHALLENGERS"
+        "ally": "ALLY",
+        "opponent": "OPPONENT"
     }
 }

@@ -11,31 +11,30 @@ import "../../styles/tournament/Tournament.css";
 export default function Tournament(props: TournamentProps) {
 	const { words } = props;
 
+	//<EmptyCard /> to design for finals and winner
 	return (
 		<div className="tournament-board">
 			<div className="demis">
 				<div className="match">
 					<ProfileCard id={1} avatar={AvatarSrc} username="ttaquet" ingame={true} isElim={true} words={words} />
-					{/* <div className="progressive-line-demis player1 top"></div> */}
-					<ProfileCard id={1} avatar={Avatar2Src} username="agilles" ingame={true} isElim={false} words={words} />
+					<div className="progressive-line-demis player1 top invisible"></div>
+					<ProfileCard id={1} avatar={Avatar2Src} username="?????" ingame={true} isElim={false} words={words} />
 					<div className="progressive-line-demis player2 top"></div>
 				</div>
 				<div className="match">
-					<ProfileCard id={1} avatar={Avatar3Src} username="ndavenne" ingame={true} isElim={true} words={words} />
-					{/* <div className="progressive-line-demis player3 bot"></div> */}
-					<ProfileCard id={1} avatar={Avatar4Src} username="bchedru" ingame={true} isElim={false} words={words} />
+					<ProfileCard id={1} avatar={Avatar3Src} username="?????" ingame={true} isElim={true} words={words} />
+					<div className="progressive-line-demis player3 bot invisible"></div>
+					<ProfileCard id={1} avatar={Avatar4Src} username="?????" ingame={true} isElim={false} words={words} />
 					<div className="progressive-line-demis player4 bot"></div>
 				</div>
 			</div>
 			<div className="finals">
 				<div className="match">
 					<ProfileCard id={1} avatar={Avatar2Src} username="agilles" ingame={true} isElim={true} words={words} />
-					{/* <div className="progressive-line-finals player1-game3 mid"></div> */}
+					<div className="progressive-line-finals player1-game3 mid invisible"></div>
 					<ProfileCard id={1} avatar={Avatar4Src} username="bchedru" ingame={true} isElim={false} words={words} />
 					<div className="progressive-line-finals player2-game3 mid"></div>
 				</div>
-				{/* <EmptyCard />
-				<EmptyCard /> */}
 			</div>
 			<div className="winner">
 				{/* <ProfileCard id={1} avatar={Avatar4Src} username="bchedru" ingame={true} isElim={false} /> */}

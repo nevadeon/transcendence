@@ -1,3 +1,4 @@
+import { useLocation } from "react-router";
 import Avatar1Src from "../../assets/avatars/rick.png";
 import Avatar2Src from "../../assets/avatars/poopy.png";
 import Avatar3Src from "../../assets/avatars/morty.png";
@@ -17,6 +18,7 @@ export default function Pong2vs2(props: Pong2vs2Props) {
 	const ctrl4 = { upKey: '\'', downKey: ']' };
 	const { pad1Pos, pad2Pos, pad3Pos, pad4Pos } = usePadsMove(ctrl1, ctrl2, ctrl3, ctrl4);
 	const { words } = props;
+	const location = useLocation();
 
 	return (
 		<div className="pong">
@@ -24,7 +26,7 @@ export default function Pong2vs2(props: Pong2vs2Props) {
 				avatar={Avatar1Src}
 				avatar2={Avatar2Src}
 				name={"ttaquet"}
-				name2={"ndavenne"}
+				name2={location.state.usernames[0]}
 				result={6}
 				ctrl={ctrl1}
 				ctrl2={ctrl2}
@@ -48,8 +50,8 @@ export default function Pong2vs2(props: Pong2vs2Props) {
 			<Scores
 				avatar={Avatar3Src}
 				avatar2={Avatar4Src}
-				name={"bchedru"}
-				name2={"agilles"}
+				name={location.state.usernames[1]}
+				name2={location.state.usernames[2]}
 				result={4}
 				ctrl={ctrl3}
 				ctrl2={ctrl4}
