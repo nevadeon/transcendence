@@ -83,6 +83,25 @@ services:
       vault:
         condition: service_healthy
 
+  user-stats:
+    build:
+      context: ../services/user-stats
+      dockerfile: Dockerfile
+    container_name: user-stats
+    ports:
+      - "3003:3003"
+    env_file:
+      - .env
+    networks:
+      - web
+      - backend
+    volumes:
+      - ../services/user-stats/src:/usr/src/app/src   # monte ton code
+      - ../services/user-stats/src/data/user-stats.sqlite:/data/user-stats.sqlite  # monte la DB
+    depends_on:
+      vault:
+        condition: service_healthy
+
   # game:
     # build:
       # context: ../services/game
@@ -100,6 +119,7 @@ services:
 
 volumes:
   user-profile-data:
+  user-stats-data:
 
 networks:
   web:
