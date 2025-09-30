@@ -58,7 +58,6 @@ export default function Form(props: FormProps) {
 				});
 				const data = await res.json();
 				if (res.ok && data.token) {
-					console.log('Registration successful', data);
 					login(data.token);
 					naviguate('/board');
 				} else {

@@ -3,10 +3,18 @@ async function statsRoutes(fastify) {
 
 	// stats
 	fastify.post("/game_history", async (req, reply) => {
-		const {red_team_A, red_team_B, blue_team_A, blue_team_B, mode, red_team_score, blue_team_score, winner } = req.body;
+		const {
+			red_team_A,
+			red_team_B,
+			blue_team_A,
+			blue_team_B,
+			mode,
+			red_team_score,
+			blue_team_score,
+			winner } = req.body;
 		try {
 			await db.run(
-				"INSERT INTO match_history(red_team_A, red_team_B, blue_team_A, blue_team_B, mode, red_team_score, blue_team_score, winner VALUES(?, ?, ?, ?, ?, ?, ?)",
+				"INSERT INTO match_history(red_team_A, red_team_B, blue_team_A, blue_team_B, mode, red_team_score, blue_team_score, winner) VALUES(?, ?, ?, ?, ?, ?, ?)",
 				[red_team_A, red_team_B, blue_team_A, blue_team_B, mode, red_team_score, blue_team_score, winner]
 			);
 
