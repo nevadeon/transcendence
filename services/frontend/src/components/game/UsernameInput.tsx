@@ -5,23 +5,9 @@ import "../../styles/tournament/UsernameInput.css";
 
 export default function UsernameInput(props: UsernameInputProps) {
 	const { mode, users, onChange, onSubmit, words } = props;
-	// const [ usernames, setUsernames ] = useState<string[]>(Array(numUser).fill(''));
 	let currLabels: string[] | undefined;
-	// UserContext();
 
-	// ?????
-	// useEffect(() => {
-    //     setUsernames(Array(numUser).fill(''));
-    // }, [numUser]);
-
-	// function handleInputChange(e: ChangeEvent<HTMLInputElement>, index: number): void {
-	// 	const { value } = e.target;
-	// 	setUsernames(prevNames => {
-	// 		const newNames = [... prevNames];
-	// 		newNames[index] = value;
-	// 		return newNames;
-	// 	});
-	// }
+	//...	
 
 	function handleSubmit(e: FormEvent): void {
         e.preventDefault();

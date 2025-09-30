@@ -32,8 +32,33 @@ export default function TournamentPage() {
 		backgroundSize: 'cover',
 	};
 
-	const handleFormSubmit = (usernames: string[]) => {
-        navigate(`/game/1vs1`, { state: { usernames } });
+	async function handleFormSubmit(usernames: string[]) {
+		try {
+			const res = await fetch("http://localhost:3003/game_history", {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify( {
+					red_team_A: 'username1',
+					red_team_B: usernames[0],
+					blue_team_A: usernames[1],
+					blue_team_B: usernames[2],
+					mode: '1vs1',
+					red_team_score: 7,
+					blue_team_score: 4,
+					winner: 'red_team'
+				} )
+			});
+			const data = await res.json();
+			if (res.ok) {
+				console.log('Registration successful', data);
+			} else {
+				console.error('Registration failed');
+			}
+		} catch(err) {
+			console.error('Registration error: ', err)
+		}
+		//timeout(5000) + {state: {users: usernames, demis: ... }}
+		// navigate('/game/1vs1', { state: usernames });
     };
 
 	return (
