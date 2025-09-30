@@ -7,6 +7,11 @@
 	z-index: 2;
 }
 
+.portal-gun-input .container:nth-child(2),
+.portal-gun-input .container:nth-child(3) {
+	margin-top: 12px
+}
+
 .portal-gun-input .labels {
 	display: flex;
 	justify-content: space-between;

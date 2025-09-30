@@ -1,8 +1,10 @@
+import type { ChangeEvent } from "react";
 import type { LanguageContextType } from "./Language";
 
 export interface UsernameInputProps {
 	mode?: string,
-	numUser: number,
-	onSubmit: (usernames: string[]) => void
+	users: string[],
+	onChange: (e: ChangeEvent<HTMLInputElement>, index: number) => void,
+	onSubmit: (usernames: string[]) => void,
 	words: LanguageContextType
 }

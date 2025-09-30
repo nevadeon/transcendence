@@ -9,7 +9,7 @@ import "../../styles/tournament/Tournament.css";
 
 // /tournament
 export default function Tournament(props: TournamentProps) {
-	const { words } = props;
+	const { users, words } = props;
 
 	//<EmptyCard /> to design for finals and winner
 	return (
@@ -18,13 +18,13 @@ export default function Tournament(props: TournamentProps) {
 				<div className="match">
 					<ProfileCard id={1} avatar={AvatarSrc} username="ttaquet" ingame={true} isElim={true} words={words} />
 					<div className="progressive-line-demis player1 top invisible"></div>
-					<ProfileCard id={1} avatar={Avatar2Src} username="?????" ingame={true} isElim={false} words={words} />
+					<ProfileCard id={1} avatar={Avatar2Src} username={users[0].length !== 0 ? users[0] : "?????"} ingame={true} isElim={false} words={words} />
 					<div className="progressive-line-demis player2 top"></div>
 				</div>
 				<div className="match">
-					<ProfileCard id={1} avatar={Avatar3Src} username="?????" ingame={true} isElim={true} words={words} />
+					<ProfileCard id={1} avatar={Avatar3Src} username={users[1].length !== 0 ? users[1] : "?????"} ingame={true} isElim={true} words={words} />
 					<div className="progressive-line-demis player3 bot invisible"></div>
-					<ProfileCard id={1} avatar={Avatar4Src} username="?????" ingame={true} isElim={false} words={words} />
+					<ProfileCard id={1} avatar={Avatar4Src} username={users[2].length !== 0 ? users[2] : "?????"} ingame={true} isElim={false} words={words} />
 					<div className="progressive-line-demis player4 bot"></div>
 				</div>
 			</div>
