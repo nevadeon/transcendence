@@ -12,10 +12,11 @@ echo "Vault is ready!"
 
 # Create policy
 vault policy write user-profile ./vault/policies/user-profile.hcl
+vault policy write user-stats ./vault/policies/user-stats.hcl
 
 # Create secret with KV v2 (simple format)
 vault kv put secret/user-profile/config \
-  USER_DB_PATH="${USER_DB_PATH}" \
+  USER_PROFILE_DB_PATH="${USER_PROFILE_DB_PATH}" \
   USER_PROFILE_PORT="${USER_PROFILE_PORT}" \
   GAME_PORT="${GAME_PORT}" \
   JWT_SECRET="$(openssl rand -hex 32)"
