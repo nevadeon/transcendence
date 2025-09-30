@@ -86,3 +86,7 @@
 .demis .match:nth-child(1) {
 	margin-bottom: 24dvh;
 }
+
+.invisible {
+	display: none;
+}
