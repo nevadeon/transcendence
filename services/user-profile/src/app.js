@@ -8,6 +8,7 @@ import dbPlugin from "./plugins/db.js";
 import jwtPlugin from "./plugins/jwt.js";
 import authRoutes from "./routes/auth.js";
 import userRoutes from "./routes/users.js";
+import { getVaultSecret } from "./plugins/vault.js";
 
 const fastify = Fastify({ logger: true });
 
@@ -16,23 +17,18 @@ async function start() {
 		origin: ["http://localhost:5173", "https://localhost:8443"],
 		methods: ["POST", "GET", "DELETE", "OPTION"],
 		credentials: true,
-	}
-	);
-
-	const res = await fetch(`${config.VAULT_ADDR}/v1/secret/data/user-profile/JWT_SECRET`, {
-		headers: { "X-Vault-Token": config.VAULT_TOKEN }
 	});
-	const body = await res.json();
-	const USER_PROFILE_PORT = body?.data?.data?.USER_PROFILE_PORT || 3001;
+
+	const USER_PROFILE_PORT = await getVaultSecret("user-profile/config", "USER_PROFILE_PORT");
 
 	await fastify.register(swagger, {
 		openapi: {
-			info: { title: "Users API", version: "1.0.0" },
+			info: { title: "Users profile API", version: "1.0.0" },
 			servers: [{ url: `http://localhost:${USER_PROFILE_PORT}` }],
 		},
 	});
 	await fastify.register(swaggerUi, {
-		routePrefix: "/docs",
+		routePrefix: "/docs/user-profile",
 		uiConfig: { docExpansion: "list", deepLinking: false },
 	});
 
@@ -44,7 +40,7 @@ async function start() {
 
 	try {
 		await fastify.listen({ port: USER_PROFILE_PORT, host: "0.0.0.0" });
-		console.log(`🚀 Server running at http://localhost:${USER_PROFILE_PORT}`);
+		console.log(`Server running at http://localhost:${USER_PROFILE_PORT}`);
 	} catch (err) {
 		fastify.log.error(err);
 		process.exit(1);
