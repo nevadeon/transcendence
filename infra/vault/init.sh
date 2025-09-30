@@ -21,4 +21,9 @@ vault kv put secret/user-profile/config \
   GAME_PORT="${GAME_PORT}" \
   JWT_SECRET="$(openssl rand -hex 32)"
 
+vault kv put secret/user-stats/config \
+  USER_STATS_PORT="${USER_STATS_PORT}" \
+  USER_STATS_DB_PATH="${USER_STATS_DB_PATH}" \
+
+
 echo "Vault initialization complete!"

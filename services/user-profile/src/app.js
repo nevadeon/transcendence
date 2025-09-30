@@ -8,7 +8,7 @@ import dbPlugin from "./plugins/db.js";
 import jwtPlugin from "./plugins/jwt.js";
 import authRoutes from "./routes/auth.js";
 import userRoutes from "./routes/users.js";
-import { getVaultSecret } from "./plugins/vault.js";
+import {getVaultSecret} from "./plugins/vault.js";
 
 const fastify = Fastify({ logger: true });
 
