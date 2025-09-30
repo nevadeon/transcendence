@@ -1,31 +1,31 @@
-import { useState, useEffect, type ChangeEvent } from "react";
+// import { useState, useEffect, type ChangeEvent } from "react";
 import type { FormEvent } from "react";
 import type { UsernameInputProps } from "../../interfaces/UsernameInput";
 import "../../styles/tournament/UsernameInput.css";
 
 export default function UsernameInput(props: UsernameInputProps) {
-	const { mode, numUser, onSubmit, words } = props;
-	const [ usernames, setUsernames ] = useState<string[]>(Array(numUser).fill(''));
+	const { mode, users, onChange, onSubmit, words } = props;
+	// const [ usernames, setUsernames ] = useState<string[]>(Array(numUser).fill(''));
 	let currLabels: string[] | undefined;
 	// UserContext();
 
-	useEffect(() => {
-        setUsernames(Array(numUser).fill(''));
-    }, [numUser]);
+	// ?????
+	// useEffect(() => {
+    //     setUsernames(Array(numUser).fill(''));
+    // }, [numUser]);
 
-	function handleInputChange(e: ChangeEvent<HTMLInputElement>, index: number): void {
-		const { value } = e.target;
-		setUsernames(prevNames => {
-			const newNames = [... prevNames];
-			newNames[index] = value;
-			return newNames;
-		});
-		console.log(usernames);
-	}
+	// function handleInputChange(e: ChangeEvent<HTMLInputElement>, index: number): void {
+	// 	const { value } = e.target;
+	// 	setUsernames(prevNames => {
+	// 		const newNames = [... prevNames];
+	// 		newNames[index] = value;
+	// 		return newNames;
+	// 	});
+	// }
 
 	function handleSubmit(e: FormEvent): void {
         e.preventDefault();
-        const trimmedUsernames = usernames.map((name) => name.trim());
+        const trimmedUsernames = users.map((name) => name.trim());
 		const allFieldsValid = trimmedUsernames.every((name) => name.length > 0);
 		if (allFieldsValid)
 			onSubmit(trimmedUsernames);
@@ -55,8 +55,8 @@ export default function UsernameInput(props: UsernameInputProps) {
 
 	return (
 		<form className="portal-gun-input" onSubmit={handleSubmit}>
-			{usernames.map((name, index) => (
-				<div key={index}>
+			{users.map((name, index) => (
+				<div key={index} className="container">
 					<div className="labels">
 						<label htmlFor={`name-${index}`}>{words.messages["portal-gun"].username}</label>
 						<label htmlFor={`name-${index}`}>{currLabels?.[index]}</label>
@@ -65,11 +65,12 @@ export default function UsernameInput(props: UsernameInputProps) {
 						type="text"
 						id={`name-${index}`}
 						name={`name-${index}`}
-						onChange={(e) => handleInputChange(e, index)}
+						onChange={(e) => onChange(e, index)}
 						value={name}
+						maxLength={12}
 						required
 						autoComplete='off'
-						pattern="^[a-zA-Z0-9]{3,24}$"
+						pattern="^[a-zA-Z0-9]{3,12}$"
 						title="Username must be 3-24 characters long and contain only letters and numbers."
 					/>
 				</div>

@@ -1,4 +1,4 @@
-import { useLocation } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import Scores from "./Scores";
 import Arena from "./Arena";
 import usePadsMove from "../../hooks/usePadsMove";
@@ -13,6 +13,11 @@ export default function Pong1vs1(props: Pong1vs1Props) {
 	const { pad1Pos, pad2Pos } = usePadsMove(ctrl1, ctrl2, undefined, undefined);
 	const { words } = props;
 	const location = useLocation();
+	// const navigate = useNavigate();
+
+
+	// const results = { winner: 'John', loser: 'Doe', score: '3-1', matchType: 'demi1' };
+	// navigate('/tournament', { state: { results } });
 
 	return (
 		<div className="pong">
