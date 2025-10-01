@@ -40,7 +40,7 @@ async function dbPlugin(fastify) {
 			red_team_score INTEGER NOT NULL,
 			blue_team_score INTEGER NOT NULL,
 			winner TEXT NOT NULL,
-			DATE DATE DEFAULT (DATE('now'))
+			date DATE DEFAULT (DATE('now'))
 		)
 	`)
 
