@@ -10,4 +10,5 @@ export interface PadPositions {
 	pad2Pos: number;
 	pad3Pos: number;
 	pad4Pos: number;
+	ballPos: {x: number, y: number};
 }

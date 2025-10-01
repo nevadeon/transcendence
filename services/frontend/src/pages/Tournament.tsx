@@ -1,5 +1,5 @@
 import { useState, type ChangeEvent } from "react";
-import { useNavigate } from "react-router";
+// import { useNavigate } from "react-router";
 import Tournament from "../components/game/Tournament.tsx";
 import UsernameInput from "../components/game/UsernameInput.tsx";
 import useLanguage from "../hooks/useLanguage";
@@ -9,7 +9,7 @@ import "../styles/tournament/Tournament.css";
 export default function TournamentPage() {
 	const [ usernames, setUsernames ] = useState<string[]>(Array(3).fill(''));
 	const words = useLanguage();
-	const navigate = useNavigate();
+	// const navigate = useNavigate();
 
 	function handleInputChange(e: ChangeEvent<HTMLInputElement>, index: number): void {
 		const { value } = e.target;
