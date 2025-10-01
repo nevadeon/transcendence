@@ -1,0 +1,20 @@
+.sidebar {
+	top: auto !important;
+	bottom: var(--position-form-btns);
+}
+
+.left-side {
+	right: calc(48px + 16px + 2.5em)!important;
+}
+
+.delete-btn {
+	background: var(--color-warning-low-opa-300)!important;
+    box-shadow: 0px 0px 8px var(--color-infos-low-opa-100)!important;
+    border: 2px solid var(--color-infos-100)!important;
+}
+
+.delete-btn svg {
+	width: 32px;
+	height: 32px;
+	color: var(--color-infos-100);
+}
