@@ -25,7 +25,7 @@ async function authRoutes(fastify) {
 			);
 			return reply.code(201).send({ ...user_data, token });
 		} catch (err) {
-			console.error("Erreur SQL :", err.message);
+			fastify.log.error("Erreur SQL :", err.message);
 			if (err.message.includes('UNIQUE constraint failed')) {
 				if (err.message.includes('users.name')) {
 					return reply.code(409).send({ 
@@ -66,7 +66,7 @@ async function authRoutes(fastify) {
 			);
 			return reply.code(201).send({ ...user_data, token });
 		} catch (err) {
-			console.error("Erreur SQL :", err.message);
+			fastify.log.error("Erreur SQL :", err.message);
 			return reply.code(500).send({ error: err.message });
 		}
 	});
