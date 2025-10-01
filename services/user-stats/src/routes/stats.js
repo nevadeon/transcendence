@@ -2,7 +2,7 @@ async function statsRoutes(fastify) {
 	const { db } = fastify;
 
 	// stats
-	fastify.post("/game_history", async (req, reply) => {
+	fastify.post("/record_match", async (req, reply) => {
 		const {
 			red_team_A,
 			red_team_B,
@@ -33,8 +33,32 @@ async function statsRoutes(fastify) {
 			}
 			reply.code(201).send({ success: TextTrackCue, message: "match Recorded Succesfully." });
 		} catch (err) {
-			fastify.log(err);
+			fastify.log.error(err);
 			reply.code(500).send({ error: "Failed to record match." });
+		}
+	})
+	
+	fastify.get("/game_history/:username", async (req, reply) => {
+		const { username } = req.param.username;
+		try {
+			const matches = await db.get(`
+				SELECT * FROM match_history 
+				WHERE red_team_A = ? 
+					OR red_team_B = ? 
+					OR blue_team_A = ? 
+					OR blue_team_B = ?
+				ORDER BY date DESC
+				`, [username, username, username, username]
+			);
+			
+			reply.code(201).send({
+				matches: matches,
+				count: matchMedia.length
+			});
+
+		} catch (err) {
+			fastify.log.error(err);
+			reply.code(500).send({ error: "Failed to get match history."})
 		}
 	})
 }
