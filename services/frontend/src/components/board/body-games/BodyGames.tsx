@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type ChangeEvent } from "react";
 import { useNavigate } from "react-router";
 import Modal from "./Modal";
 import Profile from "./Profile";
@@ -11,6 +11,7 @@ import "../../../styles/board/body-games/BodyGames.css";
 
 export default function BodyGames(props: BodyGamesProps) {
 	const [ modeToLaunch, setModeToLaunch ] = useState<string | null>(null);
+	const [ usernames, setUsernames ] = useState<string[]>(Array(3).fill(''));
 	const [ numUser, setNumUser ] = useState<number>(1);
 	const { openElement } = useBoard();
 	const navigate = useNavigate();
@@ -34,6 +35,16 @@ export default function BodyGames(props: BodyGamesProps) {
 		}
     };
 
+	// DRY !!!
+	function handleInputChange(e: ChangeEvent<HTMLInputElement>, index: number): void {
+		const { value } = e.target;
+		setUsernames(prevNames => {
+			const newNames = [... prevNames];
+			newNames[index] = value;
+			return newNames;
+		});
+	}
+
 	const handleFormSubmit = (usernames: string[]) => {
         navigate(`/game/${modeToLaunch}`, { state: { usernames } });
     };
@@ -50,7 +61,7 @@ export default function BodyGames(props: BodyGamesProps) {
 				) :
 				(
 					modeToLaunch &&
-					<UsernameInput mode={modeToLaunch} numUser={numUser} onSubmit={handleFormSubmit} words={words} />
+					<UsernameInput mode={modeToLaunch} users={["test", "test2"]} onChange={handleInputChange} onSubmit={handleFormSubmit} words={words} />
 				)
 			}
 			<button className="body-games-btn 1vs1" onClick={() => handleGameSelect('1vs1')}>
