@@ -19,7 +19,8 @@ vault kv put secret/user-profile/config \
   USER_PROFILE_DB_PATH="${USER_PROFILE_DB_PATH}" \
   USER_PROFILE_PORT="${USER_PROFILE_PORT}" \
   GAME_PORT="${GAME_PORT}" \
-  JWT_SECRET="$(openssl rand -hex 32)"
+  JWT_SECRET="$(openssl rand -hex 32)" \
+  SECRET_SALT="$(openssl rand -hex 32)"
 
 vault kv put secret/user-stats/config \
   USER_STATS_PORT="${USER_STATS_PORT}" \
