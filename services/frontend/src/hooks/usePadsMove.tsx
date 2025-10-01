@@ -1,6 +1,9 @@
 import { useState, useEffect, useRef } from "react";
 import { PAD_SPEED, type PadControls, type PadPositions } from "../interfaces/Pads";
 
+const ARENA_WIDTH_CENTER = 600;
+const ARENA_HEIGHT_CENTER = 375;
+
 export default function usePadsMove(
 	ctrlPlayer1: PadControls,
 	ctrlPlayer2: PadControls | undefined,
@@ -11,6 +14,10 @@ export default function usePadsMove(
 	const [ pad2Pos, setPad2Pos ] = useState<number>(50);
 	const [ pad3Pos, setPad3Pos ] = useState<number>(50);
 	const [ pad4Pos, setPad4Pos ] = useState<number>(50);
+	const [ ballPos, setBallPos ] = useState<any>({
+		x: ARENA_WIDTH_CENTER,
+		y: ARENA_HEIGHT_CENTER
+	});
 	const keysPressed = useRef<{ [key: string]: boolean }>({});
 	const animRef = useRef<number>(0);
 
@@ -29,6 +36,7 @@ export default function usePadsMove(
 		}
 	}, []);
 
+	// still need setBallPos()?
 	useEffect(() => {
 		const gameLoop = () => {
 			setPad1Pos(prevPos => {
@@ -77,5 +85,5 @@ export default function usePadsMove(
 		};
 	}, [ctrlPlayer1, ctrlPlayer2, ctrlPlayer3, ctrlPlayer4]);
 
-	return { pad1Pos, pad2Pos, pad3Pos, pad4Pos };
+	return { pad1Pos, pad2Pos, pad3Pos, pad4Pos, ballPos };
 }
