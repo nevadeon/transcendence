@@ -1,5 +1,7 @@
 import argon2 from "argon2";
 import { saveToken } from "../utils/tokens.js";
+import { getVaultSecret } from "../plugins/vault.js";
+import crypto from 'crypto';
 
 async function authRoutes(fastify) {
 	const { db, auth } = fastify;
@@ -8,10 +10,12 @@ async function authRoutes(fastify) {
 	fastify.post("/register", async (req, reply) => {
 		const { name, email, password } = req.body;
 		try {
-			const hashed = await argon2.hash(password);
+			const SECRET_SALT = await getVaultSecret("user-profile/config", "SECRET_SALT");
+			const hashed_password = await argon2.hash(password);
+			const hashed_email = crypto.createHash('sha256').update(email + SECRET_SALT).digest('hex');
 			await db.run(
 				"INSERT INTO users(name, email, password) VALUES(?, ?, ?)",
-				[name, email, hashed]
+				[name, hashed_email, hashed_password]
 			);
 			const user = await db.get("SELECT * FROM users WHERE name = ?", [name]);
 			const token = auth.generateToken(user);
