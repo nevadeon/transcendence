@@ -19,10 +19,10 @@ stop :
 build :
 	docker compose -f infra/docker-compose.yml build
 
-logs :
-	docker logs -f $(SERVICE)
-
 exec :
 	docker exec -it $(SERVICE) sh
+
+logs :
+	docker compose -f infra/docker-compose.yml logs -f
 
 re : down all
