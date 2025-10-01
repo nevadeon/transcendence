@@ -1,7 +1,24 @@
-export default function DeleteButton() {
+// import { useNavigate } from "react-router";
 
-	function handleClick() {
-		console.log("destroyed");
+export default function DeleteButton() {
+	// const navigate = useNavigate();
+	// const { id } = useUser();
+
+	async function handleClick() {
+		// try {
+		// 	const res = await fetch(`http://localhost:3001/users/${id}`, {
+		// 		method: "DELETE",
+		// 		headers: { 'Content-Type': 'application/json' },
+		// 	});
+		// 	if (res.ok) {
+		// 		navigate('/register');
+		// 	} else {
+		// 		console.error("User's Account Deletion failed");
+		// 	}
+		// } catch (err) {
+		// 	console.error("Delete btn : ", err);
+		// }
+		console.log("Deletion successful !");
 	}
 
 	return (
