@@ -1,25 +1,27 @@
-// import { useNavigate } from "react-router";
+import { useNavigate } from "react-router";
+import { useAuth } from "../contexts/auth/useAuth";
 
 export default function DeleteButton(props: any) {
-	// const navigate = useNavigate();
-	// const { id } = useUser();
+	const navigate = useNavigate();
+	const { user, logout } = useAuth();
 	const { inProfile } = props;
 	const styles = "auth-languages delete-btn sidebar left-side";
 
 	async function handleClick() {
-		// try {
-		// 	const res = await fetch(`http://localhost:3001/users/${id}`, {
-		// 		method: "DELETE",
-		// 		headers: { 'Content-Type': 'application/json' },
-		// 	});
-		// 	if (res.ok) {
-		// 		navigate('/register');
-		// 	} else {
-		// 		console.error("User's Account Deletion failed");
-		// 	}
-		// } catch (err) {
-		// 	console.error("Delete btn : ", err);
-		// }
+		try {
+			const res = await fetch(`http://localhost:3001/users/${user?.id}`, {
+				method: "DELETE",
+				headers: { 'Content-Type': 'application/json' },
+			});
+			if (res.ok) {
+				logout();
+				navigate('/register');
+			} else {
+				console.error("User's Account Deletion failed");
+			}
+		} catch (err) {
+			console.error("Delete btn : ", err);
+		}
 		console.log("Deletion successful !");
 	}
 

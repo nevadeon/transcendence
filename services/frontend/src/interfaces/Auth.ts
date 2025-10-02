@@ -1,8 +1,10 @@
 import type { ReactNode } from "react";
+import type { UserDataProps } from "./UserData";
 
 export interface AuthContextType {
     token: string | null;
-    login: (newToken: string) => void;
+    user: UserDataProps | null;
+    login: (newToken: string, userData: UserDataProps) => void;
     logout: () => void;
     isAuth: boolean;
 }

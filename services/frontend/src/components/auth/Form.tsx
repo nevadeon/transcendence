@@ -3,10 +3,10 @@ import { Link, useNavigate } from "react-router";
 import { useAuth } from "../../contexts/auth/useAuth";
 import useLanguage from "../../contexts/language/useLanguage";
 import type { FormProps, FormData } from "../../interfaces/Form";
-import audioSource from "../../assets/audios/start_hologram.mp3";
-import audioSource2 from "../../assets/audios/keyboard.mp3";
-import audioSource3 from "../../assets/audios/Voicy_Rick Sanchez Seriously_.mp3";
-import audioSource4 from "../../assets/audios/[Rick Sanchez]MORTY......T !!!.mp3";
+// import audioSource from "../../assets/audios/start_hologram.mp3";
+// import audioSource2 from "../../assets/audios/keyboard.mp3";
+// import audioSource3 from "../../assets/audios/Voicy_Rick Sanchez Seriously_.mp3";
+// import audioSource4 from "../../assets/audios/[Rick Sanchez]MORTY......T !!!.mp3";
 import QRCodeSrc from "../../assets/icons/qrcode.svg";
 import ModifSrc from "../../assets/icons/modif.svg";
 // opti calls, filename chars lengths
@@ -18,29 +18,29 @@ export default function Form(props: FormProps) {
 	const { messages } = useLanguage();
 	const { register, profile } = props;
 
-	async function handleAudio() {
-		try {
-			//opti in audios array?
-			const hologram = new Audio(audioSource);
-			const keyboard = new Audio(audioSource2);
-			const rickSeriously = new Audio(audioSource3);
-			const rickTalk = new Audio(audioSource4);
-			hologram.volume = .32;
-			keyboard.volume = 1;
-			rickSeriously.volume = .32;
-			rickTalk.volume = .72;
-			hologram.play();
-			setTimeout(() => {
-				rickSeriously.play();
-			}, 1200);
-			setTimeout(() => {
-				keyboard.play();
-				rickTalk.play();
-			}, 3200);
-		} catch (err) {
-			console.log(err);
-		}
-	}
+	// async function handleAudio() {
+	// 	try {
+	// 		//opti in audios array?
+	// 		const hologram = new Audio(audioSource);
+	// 		const keyboard = new Audio(audioSource2);
+	// 		const rickSeriously = new Audio(audioSource3);
+	// 		const rickTalk = new Audio(audioSource4);
+	// 		hologram.volume = .32;
+	// 		keyboard.volume = 1;
+	// 		rickSeriously.volume = .32;
+	// 		rickTalk.volume = .72;
+	// 		hologram.play();
+	// 		setTimeout(() => {
+	// 			rickSeriously.play();
+	// 		}, 1200);
+	// 		setTimeout(() => {
+	// 			keyboard.play();
+	// 			rickTalk.play();
+	// 		}, 3200);
+	// 	} catch (err) {
+	// 		console.log(err);
+	// 	}
+	// }
 
 	function handleInputChange(e: ChangeEvent<HTMLInputElement>): void {
 		const { name, value } = e.target;
@@ -56,15 +56,17 @@ export default function Form(props: FormProps) {
 					headers: { 'Content-Type': 'application/json' },
 					body: JSON.stringify( userData )
 				});
-				const data = await res.json();
-				if (res.ok && data.token) {
-					login(data.token);
+				const { token, user } = await res.json();
+				if (res.ok && token && user) {
+					login(token, user);
 					naviguate('/board');
 				} else {
+					if (res.status === 409)
+						console.log("User already exist");
 					console.error('Registration failed');
 				}
 			} catch(err) {
-				console.error('Registration error: ', err)
+				console.error(err)
 			}
 		} else {
 			try {
@@ -73,10 +75,10 @@ export default function Form(props: FormProps) {
 					headers: { 'Content-Type': 'application/json' },
 					body: JSON.stringify( userData )
 				});
-				const data = await res.json();
-				if (res.ok && data.token) {
+				const { token, user } = await res.json();
+				if (res.ok && token && user) {
 					console.log('Login successful');
-					login(data.token);
+					login(token, user);
 					naviguate('/board');
 				} else {
 					console.error('Login failed');
@@ -203,7 +205,8 @@ export default function Form(props: FormProps) {
 				}
 				{
 					!profile &&
-					<button type='submit' id='submit' className='submit' onClick={handleAudio}>
+					// onClick={handleAudio}
+					<button type='submit' id='submit' className='submit'>
 						{register ? messages.register.cta : messages.login.cta}
 					</button>
 				}
