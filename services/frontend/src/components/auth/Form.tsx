@@ -35,16 +35,12 @@ import ModifSrc from "../../assets/icons/modif.svg";
 // 	}
 // }
 export default function Form(props: FormProps) {
+	const [ userData, setUserData ] = useState<FormData>({ name: "", email: "", password: "", auth2: "" });
+	const [ validationMsg, setValidationMsg ] = useState({ field: "", msg: "" });
 	const { user, updateUser, login } = useAuth();
-	const [userData, setUserData] = useState<FormData>({ name: "", email: "", password: "", auth2: "" });
-	const [validationMsg, setValidationMsg] = useState({
-		field: "",
-		msg: ""
-	});
-	const navigate = useNavigate();
 	const { messages } = useLanguage();
+	const navigate = useNavigate();
 	const { register, profile } = props;
-
 
 	async function handleClick(fieldName: string) {
 		const value = userData[fieldName as keyof FormData];
@@ -61,7 +57,8 @@ export default function Form(props: FormProps) {
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({ [fieldName]: value })
 			});
-			
+			if (res.status === 200)
+				console.log('Password update succeed');
 			if (res.ok) {
 				const data = await res.json();
 				if (fieldName !== "password")
@@ -70,7 +67,7 @@ export default function Form(props: FormProps) {
 			} else {
 				// setValidationMsg({
 				// 	field: fieldName,
-				// 	msg: res.error
+				// 	msg: data.error
 				// });
 				console.error('Update failed');
 			}
