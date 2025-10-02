@@ -62,8 +62,11 @@ async function authRoutes(fastify) {
 
 			let token;
 			if (user.two_factor === 0) {
+				console.log("HERE");
 				token = auth.generateLongToken(user);
+				console.log("HERE");
 				await saveToken(db, name, token, '+1 hour');
+				console.log("HERE");
 			} else {
 				token = auth.generateShortToken(user);
 				await saveToken(db, name, token, '+5 min');

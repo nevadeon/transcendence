@@ -41,7 +41,7 @@ export default function Form(props: FormProps) {
 		field: "",
 		msg: ""
 	});
-	const naviguate = useNavigate();
+	const navigate = useNavigate();
 	const { messages } = useLanguage();
 	const { register, profile } = props;
 
@@ -96,7 +96,7 @@ export default function Form(props: FormProps) {
 				const { token, user } = await res.json();
 				if (res.ok && token && user) {
 					login(token, user);
-					naviguate('/board');
+					navigate('/board');
 				} else {
 					if (res.status === 409)
 						console.log("User already exist");
@@ -116,7 +116,7 @@ export default function Form(props: FormProps) {
 				if (res.ok && token && user) {
 					console.log('Login successful');
 					login(token, user);
-					naviguate('/board');
+					navigate('/board');
 				} else {
 					console.error('Login failed');
 				}

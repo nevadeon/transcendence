@@ -4,17 +4,19 @@ import type { UserDataProps } from "../../interfaces/UserData";
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+const initUser = {
+	avatar: "",
+	dimension: "",
+	email: "",
+	id: 0,
+	name: "",
+	planet: "",
+	species: "",
+};
+
 export function AuthProvider({ children }: AuthProviderProps) {
 	const [token, setToken] = useState<string | null>(null);
-	const [user, setUser] = useState<UserDataProps>({
-		avatar: "",
-		dimension: "",
-		email: "",
-		id: 0,
-		name: "",
-		planet: "",
-		species: "",
-	});
+	const [user, setUser] = useState<UserDataProps>(initUser);
 
 	useEffect(() => {
 		const storedToken = localStorage.getItem('token');
@@ -42,15 +44,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 		localStorage.removeItem('token');
 		localStorage.removeItem('user');
 		setToken(null);
-		setUser({
-			avatar: "",
-			dimension: "",
-			email: "",
-			id: 0,
-			name: "",
-			planet: "",
-			species: "",
-		});
+		setUser(initUser);
 	}
 
 	const isAuth = !!token;
