@@ -4,8 +4,6 @@ import PlanetSource from "../../../assets/icons/planet.svg";
 import DimensionSource from "../../../assets/icons/dimension.svg";
 import type { ProfileCardProps } from "../../../interfaces/ProfileCard";
 import '../../../styles/board/sidebar-user/ProfileCard.css';
-// import useProfile from "../../../hooks/useBoard";
-// import AvatarSource from "../../../assets/avatars/rick.png";
 
 export default function ProfileCard( props: ProfileCardProps ) {
 	const { avatar, username, ingame, isElim, words } = props;
