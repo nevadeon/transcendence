@@ -23,7 +23,7 @@ async function authRoutes(fastify) {
 			const user_data = await db.get("SELECT id, name, email, species, planet, dimension, avatar FROM users WHERE name = ?",
 				[name]
 			);
-			return reply.code(201).send({ ...user_data, token });
+			return reply.code(201).send({ user: user_data, token });
 		} catch (err) {
 			fastify.log.error("Erreur SQL :", err.message);
 			if (err.message.includes('UNIQUE constraint failed')) {
@@ -64,7 +64,7 @@ async function authRoutes(fastify) {
 			const user_data = await db.get("SELECT id, name, email, species, planet, dimension, avatar FROM users WHERE name = ?",
 				[name]
 			);
-			return reply.code(201).send({ ...user_data, token });
+			return reply.code(201).send({ user: user_data, token });
 		} catch (err) {
 			fastify.log.error("Erreur SQL :", err.message);
 			return reply.code(500).send({ error: err.message });
