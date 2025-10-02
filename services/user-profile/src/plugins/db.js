@@ -13,6 +13,9 @@ async function dbPlugin(fastify) {
 		driver: sqlite3.Database,
 	});
 
+	//auto suppr au 'make re'
+	await db.exec(`DROP TABLE IF EXISTS users`);
+
 	// Création tables
 	await db.exec(`
 		CREATE TABLE IF NOT EXISTS users (

@@ -11,7 +11,6 @@ export default function DeleteButton(props: any) {
 		try {
 			const res = await fetch(`http://localhost:3001/users/${user?.id}`, {
 				method: "DELETE",
-				headers: { 'Content-Type': 'application/json' },
 			});
 			if (res.ok) {
 				logout();
