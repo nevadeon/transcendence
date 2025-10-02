@@ -30,7 +30,6 @@
 	box-shadow: 0px 0px 16px var(--color-hologram-low-opa-400);
 	border: solid 4px var(--color-infos-100);
 	border-radius: 8px;
-	z-index: 1;
 }
 
 .auth-languages img {
@@ -42,6 +41,7 @@
 	position: absolute;
 	top: 0;
 	right: var(--position-form-btns);
+	z-index: 2;
 }
 
 .auth-page {
@@ -60,10 +60,14 @@
 	height: var(--height-desk-screen);
 	background: var(--color-warning-600);
 	background-image:
-	linear-gradient(var(--color-warning-400) 1px, transparent 1px),
-	linear-gradient(90deg, var(--color-warning-400) 1px, transparent 1px);
+		linear-gradient(var(--color-warning-400) 1px, transparent 1px),
+		linear-gradient(90deg, var(--color-warning-400) 1px, transparent 1px);
 	background-size: 40px 40px;
 	border: 8px solid var(--color-neutral-900);
+}
+
+.form-profile {
+	width: 100%;
 }
 
 .auth-form form, .auth-form span {

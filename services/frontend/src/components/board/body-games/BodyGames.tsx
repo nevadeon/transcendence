@@ -6,7 +6,6 @@ import Stats from "./Stats";
 import useBoard from "../../../hooks/useBoard";
 import UsernameInput from "../../game/UsernameInput";
 import type { BodyGamesProps } from "../../../interfaces/BodyGames";
-import PortraitSrc from "../../../assets/avatars/big-rick.png";
 import "../../../styles/board/body-games/BodyGames.css";
 
 export default function BodyGames(props: BodyGamesProps) {
@@ -51,7 +50,7 @@ export default function BodyGames(props: BodyGamesProps) {
 				openElement === "profile" || openElement === "stats" ?
 				(
 					<Modal>
-						<Profile avatar={PortraitSrc} words={words} />
+						<Profile words={words} />
 						<Stats words={words} />
 					</Modal>
 				) :
