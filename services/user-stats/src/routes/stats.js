@@ -50,7 +50,7 @@ async function statsRoutes(fastify) {
 				ORDER BY date DESC
 				`, [username, username, username, username]
 			);
-			
+
 			reply.code(201).send({
 				matches: matches,
 				count: matchMedia.length

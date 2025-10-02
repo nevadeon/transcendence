@@ -1,3 +1,7 @@
+import argon2 from "argon2";
+import { getVaultSecret } from "../plugins/vault.js";
+import crypto from 'crypto';
+
 async function userRoutes(fastify) {
 	const { db } = fastify;
 
@@ -15,12 +19,12 @@ async function userRoutes(fastify) {
 		const { name } = req.body;
 		try {
 			const result = await db.run(
-				"UPDATE users SET name=?, WHERE id=?",
+				"UPDATE users SET name=? WHERE id=?",
 				[name, req.params.id]
 			);
 			if (result.changes === 0)
 				return reply.code(404).send({ error: "Username has not change." });
-			return reply.code(201).send({ name: name });
+			return reply.code(200).send({ name: name });
 		} catch (err) {
 			fastify.log.error(err);
 			if (err.message.includes('UNIQUE constraint failed')) {
@@ -31,20 +35,22 @@ async function userRoutes(fastify) {
 					});
 				}
 			}
-			return reply.code(500).send(err);
+			return reply.code(500).send({ err: err.message });
 		}
 	});
 
 	fastify.put("/users/:id/email", async (req, reply) => {
 		const { email } = req.body;
+		const SECRET_SALT = await getVaultSecret("user-profile/config", "SECRET_SALT");
+		const hashed_email = crypto.createHash('sha256').update(email + SECRET_SALT).digest('hex');
 		try {
 			const result = await db.run(
-				"UPDATE users SET email=?, WHERE id=?",
-				[email, req.params.id]
+				"UPDATE users SET email=? WHERE id=?",
+				[hashed_email, req.params.id]
 			);
 			if (result.changes === 0)
 				return reply.code(404).send({ error: "Email has not change." });
-			return reply.code(201).send({ email: email });
+			return reply.code(200).send({ email: email });
 		} catch (err) {
 			fastify.log.error(err);
 			if (err.message.includes('UNIQUE constraint failed')) {
@@ -55,7 +61,7 @@ async function userRoutes(fastify) {
 					});
 				}
 			}
-			return reply.code(500).send(err);
+			return reply.code(500).send({ err: err.message });
 		}
 	});
 
@@ -72,12 +78,13 @@ async function userRoutes(fastify) {
 
 			const hashed_password = await argon2.hash(password);
 			await db.run(
-				"UPDATE users SET password = ? WHERE id = ?", [hashed_password, req.params.id]
+				"UPDATE users SET password = ? WHERE id = ?",
+				[hashed_password, req.params.id]
 			);
-			return reply.code(201);
+			return reply.code(200);
 		} catch (err) {
 			fastify.log.error(err);
-			return reply.code(500).send(err);
+			return reply.code(500).send({ err: err.message });
 		}
 	});
 
