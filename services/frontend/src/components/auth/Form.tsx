@@ -66,7 +66,7 @@ export default function Form(props: FormProps) {
 					console.error('Registration failed');
 				}
 			} catch(err) {
-				console.error(err)
+				console.error(err);
 			}
 		} else {
 			try {

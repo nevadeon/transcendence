@@ -6,7 +6,15 @@ export const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export function AuthProvider({ children }: AuthProviderProps) {
 	const [token, setToken] = useState<string | null>(null);
-	const [user, setUser] = useState<UserDataProps | null>(null);
+	const [user, setUser] = useState<UserDataProps>({
+		avatar: "",
+		dimension: "",
+		email: "",
+		id: 0,
+		name: "",
+		planet: "",
+		species: "",
+	});
 
 	useEffect(() => {
 		const storedToken = localStorage.getItem('token');
@@ -28,7 +36,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
 		localStorage.removeItem('token');
 		localStorage.removeItem('user');
 		setToken(null);
-		setUser(null);
+		setUser({
+			avatar: "",
+			dimension: "",
+			email: "",
+			id: 0,
+			name: "",
+			planet: "",
+			species: "",
+		});
 	}
 
 	const isAuth = !!token;
