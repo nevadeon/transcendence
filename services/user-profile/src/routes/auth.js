@@ -1,5 +1,5 @@
 import argon2 from "argon2";
-import { saveToken } from "../utils/tokens.js";
+import { deleteToken, saveToken } from "../utils/tokens.js";
 import { getVaultSecret } from "../plugins/vault.js";
 import crypto from 'crypto';
 
@@ -18,9 +18,9 @@ async function authRoutes(fastify) {
 				[name, hashed_email, hashed_password]
 			);
 			const user = await db.get("SELECT * FROM users WHERE name = ?", [name]);
-			const token = auth.generateToken(user);
-			await saveToken(db, name, token);
-			const user_data = await db.get("SELECT id, name, email, species, planet, dimension, avatar FROM users WHERE name = ?",
+			const token = auth.generateLongToken(user);
+			await saveToken(db, name, token, '+1 hour');
+			const user_data = await db.get("SELECT id, name, species, planet, dimension, avatar FROM users WHERE name = ?",
 				[name]
 			);
 			return reply.code(201).send({ user: user_data, token });
@@ -53,15 +53,43 @@ async function authRoutes(fastify) {
 		const { name, password } = req.body;
 		try {
 			const user = await db.get("SELECT * FROM users WHERE name = ?", [name]);
-			if (!user) return reply.code(401).send({ error: "Invalid name or password" });
+			if (!user)
+				return reply.code(401).send({ error: "Invalid name or password" });
 
 			const valid = await argon2.verify(user.password, password);
-			if (!valid) return reply.code(401).send({ error: "Invalid name or password" });
+			if (!valid)
+				return reply.code(401).send({ error: "Invalid name or password" });
 
-			const token = auth.generateToken(user);
-			await saveToken(db, name, token);
+			let token;
+			if (user.two_factor === 0) {
+				token = auth.generateLongToken(user);
+				await saveToken(db, name, token, '+1 hour');
+			} else {
+				token = auth.generateShortToken(user);
+				await saveToken(db, name, token, '+5 min');
+			}
+			const user_data = await db.get("SELECT id, name, species, planet, dimension, avatar, two_factor FROM users WHERE name = ?",
+				[name]
+			);
+			console.log("HERE");
+			return { user: user_data, token };
+		} catch (err) {
+			fastify.log.error("Erreur SQL :", err.message);
+			return reply.code(500).send({ error: err.message });
+		}
+	});
 
-			const user_data = await db.get("SELECT id, name, email, species, planet, dimension, avatar FROM users WHERE name = ?",
+	fastify.post("/two_factor", async (req, body) => {
+		const { name } = req.body;
+		try {
+			const user = await db.get("SELECT * FROM users WHERE name = ?", [name]);
+			if (!user) return reply.code(401).send({ error: "Invalid two_factor." });
+
+			await deleteToken(db, user.token);
+			const token = auth.generateLongToken(user);
+			await saveToken(db, name, token, '+1 hour');
+
+			const user_data = await db.get("SELECT id, name, species, planet, dimension, avatar, two_factor FROM users WHERE name = ?",
 				[name]
 			);
 			return reply.code(201).send({ user: user_data, token });

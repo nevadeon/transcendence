@@ -1,9 +1,9 @@
-export async function saveToken(db, username, token) {
+export async function saveToken(db, username, token, expires_at) {
 	const tmp = await db.get("SELECT token FROM tokens WHERE username = ?", [username]);
 	if (tmp) await deleteToken(db, tmp.token);
 	await db.run(
-		"INSERT INTO tokens (username, token, expires_at) VALUES (?, ?, datetime('now', '+1 hour'))",
-		[username, token]
+		"INSERT INTO tokens (username, token, expires_at) VALUES (?, ?, datetime('now', ?))",
+		[username, token, expires_at]
 	);
 }
 

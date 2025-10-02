@@ -23,7 +23,8 @@ async function dbPlugin(fastify) {
 			species TEXT DEFAULT 'Human',
 			planet TEXT DEFAULT 'Earth',
 			dimension TEXT DEFAULT 'C-137',
-			avatar TEXT DEFAULT 'defaults/poopy.png'
+			avatar TEXT DEFAULT 'defaults/poopy.png',
+			two_factor INTEGER DEFAULT 0
 		)
 	`);
 

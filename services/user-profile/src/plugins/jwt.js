@@ -12,8 +12,10 @@ async function jwtPlugin(fastify) {
 	});
 
 	fastify.decorate("auth", {
-		generateToken: (user) =>
+		generateLongToken: (user) =>
 			fastify.jwt.sign({ id: user.id, name: user.name }, { expiresIn: "1h" }),
+		generateShortToken: (user) =>
+			fastify.jwt.sign({ id: user.id, name: user.name }, { expiresIn: "5min" }),
 		verifyToken: (token) => {
 			try {
 				return fastify.jwt.verify(token);
