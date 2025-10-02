@@ -8,36 +8,40 @@
 	width: var(--width-button);
 	height: var(--height-button);
 	background: var(--color-computer-low-opa-600);
-	box-shadow: 0px 0px 4px var(--color-computer-low-opa-400);
-	border: solid 2px var(--color-computer-400);
+	box-shadow: 0px 0px 8px var(--color-computer-low-opa-400);
+	border: solid 4px var(--color-computer-400);
 	border-radius: 8px;
 	z-index: 1;
 }
 
 .o-auth-google img {
-	width: 68%;
+	width: 64%;
 	opacity: 0.5;
 }
 
 .auth-languages {
-	position: absolute;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	top: var(--position-form-btns);
-	right: var(--position-form-btns);
 	width: var(--width-button);
-	height: var(--height-button);
+	height: var(--height-input);
+	margin: 31px 0 66px;
 	background: var(--color-infos-low-opa-600);
-	box-shadow: 0px 0px 8px var(--color-hologram-low-opa-400);
-	border: solid 2px var(--color-infos-200);
+	box-shadow: 0px 0px 16px var(--color-hologram-low-opa-400);
+	border: solid 4px var(--color-infos-100);
 	border-radius: 8px;
 	z-index: 1;
 }
 
 .auth-languages img {
-	width: 80%;
+	width: 72%;
 	opacity: 0.5;
+}
+
+.auth-btn-format {
+	position: absolute;
+	top: 0;
+	right: var(--position-form-btns);
 }
 
 .auth-page {

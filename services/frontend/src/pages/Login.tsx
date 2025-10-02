@@ -10,7 +10,7 @@ export default function Login() {
 	return (
 		<div className='auth-page'>
 			<div className='auth-form'>
-				<Settings />
+				<Settings inProfile={false} />
 				<video className="video-background" autoPlay loop muted>
 					<source src={videoSource} type="video/mp4" />
 					Your browser does not support the video tag.

@@ -12,7 +12,6 @@ import "../../../styles/board/body-games/BodyGames.css";
 export default function BodyGames(props: BodyGamesProps) {
 	const [ modeToLaunch, setModeToLaunch ] = useState<string | null>(null);
 	const [ usernames, setUsernames ] = useState<string[]>(Array(3).fill(''));
-	const [ numUser, setNumUser ] = useState<number>(1);
 	const { openElement } = useBoard();
 	const navigate = useNavigate();
 	const { words } = props;
@@ -22,15 +21,12 @@ export default function BodyGames(props: BodyGamesProps) {
 	// + useUser() hook to get current login username for ALL
 	const handleGameSelect = (mode: string) => {
 		if (mode === 'tournament') {
-			setNumUser(3);
 			navigate('/tournament');
 		} else if (mode === '1vsIA') {
 			navigate('/game/1vsia');
 		} else if (mode === '1vs1') {
-			setNumUser(1);
 			setModeToLaunch(mode);
 		} else if (mode === '2vs2') {
-			setNumUser(3);
 			setModeToLaunch(mode);
 		}
     };
@@ -61,7 +57,7 @@ export default function BodyGames(props: BodyGamesProps) {
 				) :
 				(
 					modeToLaunch &&
-					<UsernameInput mode={modeToLaunch} users={["test", "test2"]} onChange={handleInputChange} onSubmit={handleFormSubmit} words={words} />
+					<UsernameInput mode={modeToLaunch} users={usernames} onChange={handleInputChange} onSubmit={handleFormSubmit} words={words} />
 				)
 			}
 			<button className="body-games-btn 1vs1" onClick={() => handleGameSelect('1vs1')}>

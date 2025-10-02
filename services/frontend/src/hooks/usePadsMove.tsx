@@ -77,6 +77,10 @@ export default function usePadsMove(
 				}
 				return Math.max(0, Math.min(100, newPos));
 			});
+			setBallPos({
+				x: 150,
+				y: 150
+			});
 			animRef.current = requestAnimationFrame(gameLoop);
 		};
 		animRef.current = requestAnimationFrame(gameLoop);

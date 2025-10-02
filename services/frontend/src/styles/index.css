@@ -3,24 +3,24 @@
 @font-face {
     font-family: 'Orbitron';
     font-style: normal;
-    font-weight: 400; 
-    font-display: swap; 
+    font-weight: 400;
+    font-display: swap;
     src: url('../assets/fonts/Orbitron-Regular.woff2') format('woff2');
 }
 
 @font-face {
     font-family: 'Orbitron';
     font-style: normal;
-    font-weight: 700; 
-    font-display: swap; 
+    font-weight: 700;
+    font-display: swap;
     src: url('../assets/fonts/Orbitron-Bold.woff2') format('woff2');
 }
 
 @font-face {
     font-family: 'Orbitron';
     font-style: normal;
-    font-weight: 900; 
-    font-display: swap; 
+    font-weight: 900;
+    font-display: swap;
     src: url('../assets/fonts/Orbitron-Black.woff2') format('woff2');
 }
 
@@ -36,8 +36,8 @@
 	--height-mobile-screen: 100dvh;
 	--height-input: 71.2px;
 	--width-input: 440px;
-	--width-button: 48px;
-	--height-button: 48px;
+	--width-button: 72px;
+	--height-button: 72px;
 	--width-screenbar: 50%;
 	--width-sidebar-user: calc(320px + 5%);
 	--width-user-avatar: 72px;

@@ -1,4 +1,4 @@
-import type { ScoresProps } from "../../interfaces/ScoresProps";
+import type { ScoresProps } from "../../interfaces/Scores";
 
 export default function Scores(props: ScoresProps) {
 	const { avatar, avatar2, name, name2, result, ctrl, ctrl2, is2vs2, words } = props;

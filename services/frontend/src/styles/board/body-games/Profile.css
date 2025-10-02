@@ -9,8 +9,15 @@
 }
 
 .profile-data {
+    position: relative;
 	display: flex;
+    justify-content: space-between;
     margin-top: 24px;
+    width: 100%;
+}
+
+.profile-data-account {
+	display: flex;
 }
 
 .profile-data-portrait {
