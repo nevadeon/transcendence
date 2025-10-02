@@ -25,6 +25,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
 			setUser(JSON.parse(storedUser));
 	}, []);
 
+	function updateUser(updatedFields: Partial<UserDataProps>) {
+		const newUser = { ...user, ...updatedFields };
+		localStorage.setItem('user', JSON.stringify(newUser));
+		setUser(newUser);
+	}
+
 	function login(newToken: string, userData: UserDataProps) {
 		localStorage.setItem('token', newToken);
 		localStorage.setItem('user', JSON.stringify(userData));
@@ -50,7 +56,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 	const isAuth = !!token;
 
 	return (
-		<AuthContext.Provider value={{ token, user, login, logout, isAuth }}>
+		<AuthContext.Provider value={{ token, user, updateUser, login, logout, isAuth }}>
 			{children}
 		</AuthContext.Provider>
 	);
