@@ -1,8 +1,10 @@
 // import { useNavigate } from "react-router";
 
-export default function DeleteButton() {
+export default function DeleteButton(props: any) {
 	// const navigate = useNavigate();
 	// const { id } = useUser();
+	const { inProfile } = props;
+	const styles = "auth-languages delete-btn sidebar left-side";
 
 	async function handleClick() {
 		// try {
@@ -24,7 +26,7 @@ export default function DeleteButton() {
 	return (
 		<button
 			onClick={handleClick}
-			className="auth-languages delete-btn sidebar left-side">
+			className={inProfile ? styles + " in-profile" : styles}>
 				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
 					<rect width="256" height="256" fill="none"/>
 					<line x1="216" y1="60" x2="40" y2="60" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="20"/>
