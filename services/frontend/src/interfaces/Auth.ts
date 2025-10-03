@@ -8,6 +8,7 @@ export interface AuthContextType {
     login: (newToken: string, userData: UserDataProps) => void;
     logout: () => void;
     isAuth: boolean;
+    isLoading: boolean;
 }
 
 export interface AuthProviderProps {

@@ -1,8 +1,8 @@
 import Contacts from "./Contacts.tsx";
 import AddContact from "./AddContact.tsx";
 import type { FriendListProps } from "../../../interfaces/FriendList.ts";
-import MortySource from "../../../assets/avatars/morty.png";
-import PoopySource from "../../../assets/avatars/poopy.png";
+import MortySource from "../../../../public/avatars/defaults/morty.png";
+import PoopySource from "../../../../public/avatars/defaults/poopy.png";
 import "../../../styles/board/sidebar-friendlist/FriendList.css";
 
 export default function FriendList(props: FriendListProps) {

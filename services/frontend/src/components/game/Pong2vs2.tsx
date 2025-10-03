@@ -1,8 +1,8 @@
 import { useLocation } from "react-router";
-import Avatar1Src from "../../assets/avatars/rick.png";
-import Avatar2Src from "../../assets/avatars/poopy.png";
-import Avatar3Src from "../../assets/avatars/morty.png";
-import Avatar4Src from "../../assets/avatars/squanchy.png";
+import Avatar1Src from "../../../public/avatars/defaults/rick.png";
+import Avatar2Src from "../../../public/avatars/defaults/poopy.png";
+import Avatar3Src from "../../../public/avatars/defaults/morty.png";
+import Avatar4Src from "../../../public/avatars/defaults/squanchy.png";
 import Scores from "./Scores";
 import DuoArenaSource from "../../assets/game/2vs2-terrain.svg";
 import ThinPadSource from "../../assets/game/thin-pad.svg";

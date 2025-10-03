@@ -1,10 +1,10 @@
 import ProfileCard from "../board/sidebar-user/ProfileCard";
 import WinnerCard from "./WinnerCard";
 import type { TournamentProps } from "../../interfaces/Tournament";
-import AvatarSrc from "../../assets/avatars/rick.png";
-import Avatar2Src from "../../assets/avatars/morty.png";
-import Avatar3Src from "../../assets/avatars/squanchy.png";
-import Avatar4Src from "../../assets/avatars/poopy.png";
+import AvatarSrc from "../../../public/avatars/defaults/rick.png";
+import Avatar2Src from "../../../public/avatars/defaults/morty.png";
+import Avatar3Src from "../../../public/avatars/defaults/squanchy.png";
+import Avatar4Src from "../../../public/avatars/defaults/poopy.png";
 import "../../styles/tournament/Tournament.css";
 
 // /tournament
