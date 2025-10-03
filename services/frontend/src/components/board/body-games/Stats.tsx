@@ -2,10 +2,10 @@
 import useBoard from "../../../hooks/useBoard";
 import type { StatsProps } from "../../../interfaces/Stats.ts";
 import CrossSrc from "../../../assets/icons/cross.svg";
-import MeeseeksSrc from "../../../assets/avatars/meeseeks.png";
-import SquanchySrc from "../../../assets/avatars/squanchy.png";
-import PoopySrc from "../../../assets/avatars/poopy.png";
-import MortySrc from "../../../assets/avatars/morty.png";
+import MeeseeksSrc from "../../../../public/avatars/defaults/meeseeks.png";
+import SquanchySrc from "../../../../public/avatars/defaults/squanchy.png";
+import PoopySrc from "../../../../public/avatars/defaults/poopy.png";
+import MortySrc from "../../../../public/avatars/defaults/morty.png";
 import "../../../styles/board/body-games/Stats.css";
 
 // curr.user === score1 + 4 <tr> max, then scrollbar !!!

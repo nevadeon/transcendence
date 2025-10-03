@@ -14,9 +14,16 @@ const initUser = {
 	species: "",
 };
 
+function formatAvatarPath(avatar: string) {
+	if (!avatar)
+		return '/avatars/defaults/rick.png';
+	return `/avatars/${avatar}`;
+}
+
 export function AuthProvider({ children }: AuthProviderProps) {
-	const [token, setToken] = useState<string | null>(null);
-	const [user, setUser] = useState<UserDataProps>(initUser);
+	const [ isLoading, setIsLoading ] = useState<boolean>(true);
+	const [ token, setToken ] = useState<string | null>(null);
+	const [ user, setUser ] = useState<UserDataProps>(initUser);
 
 	useEffect(() => {
 		const storedToken = localStorage.getItem('token');
@@ -25,15 +32,19 @@ export function AuthProvider({ children }: AuthProviderProps) {
 			setToken(storedToken);
 		if (storedUser)
 			setUser(JSON.parse(storedUser));
+		setIsLoading(false);
 	}, []);
 
 	function updateUser(updatedFields: Partial<UserDataProps>) {
+		if (updatedFields.avatar)
+			updatedFields.avatar = formatAvatarPath(updatedFields.avatar);
 		const newUser = { ...user, ...updatedFields };
 		localStorage.setItem('user', JSON.stringify(newUser));
 		setUser(newUser);
 	}
 
 	function login(newToken: string, userData: UserDataProps) {
+		userData.avatar = formatAvatarPath(userData.avatar);
 		localStorage.setItem('token', newToken);
 		localStorage.setItem('user', JSON.stringify(userData));
 		setToken(newToken);
@@ -50,7 +61,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 	const isAuth = !!token;
 
 	return (
-		<AuthContext.Provider value={{ token, user, updateUser, login, logout, isAuth }}>
+		<AuthContext.Provider value={{ token, user, updateUser, login, logout, isAuth, isLoading }}>
 			{children}
 		</AuthContext.Provider>
 	);

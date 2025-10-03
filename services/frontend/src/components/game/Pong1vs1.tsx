@@ -2,8 +2,8 @@
 import Scores from "./Scores";
 import Arena from "./Arena";
 import usePadsMove from "../../hooks/usePadsMove";
-import Avatar1Src from "../../assets/avatars/rick.png";
-import Avatar2Src from "../../assets/avatars/poopy.png";
+import Avatar1Src from "../../../public/avatars/defaults/rick.png"
+import Avatar2Src from "../../../public/avatars/defaults/poopy.png";
 import type { Pong1vs1Props } from "../../interfaces/Pong1vs1";
 
 // /game/1vs1

@@ -1,7 +1,7 @@
 import usePadsMove from "../../hooks/usePadsMove";
 import type { Pong1vsIAProps } from "../../interfaces/Pong1vsIA";
-import Avatar1Source from "../../assets/avatars/rick.png";
-import Avatar2Source from "../../assets/avatars/meeseeks.png";
+import Avatar1Source from "../../../public/avatars/defaults/rick.png";
+import Avatar2Source from "../../../public/avatars/defaults/meeseeks.png";
 import ArenaSource from "../../assets/game/arena.svg";
 // import PadLeftSource from "../../assets/game/padleft.svg";
 import PadSource from "../../assets/game/padright.svg";
