@@ -24,18 +24,18 @@ async function userRoutes(fastify) {
 			);
 			if (result.changes === 0)
 				return reply.code(404).send({ error: "Username has not change." });
+			console.log('after 404');
 			return reply.code(200).send({ name: name });
 		} catch (err) {
 			fastify.log.error(err);
 			if (err.message.includes('UNIQUE constraint failed')) {
 				if (err.message.includes('users.name')) {
 					return reply.code(409).send({ 
-						error: "Username already exists",
-						field: "name"
+						error: "Username already exists"
 					});
 				}
 			}
-			return reply.code(500).send({ err: err.message });
+			return reply.code(500).send({ error: err.message });
 		}
 	});
 
@@ -56,12 +56,11 @@ async function userRoutes(fastify) {
 			if (err.message.includes('UNIQUE constraint failed')) {
 				if (err.message.includes('users.email')) {
 					return reply.code(409).send({ 
-						error: "Email already exists",
-						field: "email"
+						error: "Email already exists"
 					});
 				}
 			}
-			return reply.code(500).send({ err: err.message });
+			return reply.code(500).send({ error: err.message });
 		}
 	});
 
@@ -84,7 +83,14 @@ async function userRoutes(fastify) {
 			return reply.code(200);
 		} catch (err) {
 			fastify.log.error(err);
-			return reply.code(500).send({ err: err.message });
+			if (err.message.includes('UNIQUE constraint failed')) {
+				if (err.message.includes('users.email')) {
+					return reply.code(409).send({ 
+						error: "Password already exists"
+					});
+				}
+			}
+			return reply.code(500).send({ error: err.message });
 		}
 	});
 
