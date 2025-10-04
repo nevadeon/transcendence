@@ -29,7 +29,7 @@ export default function Profile(props: ProfileProps) {
 			</div>
 			<div className="profile-data">
 				<div className="profile-data-account">
-					<img src={user.avatar} alt="Avatar Profile" className="profile-data-portrait" />
+					<img src={user.avatar ? user.avatar : "default.png"} alt="Avatar Profile" className="profile-data-portrait" />
 					<Form register={true} profile={true} />
 				</div>
 				<Settings inProfile={true} />
