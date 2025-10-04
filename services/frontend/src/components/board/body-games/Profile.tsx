@@ -1,7 +1,7 @@
 import Form from "../../auth/Form";
 import Settings from "../../Settings.tsx";
+import AvatarSelector from "./AvatarSelector.tsx";
 import useBoard from "../../../hooks/useBoard";
-import { useAuth } from "../../../contexts/auth/useAuth";
 import type { ProfileProps } from "../../../interfaces/Profile";
 import CrossSrc from "../../../assets/icons/cross.svg";
 import "../../../styles/board/body-games/Profile.css";
@@ -10,7 +10,6 @@ export default function Profile(props: ProfileProps) {
 	const { words } = props;
 	const { openElement, toggleElement } = useBoard();
 	const isOpen = openElement === 'profile';
-	const { user } = useAuth();
 
 	function handleClose() {
 		toggleElement(null);
@@ -29,7 +28,7 @@ export default function Profile(props: ProfileProps) {
 			</div>
 			<div className="profile-data">
 				<div className="profile-data-account">
-					<img src={user.avatar ? user.avatar : "default.png"} alt="Avatar Profile" className="profile-data-portrait" />
+					<AvatarSelector />
 					<Form register={true} profile={true} />
 				</div>
 				<Settings inProfile={true} />

@@ -16,6 +16,21 @@ async function userRoutes(fastify) {
 		return reply.code(201).send({user: user});
 	});
 
+	fastify.put("/users/:id/avatar", async (req, reply) => {
+		const { avatar: rawAvatar } = req.body;
+		const avatar = rawAvatar.trim();
+		try {
+			await db.run(
+				"UPDATE users SET avatar=? WHERE id=?",
+				[avatar, req.params.id]
+			);
+			return reply.code(200).send({ avatar: avatar });
+		} catch (err) {
+			fastify.log.error(err);
+			return reply.code(500).send({ error: err.message });
+		}
+	});
+
 	fastify.put("/users/:id/name", async (req, reply) => {
 		const { name: rawName } = req.body;
 		const name = rawName.trim();
