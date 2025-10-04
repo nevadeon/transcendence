@@ -5,7 +5,7 @@ import config from "../config.js";
 import { getVaultSecret } from "./vault.js";
 
 async function dbPlugin(fastify) {
-	
+
 	const DB_PATH = await getVaultSecret("user-profile/config", "USER_PROFILE_DB_PATH");
 
 	const db = await open({
@@ -22,12 +22,13 @@ async function dbPlugin(fastify) {
 			id INTEGER PRIMARY KEY AUTOINCREMENT,
 			name TEXT NOT NULL UNIQUE,
 			email TEXT NOT NULL UNIQUE,
-			password TEXT NOT NULL,
+			password TEXT,
 			species TEXT DEFAULT 'Human',
 			planet TEXT DEFAULT 'Earth',
 			dimension TEXT DEFAULT 'C-137',
 			avatar TEXT DEFAULT 'defaults/poopy.png',
-			two_factor INTEGER DEFAULT 0
+			two_factor INTEGER DEFAULT 0,
+			googleId TEXT UNIQUE
 		)
 	`);
 

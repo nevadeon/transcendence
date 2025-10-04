@@ -1,48 +1,49 @@
-import { useGoogleLogin } from '@react-oauth/google';
 import { useNavigate } from 'react-router';
+import { useGoogleLogin } from '@react-oauth/google';
+import { jwtDecode } from 'jwt-decode';
+import { useAuth } from '../../contexts/auth/useAuth';
 import googleIcon from "../../assets/oauth/google.svg";
 
 export default function CustomGoogleButton() {
 	const naviguate = useNavigate();
+	const { login } = useAuth();
 
 	async function handleOAuthSuccess(credentialResponse: any) {
-		console.log("Token reçu :", credentialResponse.credential);
+		console.log(credentialResponse.credential);
+		console.log(jwtDecode(credentialResponse.credential));
 		try {
-			const res = await fetch('http://localhost:3001/api/auth/google', { //endpoint in back
+			const res = await fetch('http://localhost:3001/register/google/verify', {
 				method: 'POST',
 				headers: {
 				'Content-Type': 'application/json',
 				},
 				body: JSON.stringify({
-					token: credentialResponse.credential,
+					idToken: credentialResponse.credential,
 				}),
 			});
 			const data = await res.json();
-			if (!res.ok) {
-				throw new Error(data.message || "La connexion a échoué.");
+			if (res.ok && data.token && data.user) {
+				login(data.token, data.user);
+				naviguate('/board');
+				console.log('OAuth 2.0 succeed');
 			}
-			const user = data.user;
-			const token = data.token;
-			localStorage.setItem('user', JSON.stringify(user));
-			localStorage.setItem('token', token);
-			naviguate('/board');
 		} catch (err: any) {
-			console.error("Erreur lors de la connexion avec le backend :", err);
+			console.error("OAuth 2.0 failed :", err);
 		}
 	}
 
-	const login = useGoogleLogin({
+	const googleLogin = useGoogleLogin({
 		onSuccess: handleOAuthSuccess,
 		onError: () => {
-			console.log('Login Failed');
+			console.log('OAuth Login from Google SDK failed');
 		},
 	});
 
 	return (
 		<button 
-			onClick={() => login()} 
+			onClick={() => googleLogin()}
 			className="o-auth-google">
-			<img src={ googleIcon } alt="Google logo" />
+			<img src={ googleIcon } alt="Google Icon" />
 		</button>
 	);
 }
