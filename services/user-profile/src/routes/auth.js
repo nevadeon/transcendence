@@ -17,10 +17,10 @@ async function authRoutes(fastify) {
 				"INSERT INTO users(name, email, password) VALUES(?, ?, ?)",
 				[name, hashed_email, hashed_password]
 			);
-			const user = await db.get("SELECT * FROM users WHERE name = ?", [name]);
+			const user = await db.get("SELECT * FROM users WHERE name=?", [name]);
 			const token = auth.generateLongToken(user);
 			await saveToken(db, name, token, '+1 hour');
-			const user_data = await db.get("SELECT id, name, species, planet, dimension, avatar FROM users WHERE name = ?",
+			const user_data = await db.get("SELECT id, name, species, planet, dimension, avatar FROM users WHERE name=?",
 				[name]
 			);
 			return reply.code(201).send({ user: user_data, token });
@@ -28,23 +28,24 @@ async function authRoutes(fastify) {
 			fastify.log.error("Erreur SQL :", err.message);
 			if (err.message.includes('UNIQUE constraint failed')) {
 				if (err.message.includes('users.name')) {
-					return reply.code(409).send({ 
-						error: "Username already exists",
-						field: "name"
+					return reply.code(409).send({
+						field: "name",
+						error: "USERNAME ALREADY EXISTS",
 					});
 				}
 				if (err.message.includes('users.email')) {
-					return reply.code(409).send({ 
-						error: "Email already exists",
-						field: "email"
+					return reply.code(409).send({
+						field: "email",
+						error: "EMAIL ALREADY EXISTS",
 					});
 				}
 				// Erreur UNIQUE générique
-				return reply.code(409).send({ 
-					error: "This entry already exists" 
+				return reply.code(409).send({
+					field: "password",
+					error: "ENTRY ALREADY EXISTS"
 				});
 			}
-			return reply.code(500).send({ error: err.message });
+			return reply.code(500).send({ field: "password", msg: "SERVER ERROR" });
 		}
 	});
 
@@ -52,7 +53,7 @@ async function authRoutes(fastify) {
 	fastify.post("/login", async (req, reply) => {
 		const { name, password } = req.body;
 		try {
-			const user = await db.get("SELECT * FROM users WHERE name = ?", [name]);
+			const user = await db.get("SELECT * FROM users WHERE name=?", [name]);
 			if (!user)
 				return reply.code(401).send({ error: "Invalid name or password" });
 
@@ -62,19 +63,15 @@ async function authRoutes(fastify) {
 
 			let token;
 			if (user.two_factor === 0) {
-				console.log("HERE");
 				token = auth.generateLongToken(user);
-				console.log("HERE");
 				await saveToken(db, name, token, '+1 hour');
-				console.log("HERE");
 			} else {
 				token = auth.generateShortToken(user);
 				await saveToken(db, name, token, '+5 min');
 			}
-			const user_data = await db.get("SELECT id, name, species, planet, dimension, avatar, two_factor FROM users WHERE name = ?",
+			const user_data = await db.get("SELECT id, name, species, planet, dimension, avatar, two_factor FROM users WHERE name=?",
 				[name]
 			);
-			console.log("HERE");
 			return { user: user_data, token };
 		} catch (err) {
 			fastify.log.error("Erreur SQL :", err.message);
@@ -85,14 +82,13 @@ async function authRoutes(fastify) {
 	fastify.post("/two_factor", async (req, body) => {
 		const { name } = req.body;
 		try {
-			const user = await db.get("SELECT * FROM users WHERE name = ?", [name]);
-			if (!user) return reply.code(401).send({ error: "Invalid two_factor." });
-
+			const user = await db.get("SELECT * FROM users WHERE name=?", [name]);
+			if (!user)
+				return reply.code(401).send({ error: "Invalid two_factor." });
 			await deleteToken(db, user.token);
 			const token = auth.generateLongToken(user);
 			await saveToken(db, name, token, '+1 hour');
-
-			const user_data = await db.get("SELECT id, name, species, planet, dimension, avatar, two_factor FROM users WHERE name = ?",
+			const user_data = await db.get("SELECT id, name, species, planet, dimension, avatar, two_factor FROM users WHERE name=?",
 				[name]
 			);
 			return reply.code(201).send({ user: user_data, token });

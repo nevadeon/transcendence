@@ -10,56 +10,46 @@ async function userRoutes(fastify) {
 	});
 
 	fastify.get("/users/:id/", async (req, reply) => {
-		const user = await db.get("SELECT * FROM users WHERE id = ?", [req.params.id]);
-		if (!user) return reply.code(404).send({ error: "User not found" });
+		const user = await db.get("SELECT * FROM users WHERE id=?", [req.params.id]);
+		if (!user)
+			return reply.code(404).send({ error: "USER NOT FOUND" });
 		return reply.code(201).send({user: user});
 	});
 
 	fastify.put("/users/:id/name", async (req, reply) => {
-		const { name } = req.body;
+		const { name: rawName } = req.body;
+		const name = rawName.trim();
 		try {
-			const result = await db.run(
+			const currUser = await db.get("SELECT name FROM users WHERE id=?", [req.params.id]);
+			if (currUser.name.trim() === name)
+				return reply.code(409).send({ error: "USERNAME ALREADY EXISTS" });
+			await db.run(
 				"UPDATE users SET name=? WHERE id=?",
 				[name, req.params.id]
 			);
-			if (result.changes === 0)
-				return reply.code(404).send({ error: "Username has not change." });
-			console.log('after 404');
 			return reply.code(200).send({ name: name });
 		} catch (err) {
 			fastify.log.error(err);
-			if (err.message.includes('UNIQUE constraint failed')) {
-				if (err.message.includes('users.name')) {
-					return reply.code(409).send({ 
-						error: "Username already exists"
-					});
-				}
-			}
 			return reply.code(500).send({ error: err.message });
 		}
 	});
 
 	fastify.put("/users/:id/email", async (req, reply) => {
-		const { email } = req.body;
+		const { email: rawEmail } = req.body;
+		const email = rawEmail.trim();
 		const SECRET_SALT = await getVaultSecret("user-profile/config", "SECRET_SALT");
-		const hashed_email = crypto.createHash('sha256').update(email + SECRET_SALT).digest('hex');
+		const newHashedEmail = crypto.createHash('sha256').update(email + SECRET_SALT).digest('hex');
 		try {
-			const result = await db.run(
+			const currHashedEmail = await db.get("SELECT email FROM users WHERE id=?", [req.params.id]);
+			if (currHashedEmail.email.trim() === newHashedEmail)
+				return reply.code(409).send({ error: "EMAIL ALREADY EXISTS" });
+			await db.run(
 				"UPDATE users SET email=? WHERE id=?",
-				[hashed_email, req.params.id]
+				[newHashedEmail, req.params.id]
 			);
-			if (result.changes === 0)
-				return reply.code(404).send({ error: "Email has not change." });
 			return reply.code(200).send({ email: email });
 		} catch (err) {
 			fastify.log.error(err);
-			if (err.message.includes('UNIQUE constraint failed')) {
-				if (err.message.includes('users.email')) {
-					return reply.code(409).send({ 
-						error: "Email already exists"
-					});
-				}
-			}
 			return reply.code(500).send({ error: err.message });
 		}
 	});
@@ -67,29 +57,18 @@ async function userRoutes(fastify) {
 	fastify.put("/users/:id/password", async (req, reply) => {
 		const { password } = req.body;
 		try {
-			const user = await db.get(
-				"SELECT password FROM users WHERE id = ?",
-				[req.params.id]
-			);
-			const test = await argon2.verify(user.password, password);
-			if (test)
-				return reply.code(404).send({ error: "Password has not change." });
-
+			const user = await db.get( "SELECT password FROM users WHERE id=?", [req.params.id] );
+			const samePassword = await argon2.verify(user.password, password);
+			if (samePassword)
+				return reply.code(409).send({ error: "PASSWORD ALREADY EXISTS" });
 			const hashed_password = await argon2.hash(password);
 			await db.run(
-				"UPDATE users SET password = ? WHERE id = ?",
+				"UPDATE users SET password=? WHERE id=?",
 				[hashed_password, req.params.id]
 			);
-			return reply.code(200);
+			return reply.code(200).send({ msg: "PASSWORD UPDATED"});
 		} catch (err) {
 			fastify.log.error(err);
-			if (err.message.includes('UNIQUE constraint failed')) {
-				if (err.message.includes('users.email')) {
-					return reply.code(409).send({ 
-						error: "Password already exists"
-					});
-				}
-			}
 			return reply.code(500).send({ error: err.message });
 		}
 	});
