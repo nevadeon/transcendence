@@ -7,5 +7,4 @@ export interface FormData {
 	name: string,
 	email?: string,
 	password: string,
-	auth2: string,
 }

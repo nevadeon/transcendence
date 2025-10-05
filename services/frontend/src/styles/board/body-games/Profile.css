@@ -21,11 +21,13 @@
 }
 
 .profile-data-portrait {
-    margin-right: 32px;
+    width: 300px;
+    height: 300px;
 }
 
 .profile-input {
-	width: 100%;
+	width:  304px;
+    height: var(--height-input);
     margin-right: 32px;
 	padding: 16px;
     font-family: var(--font-titles);
@@ -39,6 +41,56 @@
     text-shadow: 0px 0px 4px var(--color-infos-vlow-opa-100);
 }
 
+.checkbox-2fa {
+    position: relative;
+    width: 72px;
+    height: var(--height-input);
+    margin: 0 32px 16px 0;
+}
+
+.checkbox-2fa input[type="checkbox"] {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    appearance: none;
+    display: grid;
+    place-content: center;
+}
+
+.checkbox-2fa input[type="checkbox"]:checked::before {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 24px;
+    height: 24px;
+    background-color: var(--color-computer-400);
+    border-radius: 2px;
+}
+
+.disabled {
+    width: 50%;
+    margin-right: 16px;
+}
+
+.cancel {
+    width: 50%;
+    margin: 0;
+    padding: 0;
+}
+
+.confirmation-2fa {
+    margin-top: .75em;
+}
+
+.twofa-container {
+    margin-right: 32px;
+}
+
 .in-line {
     display: flex;
 }
@@ -48,6 +100,8 @@
 }
 
 .profile-label {
+    display: flex;
+    flex-direction: row;
 	margin-bottom: 8px;
 	font-size: var(--font-size-input);
 	font-weight: var(--font-weight-bold);
