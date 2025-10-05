@@ -74,7 +74,7 @@
 	z-index: 1;
 }
 
-.usrname-input, .email-input, .pwd-input, .otp-input {
+.usrname-input, .email-input, .pwd-input, .twofa-input {
 	position: relative;
 	width: var(--width-input);
 }

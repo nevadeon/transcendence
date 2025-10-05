@@ -27,6 +27,7 @@ async function dbPlugin(fastify) {
 			planet TEXT DEFAULT 'Earth',
 			dimension TEXT DEFAULT 'C-137',
 			avatar TEXT DEFAULT 'defaults/poopy.png',
+			two_factor_secret TEXT NULL,
 			two_factor INTEGER DEFAULT 0,
 			googleId TEXT UNIQUE
 		)

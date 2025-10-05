@@ -3,13 +3,13 @@ import { Link, useNavigate } from "react-router";
 import useLanguage from "../../contexts/language/useLanguage";
 import type { FormProps, FormData } from "../../interfaces/Form";
 import { useAuth } from "../../contexts/auth/useAuth";
+import ModifSrc from "../../assets/icons/modif.svg";
+import WarningSrc from "../../assets/icons/warning.svg";
+import TwoFactorSetup from "./TwoFactor";
 // import audioSource from "../../assets/audios/start_hologram.mp3";
 // import audioSource2 from "../../assets/audios/keyboard.mp3";
 // import audioSource3 from "../../assets/audios/Voicy_Rick Sanchez Seriously_.mp3";
 // import audioSource4 from "../../assets/audios/[Rick Sanchez]MORTY......T !!!.mp3";
-import QRCodeSrc from "../../assets/icons/qrcode.svg";
-import ModifSrc from "../../assets/icons/modif.svg";
-import WarningSrc from "../../assets/icons/warning.svg";
 // opti calls, filename chars lengths
 
 // async function handleAudio() {
@@ -35,20 +35,39 @@ import WarningSrc from "../../assets/icons/warning.svg";
 // 		console.log(err);
 // 	}
 // }
-const userDataInit = { name: "", email: "", password: "", auth2: "" };
+const userDataInit = { name: "", email: "", password: "" };
+
 export interface ValidationMsgProps {
 	field: string,
 	msg: string
 };
 
+interface ValidationMsg2FAProps {
+    type: 'success' | 'error' | 'info';
+    message: string;
+}
+
 export default function Form(props: FormProps) {
 	const [ userData, setUserData ] = useState<FormData>(userDataInit);
 	const [ validationMsg, setValidationMsg ] = useState<ValidationMsgProps | null>(null);
-	const { user, updateUser, login } = useAuth();
+	const [ validationMsg2FA, setValidationMsg2FA ] = useState<ValidationMsg2FAProps | null>(null);
+	const [ is2FARequired, setIs2FARequired ] = useState(false);
+	const [ is2FACodeGen, setIs2FACodeGen ] = useState(false);
+	const [ twoFactorCode, setTwoFactorCode ] = useState('');
+	const { user, token, updateUser, login } = useAuth();
 	const { messages } = useLanguage();
 	const navigate = useNavigate();
 	const { register, profile } = props;
 
+	function handleClick2FAOpen() {
+		setIs2FACodeGen(true);
+		console.log(is2FACodeGen);
+	}
+
+	function handleClick2FACancel() {
+		setIs2FACodeGen(false);
+		console.log(is2FACodeGen);
+	}
 
 	async function handleClick(fieldName: string) {
 		const value = userData[fieldName as keyof FormData];
@@ -84,7 +103,6 @@ export default function Form(props: FormProps) {
 		}
 	}
 
-
 	function handleInputChange(e: ChangeEvent<HTMLInputElement>): void {
 		const { name, value } = e.target;
 		setUserData(( prev: FormData ) => ( { ...prev, [name]: value } ));
@@ -117,17 +135,35 @@ export default function Form(props: FormProps) {
 			}
 		} else {
 			try {
+				const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+				// 2nd login with 2FA
+				if (is2FARequired && twoFactorCode) {
+					headers['x-two-factor-code'] = twoFactorCode;
+				}
 				const res = await fetch("http://localhost:3001/login", {
 					method: 'POST',
-					headers: { 'Content-Type': 'application/json' },
+					headers: headers,
 					body: JSON.stringify( userData )
 				});
-				const { token, user } = await res.json();
+				const data = await res.json();
+				const { token, user } = data;
 				if (res.ok && token && user) {
-					console.log('Login successful');
+					setValidationMsg(null);
+					setIs2FARequired(false);
+            		setTwoFactorCode('');
 					login(token, user);
 					navigate('/board');
+					console.log('Login successful');
+				} else if (res.status === 403 && data.needs_2fa) {
+					setIs2FARequired(true);
+					setValidationMsg2FA({ type: 'info', message: "Veuillez entrer votre code d'authentification à deux facteurs." });
 				} else {
+					setValidationMsg({
+						field: data.field,
+						msg: data.error
+					});
+					setIs2FARequired(false);
+					setTwoFactorCode('');
 					console.error('Login failed');
 				}
 			} catch(err) {
@@ -136,146 +172,166 @@ export default function Form(props: FormProps) {
 		}
 	}
 
+	const getMessageStyle = (type: ValidationMsg2FAProps['type']) => {
+        switch (type) {
+            case 'success': return 'bg-green-100 border-green-400 text-green-700';
+            case 'error': return 'bg-red-100 border-red-400 text-red-700';
+            case 'info': return 'bg-blue-100 border-blue-400 text-blue-700';
+            default: return '';
+        }
+    };
+
 	return (
 		<>
 			<form onSubmit={handleSubmit} className={profile ? "form-profile" : ""}>
-				<div className='usrname-input'>
-					<label
-						htmlFor="name"
-						className={profile ? "profile-label" : ""}
-					>
-						{messages.register.name}
-					</label>
-					<div className="in-line">
-						<input
-							type="text"
-							id="name"
-							name="name"
-							className={profile ? "profile-input" : ""}
-							onChange={handleInputChange}
-							value={userData.name}
-							placeholder="..."
-							required
-							autoComplete='off'
-							pattern="^[a-zA-Z0-9]{3,24}$"
-							title="Username must be 3-24 characters long and contain only letters and numbers."
-						/>
-						{
-							profile &&
-							<button type="button" className="profile-btn" onClick={() => handleClick('name')}>
-								<img src={ModifSrc} alt="Modif Icon" />
-							</button>
-						}
-					</div>
-					{
-						validationMsg && validationMsg.field === "name" &&
-						<div className="field">
-							<img className="field-icon" src={WarningSrc} alt="Warning Icon" />
-							<span className="field-msg">{validationMsg.msg}</span>
-						</div>
-					}
-				</div>
 				{
-					register &&
-					<div className='email-input'>
-						<label
-							htmlFor='email'
-							className={profile ? "profile-label" : ""}
-						>
-							{messages.register.email}
-						</label>
-						<div className="in-line">
-							<input
-								type='email'
-								id='email'
-								name='email'
-								className={profile ? "profile-input" : ""}
-								onChange={handleInputChange}
-								value={userData.email}
-								placeholder="..."
-								required
-								autoComplete='off'
-							/>
+					is2FARequired && (
+					<div className="twofa-input">
+						{
+							validationMsg2FA &&
+							<div className={`${getMessageStyle(validationMsg2FA.type)}`}>
+								<img className="field-icon" src={WarningSrc} alt="Warning Icon" />
+								<span className="field-msg">{validationMsg2FA.message}</span>
+							</div>
+						}
+						<label htmlFor="2fa-code">CODE 2FA (TOTP)</label>
+						<input
+							id="2fa-code"
+							name="2fa-code"
+							type="text"
+							placeholder="123456"
+							value={twoFactorCode}
+							onChange={(e) => setTwoFactorCode(e.target.value.replace(/[^0-9]/g, '').slice(0, 6))}
+							required
+						/>
+						<span>Ré-appuyez sur Connexion après avoir entré le code.</span>
+					</div>
+				)}
+				{
+					!is2FARequired && (
+						<div>
+							{
+								!is2FACodeGen && (
+									<div>
+										<div className='usrname-input'>
+											<label
+												htmlFor="name"
+												className={profile ? "profile-label" : ""}
+											>
+												{messages.register.name}
+											</label>
+											<div className="in-line">
+												<input
+													type="text"
+													id="name"
+													name="name"
+													className={profile ? "profile-input" : ""}
+													onChange={handleInputChange}
+													value={userData.name}
+													placeholder="..."
+													required
+													autoComplete='off'
+													pattern="^[a-zA-Z0-9]{3,24}$"
+													title="Username must be 3-24 characters long and contain only letters and numbers."
+												/>
+												{
+													profile &&
+													<button type="button" className="profile-btn" onClick={() => handleClick('name')}>
+														<img src={ModifSrc} alt="Modif Icon" />
+													</button>
+												}
+											</div>
+											{
+												validationMsg && validationMsg.field === "name" &&
+												<div className="field">
+													<img className="field-icon" src={WarningSrc} alt="Warning Icon" />
+													<span className="field-msg">{validationMsg.msg}</span>
+												</div>
+											}
+										</div>
+										{
+											register &&
+											<div className='email-input'>
+												<label
+													htmlFor='email'
+													className={profile ? "profile-label" : ""}
+												>
+													{messages.register.email}
+												</label>
+												<div className="in-line">
+													<input
+														type='email'
+														id='email'
+														name='email'
+														className={profile ? "profile-input" : ""}
+														onChange={handleInputChange}
+														value={userData.email}
+														placeholder="..."
+														required
+														autoComplete='off'
+													/>
+													{
+														profile &&
+														<button type="button" className="profile-btn" onClick={() => handleClick('email')}>
+															<img src={ModifSrc} alt="Modif Icon" />
+														</button>
+													}
+												</div>
+												{
+													validationMsg && validationMsg.field === "email" &&
+													<div className="field">
+														<img className="field-icon" src={WarningSrc} alt="Warning Icon" />
+														<span className="field-msg">{validationMsg.msg}</span>
+													</div>
+												}
+											</div>
+										}
+										<div className='pwd-input'>
+											<label
+												htmlFor="password"
+												className={profile ? "profile-label" : ""}
+											>
+												{messages.register.pwd}
+											</label>
+											<div className="in-line">
+												<input
+													type="password"
+													id="password"
+													name="password"
+													className={profile ? "profile-input" : ""}
+													onChange={handleInputChange}
+													value={userData.password}
+													placeholder="..."
+													required
+													autoComplete='off'
+													minLength={8}
+													// pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
+													// title="Password must contain at least 1 uppercase letter, 1 lowercase letter, 1 number, 1 special character, and be at least 8 characters long."
+												/>
+												{
+													profile &&
+													<button type="button" className="profile-btn" onClick={() => handleClick('password')} >
+														<img src={ModifSrc} alt="Modif Icon" />
+													</button>
+												}
+											</div>
+											{
+												validationMsg && validationMsg.field === "password" &&
+												<div className="field">
+													<img className="field-icon" src={WarningSrc} alt="Warning Icon" />
+													<span className="field-msg">{validationMsg.msg}</span>
+												</div>
+											}
+										</div>
+									</div>
+								)
+							}
 							{
 								profile &&
-								<button type="button" className="profile-btn" onClick={() => handleClick('email')}>
-									<img src={ModifSrc} alt="Modif Icon" />
-								</button>
+								<TwoFactorSetup token={token} profile={profile} onClickOpen={handleClick2FAOpen} onClickCancel={handleClick2FACancel} />
 							}
 						</div>
-						{
-							validationMsg && validationMsg.field === "email" &&
-							<div className="field">
-								<img className="field-icon" src={WarningSrc} alt="Warning Icon" />
-								<span className="field-msg">{validationMsg.msg}</span>
-							</div>
-						}
-					</div>
-				}
-				<div className='pwd-input'>
-					<label
-						htmlFor="password"
-						className={profile ? "profile-label" : ""}
-					>
-						{messages.register.pwd}
-					</label>
-					<div className="in-line">
-						<input
-							type="password"
-							id="password"
-							name="password"
-							className={profile ? "profile-input" : ""}
-							onChange={handleInputChange}
-							value={userData.password}
-							placeholder="..."
-							required
-							autoComplete='off'
-							minLength={8}
-							// pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
-							// title="Password must contain at least 1 uppercase letter, 1 lowercase letter, 1 number, 1 special character, and be at least 8 characters long."
-						/>
-						{
-							profile &&
-							<button type="button" className="profile-btn" onClick={() => handleClick('password')} >
-								<img src={ModifSrc} alt="Modif Icon" />
-							</button>
-						}
-					</div>
-					{
-						validationMsg && validationMsg.field === "password" &&
-						<div className="field">
-							<img className="field-icon" src={WarningSrc} alt="Warning Icon" />
-							<span className="field-msg">{validationMsg.msg}</span>
-						</div>
-					}
-				</div>
-				{
-					profile &&
-					<div className='otp-input'>
-						<label
-							htmlFor='auth2'
-							className={profile ? "profile-label" : ""}
-						>
-							2FA AUTH
-						</label>
-						<div className="in-line">
-							<div className="toggle-switch">
-								<label htmlFor="2fa-switch"></label>
-								<input type="checkbox" id="2fa-switch" name="2fa-switch" />
-								{/* + checked={is2FaEnabled} onChange={handleToggle} /> */}
-							</div>
-							<button type="button" className="profile-btn" onClick={() => handleClick('auth2')}>
-								<img src={QRCodeSrc} alt="QRCode Icon" />
-							</button>
-						</div>
-						{
-							validationMsg && validationMsg.field === "auth2" &&
-							<div className="field">
-								<img className="field-icon" src={WarningSrc} alt="Warning Icon" />
-								<span className="field-msg">{validationMsg.msg}</span>
-							</div>
-						}
-					</div>
+					)
 				}
 				{
 					!profile &&

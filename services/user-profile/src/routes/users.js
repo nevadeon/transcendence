@@ -1,6 +1,27 @@
 import argon2 from "argon2";
-import { getVaultSecret } from "../plugins/vault.js";
 import crypto from 'crypto';
+import { getVaultSecret } from "../plugins/vault.js";
+import { authenticator } from 'otplib';
+import qrcode from 'qrcode';
+
+// 2fa config
+const APP_NAME = "ft_transcendence";
+authenticator.options = { window: 1 };
+
+const authenticate = async (req, reply) => {
+        try {
+            // fastify.jwt.verify() lance une erreur si le token est invalide ou manquant
+            const payload = await req.jwtVerify();
+            if (!payload.id) {
+                throw new Error("Token payload missing required user ID.");
+            }
+            req.user = payload;
+        } catch (err) {
+            fastify.log.error('JWT Verification Failed:', err);
+            reply.code(401).send({ message: "Authentification requise. Token JWT invalide ou manquant." });
+            throw err; // Essentiel pour arrêter l'exécution du handler de route
+        }
+    };
 
 async function userRoutes(fastify) {
 	const { db } = fastify;
@@ -87,6 +108,131 @@ async function userRoutes(fastify) {
 			return reply.code(500).send({ error: err.message });
 		}
 	});
+
+	fastify.get('/api/user/2fa/status', async (req, reply) => {
+        try {
+            await authenticate(req, reply);
+        } catch (err) {
+            return;
+        }
+        const userId = req.user.id;
+        try {
+            const user = await db.get(
+                "SELECT two_factor, two_factor_secret FROM users WHERE id=?", 
+                [userId]
+            );
+            if (!user) {
+                return reply.code(404).send({ message: "Utilisateur non trouvé." });
+            }
+            return reply.code(200).send({
+                is_2fa_enabled: user.two_factor === 1,
+                has_secret: !!user.two_factor_secret
+            });
+        } catch (err) {
+            fastify.log.error(err);
+            return reply.code(500).send({ message: "Erreur serveur lors de la récupération du statut 2FA." });
+        }
+    });
+
+	fastify.post('/api/user/2fa/generate-secret', async (req, reply) => {
+		try {
+            await authenticate(req, reply);
+        } catch (err) {
+            return;
+        }
+        const userId = req.user.id;
+        try {
+			const user = await db.get("SELECT email FROM users WHERE id=?", [userId]);
+            if (!user || !user.email)
+                 return reply.code(404).send({ message: "Utilisateur non trouvé ou email manquant." });
+            const secret = authenticator.generateSecret();
+            const otpAuthUrl = authenticator.keyuri(
+                user.email,
+                APP_NAME,
+                secret
+            );
+            // uri to url
+            const qrCodeImage = await qrcode.toDataURL(otpAuthUrl);
+            await db.run(
+                "UPDATE users SET two_factor_secret=? WHERE id=?",
+                [secret, userId]
+            );
+            return reply.code(200).send({
+                qrCodeImage: qrCodeImage,
+                identifier: user.email //email visible dans Google Authenticator
+            });
+        } catch (err) {
+            fastify.log.error(err);
+            return reply.code(500).send({ message: "Erreur serveur lors de la génération du secret 2FA." });
+        }
+    });
+
+	fastify.post('/api/user/2fa/verify-setup', async (req, reply) => {
+        try {
+            await authenticate(req, reply);
+        } catch (err) {
+            return;
+        }
+        const userId = req.user.id;
+        const { token } = req.body; // Le code TOTP à 6 chiffres soumis par l'utilisateur
+        if (!token || typeof token !== 'string' || token.length !== 6 || isNaN(parseInt(token, 10))) {
+            return reply.code(400).send({ message: "Token TOTP invalide." });
+        }
+        try {
+            const userCheck = await db.get("SELECT two_factor_secret FROM users WHERE id=?", [userId]);
+            if (!userCheck || !userCheck.two_factor_secret) {
+                return reply.code(400).send({
+                    message: "Le secret 2FA n'a pas été trouvé. Veuillez régénérer le QR Code."
+                });
+			}
+            const secret = userCheck.two_factor_secret;
+            const isValid = authenticator.verify({ token, secret });
+            if (!isValid) {
+                return reply.code(401).send({ message: "Code 2FA incorrect ou expiré." });
+            }
+
+            await db.run(
+                "UPDATE users SET two_factor=? WHERE id=?",
+                [1, userId]
+            );
+            return reply.code(200).send({ message: "2FA activé et confirmé avec succès !", is_2fa_enabled: 1 });
+        } catch (err) {
+            fastify.log.error(err);
+            return reply.code(500).send({ message: "Erreur serveur lors de la vérification 2FA." });
+        }
+    });
+
+	fastify.put("/api/user/2fa/toggle", async (req, reply) => {
+		try {
+            await authenticate(req, reply);
+        } catch (err) {
+            return;
+        }
+        const userId = req.user.id;
+        const new2FAState = req.body.two_factor ? 1 : 0;
+        try {
+            if (new2FAState === 1) {
+                const userCheck = await db.get("SELECT two_factor_secret FROM users WHERE id=?", [userId]);
+                if (!userCheck || !userCheck.two_factor_secret) {
+                    return reply.code(400).send({
+                        message: "Veuillez d'abord générer et confirmer votre code 2FA."
+                    });
+                }
+            }
+            await db.run(
+                "UPDATE users SET two_factor=? WHERE id=?",
+                [new2FAState, userId]
+            );
+            const message = new2FAState === 1
+                ? "2FA activé avec succès."
+                : "2FA désactivé. Le secret est toujours stocké.";
+            return reply.code(200).send({ message: message, is_2fa_enabled: new2FAState });
+
+        } catch (err) {
+            fastify.log.error(err);
+            return reply.code(500).send({ message: "Erreur serveur lors de la mise à jour du statut 2FA." });
+        }
+    });
 
 	fastify.delete("/users/:id", async (req, reply) => {
 		const result = await db.run("DELETE FROM users WHERE id=?", [req.params.id]);
