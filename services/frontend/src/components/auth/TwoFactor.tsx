@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import WarningSrc from "../../assets/icons/warning.svg";
 
 interface ValidationMsgProps {
     type: 'success' | 'error' | 'info';
@@ -114,9 +115,9 @@ export default function TwoFactorSetup(props: any) {
             const data = await res.json();
             if (res.ok) {
                 setQrCodeData(data.qrCodeImage);
-                setValidationMsg({ 
-                    type: 'info', 
-                    message: `Scannez ce code avec votre application d'authentification(ex: Google Authenticator). Identifiant: ${data.identifier}` 
+                setValidationMsg({
+                    type: 'info',
+                    message: `Scannez ce code sur votre app 2FA(ex: Google Authenticator)`
                 });
                 setIsSettingUp(true); // S'assurer que le mode setup est actif
             } else {
@@ -169,26 +170,18 @@ export default function TwoFactorSetup(props: any) {
         }
     };
 
-    const getMessageStyle = (type: ValidationMsgProps['type']) => {
-        switch (type) {
-            case 'success': return 'bg-green-100 border-green-400 text-green-700';
-            case 'error': return 'bg-red-100 border-red-400 text-red-700';
-            case 'info': return 'bg-blue-100 border-blue-400 text-blue-700';
-            default: return '';
-        }
-    };
-
     return (
-        <div className="twofa-container">
+        <div className={isSettingUp ? "twofa-container" : ""}>
             {validationMsg && (
-                <div role="alert">
-                    <p>{validationMsg.message}</p>
+                <div className="field" style={{ position: 'relative' }}>
+                    <img className="field-icon" src={WarningSrc} alt="Warning Icon" />
+                    <span className="field-msg">{validationMsg.message}</span>
                 </div>
             )}
             <div className="flex justify-between items-center py-2 border-b">
                 <label htmlFor="2fa-switch" className={profile ? "profile-label" : ""}>
                     2FA STATUS :
-                    <span style={{marginLeft: '8px'}}> {is2FAEnabled ? 'Activé' : 'Désactivé'} </span>
+                    <span style={{marginLeft: '8px'}}> {is2FAEnabled ? 'ACTIVE' : 'DISABLED'} </span>
                 </label>
                 <div className="in-line">
                     {
@@ -206,6 +199,24 @@ export default function TwoFactorSetup(props: any) {
                             {isLoading ? 'LOADING' : 'GENERATE 2FA'}
                         </button>
                     )}
+                    {
+                        isSettingUp && (
+                            qrCodeData ? (
+                                <div style={{ display: 'flex', flexDirection: 'column', marginRight: '1em' }}>
+                                    <img
+                                        src={qrCodeData}
+                                        alt="QR Code 2FA"
+                                        style={{ width: 128, height: 128 }}
+                                    />
+                                    <span className='msg-2fa' style={{ marginTop: '8px' }}>SCAN THIS QRCODE</span>
+                                </div>
+                                ) : (
+                                <span className='msg-2fa'>
+                                    {isLoading ? 'GENERATE QRCODE...' : 'CLICK ON CHECKBOX TO GENERATE THE QRCODE'}
+                                </span>
+                            )
+                        )
+                    }
                     <label htmlFor="2fa-switch" className='checkbox-2fa'>
                         <input
                             type="checkbox"
@@ -221,12 +232,12 @@ export default function TwoFactorSetup(props: any) {
             </div>
             {isSettingUp && (
                 <div>
-                    {qrCodeData ? (
+                    {/* {qrCodeData ? (
                         <div>
                             <img
                                 src={qrCodeData}
                                 alt="QR Code 2FA"
-                                style={{ width: 256, height: 256 }}
+                                style={{ width: 128, height: 128 }}
                             />
                             <span className='msg-2fa'>Scannez ce code. Le secret sera activé après la vérification.</span>
                         </div>
@@ -234,7 +245,7 @@ export default function TwoFactorSetup(props: any) {
                         <span className='msg-2fa'>
                             {isLoading ? 'GENERATE QRCODE...' : 'CLICK ON CHECKBOX TO GENERATE THE QRCODE'}
                         </span>
-                    )}
+                    )} */}
                     <div className='confirmation-2fa'>
                         <input
                             id="setup-token"
