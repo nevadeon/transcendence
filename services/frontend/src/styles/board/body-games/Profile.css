@@ -28,7 +28,7 @@
 .profile-input {
 	width:  304px;
     height: var(--height-input);
-    margin-right: 32px;
+    /* margin-right: 32px; */
 	padding: 16px;
     font-family: var(--font-titles);
     font-size: var(--font-size-profile-card-header);
