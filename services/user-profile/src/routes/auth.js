@@ -1,11 +1,13 @@
 // import { OAuth2Client } from 'google-auth-library';
 import { deleteToken, saveToken } from "../utils/tokens.js";
 import { getVaultSecret } from "../plugins/vault.js";
+import { authenticator } from 'otplib';
 import argon2 from "argon2";
 import crypto from 'crypto';
 
 // const GOOGLE_CLIENT_ID = await getVaultSecret("user-profile/config", "GOOGLE_CLIENT_ID");
 // const googleClient = new OAuth2Client(GOOGLE_CLIENT_ID);
+const TWO_FACTOR_HEADER = 'x-two-factor-code';
 
 async function authRoutes(fastify) {
 	const { db, auth } = fastify;
@@ -111,48 +113,63 @@ async function authRoutes(fastify) {
 		try {
 			const user = await db.get("SELECT * FROM users WHERE name=?", [name]);
 			if (!user)
-				return reply.code(401).send({ error: "Invalid name or password" });
+				return reply.code(401).send({ field: 'name', error: "Invalid name or password" });
 
 			const valid = await argon2.verify(user.password, password);
 			if (!valid)
-				return reply.code(401).send({ error: "Invalid name or password" });
+				return reply.code(401).send({ field: 'password', error: "Invalid name or password" });
 
 			let token;
 			if (user.two_factor === 0) {
 				token = auth.generateLongToken(user);
 				await saveToken(db, name, token, '+1 hour');
 			} else {
+				const is2FAActive = user.two_factor === 1 && user.two_factor_secret;
+				const twoFactorCode = req.headers[TWO_FACTOR_HEADER];
+				if (is2FAActive && !twoFactorCode) {
+					return reply.code(403).send({
+						message: "Authentification à deux facteurs requise.",
+						needs_2fa: true
+					});
+				}
+				if (is2FAActive && twoFactorCode) {
+					authenticator.options = { window: 1 };
+					const isValid = authenticator.verify({ token: twoFactorCode, secret: user.two_factor_secret });
+					if (!isValid) {
+						return reply.code(401).send({ message: "Code 2FA incorrect ou expiré." });
+					}
+				}
 				token = auth.generateShortToken(user);
 				await saveToken(db, name, token, '+5 min');
 			}
 			const user_data = await db.get("SELECT id, name, species, planet, dimension, avatar, two_factor FROM users WHERE name=?",
 				[name]
 			);
-			return { user: user_data, token };
-		} catch (err) {
-			fastify.log.error("Erreur SQL :", err.message);
-			return reply.code(500).send({ error: err.message });
-		}
-	});
-
-	fastify.post("/two_factor", async (req, body) => {
-		const { name } = req.body;
-		try {
-			const user = await db.get("SELECT * FROM users WHERE name=?", [name]);
-			if (!user)
-				return reply.code(401).send({ error: "Invalid two_factor." });
-			await deleteToken(db, user.token);
-			const token = auth.generateLongToken(user);
-			await saveToken(db, name, token, '+1 hour');
-			const user_data = await db.get("SELECT id, name, species, planet, dimension, avatar, two_factor FROM users WHERE name=?",
-				[name]
-			);
 			return reply.code(201).send({ user: user_data, token });
 		} catch (err) {
 			fastify.log.error("Erreur SQL :", err.message);
-			return reply.code(500).send({ error: err.message });
+			return reply.code(500).send({ field: 'password', error: err.message });
 		}
 	});
+
+	// fastify.post("/two_factor", async (req, body) => {
+	// 	const { name } = req.body;
+	// 	try {
+	// 		const user = await db.get("SELECT * FROM users WHERE name=?", [name]);
+	// 		if (!user)
+	// 			return reply.code(401).send({ error: "Invalid two_factor." });
+	// 		await deleteToken(db, user.token);
+	// 		const token = auth.generateLongToken(user);
+	// 		await saveToken(db, name, token, '+1 hour');
+	// 		const user_data = await db.get("SELECT id, name, species, planet, dimension, avatar, two_factor FROM users WHERE name=?",
+	// 			[name]
+	// 		);
+	// 		return reply.code(201).send({ user: user_data, token });
+	// 	} catch (err) {
+	// 		fastify.log.error("Erreur SQL :", err.message);
+	// 		return reply.code(500).send({ error: err.message });
+	// 	}
+	// });
 }
 
 export default authRoutes;
