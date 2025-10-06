@@ -8,6 +8,8 @@ import "../../../styles/board/sidebar-friendlist/FriendList.css";
 export default function FriendList(props: FriendListProps) {
 	const { words } = props;
 
+	// useEffect() SELECT friendlist FROM users WHERE ID=id -> res [ {name: user.name, status: user.status}, {...} ]
+
 	return (
 		<div className="friendlist">
 			<div className="friendlist-header">

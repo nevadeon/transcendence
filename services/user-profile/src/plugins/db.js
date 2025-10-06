@@ -14,7 +14,11 @@ async function dbPlugin(fastify) {
 	});
 
 	//auto suppr au 'make re'
-	await db.exec(`DROP TABLE IF EXISTS users`);
+	await db.exec(`
+		DROP TABLE IF EXISTS users;
+		DROP TABLE IF EXISTS tokens;
+        DROP TABLE IF EXISTS friends;
+	`);
 
 	// Création tables
 	await db.exec(`
@@ -27,8 +31,9 @@ async function dbPlugin(fastify) {
 			planet TEXT DEFAULT 'Earth',
 			dimension TEXT DEFAULT 'C-137',
 			avatar TEXT DEFAULT 'defaults/poopy.png',
+			status INTEGER NOT NULL DEFAULT 0 CHECK (status IN (0, 1)),
 			two_factor_secret TEXT NULL,
-			two_factor INTEGER DEFAULT 0,
+			two_factor INTEGER NOT NULL DEFAULT 0 CHECK (two_factor IN (0, 1)),
 			googleId TEXT UNIQUE
 		)
 	`);
@@ -40,9 +45,20 @@ async function dbPlugin(fastify) {
 			token TEXT NOT NULL UNIQUE,
 			created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 			expires_at DATETIME,
-			FOREIGN KEY(username) REFERENCES users(name)
+			FOREIGN KEY(username) REFERENCES users(name) ON DELETE CASCADE
 		)
 	`);
+
+	await db.exec(`
+        CREATE TABLE IF NOT EXISTS friends (
+            user_id INTEGER NOT NULL,
+            friend_id INTEGER NOT NULL,
+            status INTEGER NOT NULL DEFAULT 0 CHECK (status IN (0, 1, 2)),
+            PRIMARY KEY (user_id, friend_id),
+            FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE,
+            FOREIGN KEY(friend_id) REFERENCES users(id) ON DELETE CASCADE
+        )
+    `);
 
 	fastify.decorate("db", db);
 }
