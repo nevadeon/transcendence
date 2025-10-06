@@ -6,6 +6,8 @@ import useLanguage from "../hooks/useLanguage";
 import TeleportSrc from "../assets/tournament/teleport-bg.png";
 import "../styles/tournament/Tournament.css";
 
+// const BASE_URL = process.env.;
+
 export default function TournamentPage() {
 	const [ usernames, setUsernames ] = useState<string[]>(Array(3).fill(''));
 	const words = useLanguage();
@@ -34,7 +36,7 @@ export default function TournamentPage() {
 
 	async function handleFormSubmit(usernames: string[]) {
 		try {
-			const res = await fetch("http://localhost:3003/game_history", {
+			const res = await fetch("http://localhost:3003/record_match", {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify( {
@@ -42,10 +44,10 @@ export default function TournamentPage() {
 					red_team_B: usernames[0],
 					blue_team_A: usernames[1],
 					blue_team_B: usernames[2],
-					mode: '1vs1',
+					mode: 'versus',
 					red_team_score: 7,
 					blue_team_score: 4,
-					winner: 'red_team'
+					winner: 'red'
 				} )
 			});
 			const data = await res.json();

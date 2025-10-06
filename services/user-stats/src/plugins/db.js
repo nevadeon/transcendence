@@ -13,6 +13,11 @@ async function dbPlugin(fastify) {
 	});
 
 	await db.exec(`
+		DROP TABLE IF EXISTS users_stats;	
+		DROP TABLE IF EXISTS match_history;	
+	`);
+
+	await db.exec(`
 		CREATE TABLE IF NOT EXISTS users_stats (
 			id INTEGER PRIMARY KEY AUTOINCREMENT,
 			name TEXT NOT NULL UNIQUE,
@@ -22,6 +27,8 @@ async function dbPlugin(fastify) {
 			tournaments_win INTEGER DEFAULT 0,
 			versus INTEGER DEFAULT 0,
 			versus_win INTEGER DEFAULT 0,
+			versusCoop INTEGER DEFAULT 0,
+			versusCoop_win INTEGER DEFAULT 0,
 			versusIa INTEGER DEFAULT 0,
 			versusIa_win INTEGER DEFAULT 0,
 			billiards INTEGER DEFAULT 0,
@@ -34,8 +41,8 @@ async function dbPlugin(fastify) {
 			id INTEGER PRIMARY KEY AUTOINCREMENT,
 			red_team_A TEXT NOT NULL,
 			red_team_B TEXT,
-			bleu_team_A TEXT DEFAULT 'IA',
-			bleu_team_B TEXT,
+			blue_team_A TEXT DEFAULT 'IA',
+			blue_team_B TEXT,
 			mode TEXT NOT NULL,
 			red_team_score INTEGER NOT NULL,
 			blue_team_score INTEGER NOT NULL,

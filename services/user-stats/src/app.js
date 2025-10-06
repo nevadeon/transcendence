@@ -6,6 +6,7 @@ import swaggerUi from "@fastify/swagger-ui";
 
 import {getVaultSecret} from "./plugins/vault.js";
 import dbPlugins from "./plugins/db.js";
+import statsRoutes from "./routes/stats.js";
 
 const fastify = Fastify({ logger: true });
 
@@ -30,6 +31,7 @@ async function start() {
 	});
 
 	await fastify.register(dbPlugins);
+	await fastify.register(statsRoutes);
 
 	try {
 		await fastify.listen({ port: USER_STATS_PORT, host: "0.0.0.0"});
