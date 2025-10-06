@@ -77,23 +77,19 @@ async function authRoutes(fastify) {
 			if (googleRes.status !== 200) {
 				return reply.code(401).send({ message: "Jeton Google invalide ou expiré." });
 			}
-			console.log(googleUserData);
 			const { sub: googleId, email, given_name } = googleUserData;
 		
-			// 2. GESTION CONNEXION / INSCRIPTION (Upsert)
+			// CONNEXION / INSCRIPTION
 			let user = await db.get("SELECT * FROM users WHERE googleId=?", [googleId]);
             if (user)
-                return issueUserSession(reply, user); //RESPONSE
-
+                return issueUserSession(reply, user);
 			user = await db.get("SELECT * FROM users WHERE email=?", [email]); // si deja log via credentials, et veux OAuth ensuite
 			if (user) {
                 await db.run("UPDATE users SET googleId=? WHERE id=?", [googleId, user.id]);
-                return issueUserSession(reply, user); //RESPONSE
+                return issueUserSession(reply, user);
             } else {
-                // INSCRIPTION: Nouvel utilisateur, l'enregistrer dans la DB
                 const SECRET_SALT = await getVaultSecret("user-profile/config", "SECRET_SALT");
                 const hashed_email = crypto.createHash('sha256').update(email + SECRET_SALT).digest('hex');
-                // Insérer le new user (sans mot de passe, mais avec googleId)
                 await db.run(
                     "INSERT INTO users(name, email, googleId) VALUES(?, ?, ?)",
                     [given_name, hashed_email, googleId]
