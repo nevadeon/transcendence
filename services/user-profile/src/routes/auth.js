@@ -150,6 +150,25 @@ async function authRoutes(fastify) {
 			return reply.code(500).send({ field: 'password', error: err.message });
 		}
 	});
+
+	// fastify.post("/two_factor", async (req, body) => {
+	// 	const { name } = req.body;
+	// 	try {
+	// 		const user = await db.get("SELECT * FROM users WHERE name=?", [name]);
+	// 		if (!user)
+	// 			return reply.code(401).send({ error: "Invalid two_factor." });
+	// 		await deleteToken(db, user.token);
+	// 		const token = auth.generateLongToken(user);
+	// 		await saveToken(db, name, token, '+1 hour');
+	// 		const user_data = await db.get("SELECT id, name, species, planet, dimension, avatar, two_factor FROM users WHERE name=?",
+	// 			[name]
+	// 		);
+	// 		return reply.code(201).send({ user: user_data, token });
+	// 	} catch (err) {
+	// 		fastify.log.error("Erreur SQL :", err.message);
+	// 		return reply.code(500).send({ error: err.message });
+	// 	}
+	// });
 }
 
 export default authRoutes;
