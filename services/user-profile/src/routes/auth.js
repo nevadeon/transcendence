@@ -55,57 +55,60 @@ async function authRoutes(fastify) {
 		}
 	});
 
-	// async function issueUserSession(reply, user) {
-    //     // user doit contenir l'id et le name
-    //     const token = auth.generateLongToken(user);
-    //     await saveToken(db, user.name, token, '+1 hour');
-    //     const user_data = await db.get( "SELECT id, name, species, planet, dimension, avatar FROM users WHERE id=?", [user.id] );
-    //     return reply.code(201).send({ user: user_data, token });
-    // }
+	async function issueUserSession(reply, user) {
+        // user doit contenir l'id et le name
+        const token = auth.generateLongToken(user);
+        await saveToken(db, user.name, token, '+1 hour');
+        const user_data = await db.get( "SELECT id, name, species, planet, dimension, avatar FROM users WHERE id=?", [user.id] );
+        return reply.code(201).send({ user: user_data, token });
+    }
 
-	// fastify.post("/register/google/verify", async (req, reply) => {
-    //     const { idToken } = req.body; // Token envoyé par le frontend
-    //     if (!idToken)
-    //         return reply.code(400).send({ message: "ID Token Google manquant." }); // #TODO console.error OU <Register />(page) recup et affiche in <Form />
-    //     try {
-    //         // 1. VÉRIFICATION SÉCURISÉE DU TOKEN GOOGLE
-    //         const ticket = await googleClient.verifyIdToken({ idToken: idToken, audience: GOOGLE_CLIENT_ID });
-	// 		const payload = ticket.getPayload();
-    //         if (!payload || !payload.sub || !payload.email)
-    //             return reply.code(401).send({ message: "Token invalide ou données manquantes." }); //RESPONSE
+	fastify.post("/register/google/verify", async (req, reply) => {
+        const { accessToken } = req.body;
 
-	// 		const googleId = payload.sub; // googleId unique
-    //         const email = payload.email;
-    //         const name = payload.name || payload.given_name || 'GoogleUser';
-	// 		// 2. GESTION CONNEXION / INSCRIPTION (Upsert)
-	// 		let user = await db.get("SELECT * FROM users WHERE googleId=?", [googleId]);
-    //         if (user)
-    //             return issueUserSession(reply, user); //RESPONSE
+		if (!accessToken)
+			return reply.code(400).send({ message: "Access Token manquant." });
 
-	// 		user = await db.get("SELECT * FROM users WHERE email=?", [email]); // si deja log via credentials, et veux OAuth ensuite
-	// 		if (user) {
-    //             await db.run("UPDATE users SET googleId=? WHERE id=?", [googleId, user.id]);
-    //             return issueUserSession(reply, user); //RESPONSE
-    //         } else {
-    //             // INSCRIPTION: Nouvel utilisateur, l'enregistrer dans la DB
-    //             const SECRET_SALT = await getVaultSecret("user-profile/config", "SECRET_SALT");
-    //             const hashed_email = crypto.createHash('sha256').update(email + SECRET_SALT).digest('hex');
-    //             // Insérer le new user (sans mot de passe, mais avec googleId)
-    //             await db.run(
-    //                 "INSERT INTO users(name, email, googleId) VALUES(?, ?, ?)",
-    //                 [name, hashed_email, googleId]
-    //             );
-    //             const newUser = await db.get("SELECT * FROM users WHERE googleId=?", [googleId]);
-    //             if (newUser)
-    //                 return issueUserSession(reply, newUser); //RESPONSE
-    //             else
-    //                 throw new Error("Erreur lors de la récupération du nouvel utilisateur."); //RESPONSE(to catch)
-    //         }
-	// 	} catch (err) {
-    //         fastify.log.error("Erreur Google Auth:", err.message);
-    //         return reply.code(401).send({ message: "Authentification via Google échouée." }); //RESPONSE
-    //     }
-    // });
+        try {
+			const googleRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+				headers: { 'Authorization': `Bearer ${accessToken}` }
+			});
+			const googleUserData = await googleRes.json();
+			if (googleRes.status !== 200) {
+				return reply.code(401).send({ message: "Jeton Google invalide ou expiré." });
+			}
+			console.log(googleUserData);
+			const { sub: googleId, email, given_name } = googleUserData;
+		
+			// 2. GESTION CONNEXION / INSCRIPTION (Upsert)
+			let user = await db.get("SELECT * FROM users WHERE googleId=?", [googleId]);
+            if (user)
+                return issueUserSession(reply, user); //RESPONSE
+
+			user = await db.get("SELECT * FROM users WHERE email=?", [email]); // si deja log via credentials, et veux OAuth ensuite
+			if (user) {
+                await db.run("UPDATE users SET googleId=? WHERE id=?", [googleId, user.id]);
+                return issueUserSession(reply, user); //RESPONSE
+            } else {
+                // INSCRIPTION: Nouvel utilisateur, l'enregistrer dans la DB
+                const SECRET_SALT = await getVaultSecret("user-profile/config", "SECRET_SALT");
+                const hashed_email = crypto.createHash('sha256').update(email + SECRET_SALT).digest('hex');
+                // Insérer le new user (sans mot de passe, mais avec googleId)
+                await db.run(
+                    "INSERT INTO users(name, email, googleId) VALUES(?, ?, ?)",
+                    [given_name, hashed_email, googleId]
+                );
+                const newUser = await db.get("SELECT * FROM users WHERE googleId=?", [googleId]);
+                if (newUser)
+                    return issueUserSession(reply, newUser); //RESPONSE
+                else
+                    throw new Error("Erreur lors de la récupération du nouvel utilisateur."); //RESPONSE(to catch)
+            }
+		} catch (err) {
+            fastify.log.error("Erreur Google Auth:", err.message);
+            return reply.code(401).send({ message: "Authentification via Google échouée." }); //RESPONSE
+        }
+    });
 
 	// Login
 	fastify.post("/login", async (req, reply) => {
@@ -151,25 +154,6 @@ async function authRoutes(fastify) {
 			return reply.code(500).send({ field: 'password', error: err.message });
 		}
 	});
-
-	// fastify.post("/two_factor", async (req, body) => {
-	// 	const { name } = req.body;
-	// 	try {
-	// 		const user = await db.get("SELECT * FROM users WHERE name=?", [name]);
-	// 		if (!user)
-	// 			return reply.code(401).send({ error: "Invalid two_factor." });
-	// 		await deleteToken(db, user.token);
-	// 		const token = auth.generateLongToken(user);
-	// 		await saveToken(db, name, token, '+1 hour');
-	// 		const user_data = await db.get("SELECT id, name, species, planet, dimension, avatar, two_factor FROM users WHERE name=?",
-	// 			[name]
-	// 		);
-	// 		return reply.code(201).send({ user: user_data, token });
-	// 	} catch (err) {
-	// 		fastify.log.error("Erreur SQL :", err.message);
-	// 		return reply.code(500).send({ error: err.message });
-	// 	}
-	// });
 }
 
 export default authRoutes;
