@@ -1,0 +1,30 @@
+.profile-addfriend {
+	position: relative;
+	color: var(--color-computer-300);
+    font-weight: var(--font-weight-bold);
+}
+
+.contact-card {
+	position: relative;
+	display: flex;
+	align-items: center;
+	margin: 12px 0 12px 0;
+}
+
+.profile-card-data-header span:nth-child(2) {
+	display: inline-block;
+    width: 12px;
+    height: 12px;
+    margin-left: 4px;
+    border-radius: 12px;
+}
+
+.online {
+    background: var(--color-hologram-400);
+    box-shadow: 0 0 8px var(--color-hologram-low-opa-400);
+}
+
+.offline {
+    background: var(--color-warning-300);
+    box-shadow: 0 0 4px var(--color-warning-low-opa-300);
+}

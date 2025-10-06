@@ -10,7 +10,6 @@ authenticator.options = { window: 1 };
 
 const authenticate = async (req, reply) => {
         try {
-            // fastify.jwt.verify() lance une erreur si le token est invalide ou manquant
             const payload = await req.jwtVerify();
             if (!payload.id) {
                 throw new Error("Token payload missing required user ID.");
@@ -19,15 +18,28 @@ const authenticate = async (req, reply) => {
         } catch (err) {
             fastify.log.error('JWT Verification Failed:', err);
             reply.code(401).send({ message: "Authentification requise. Token JWT invalide ou manquant." });
-            throw err; // Essentiel pour arrêter l'exécution du handler de route
+            throw err; // to trigger catch(err) within calling routes
         }
     };
 
 async function userRoutes(fastify) {
 	const { db } = fastify;
 
-	fastify.get("/users", async () => {
-		return await db.all("SELECT * FROM users");
+	fastify.get("/users", async (req, reply) => {
+        try {
+            await authenticate(req, reply);
+        } catch (err) {
+            return ;
+        }
+        const userId = req.user.id;
+        console.log("\n\nuserID: \n\n", userId);
+        try {
+            const users = await db.all("SELECT id, name, avatar, status, species, planet, dimension FROM users WHERE id!=?", [userId]);
+            console.log("\n\nusers: \n\n", users);
+            return reply.code(200).send(users);
+        } catch (err) {
+            return reply.status(500).send({ message: "Erreur lors de la récupération des utilisateurs." });
+        }
 	});
 
 	fastify.get("/users/:id/", async (req, reply) => {
@@ -231,6 +243,35 @@ async function userRoutes(fastify) {
         } catch (err) {
             fastify.log.error(err);
             return reply.code(500).send({ message: "Erreur serveur lors de la mise à jour du statut 2FA." });
+        }
+    });
+
+    fastify.post("/friends/request", async (req, reply) => {
+        try {
+            await authenticate(req, reply);
+        } catch (err) {
+            return ;
+        }
+        const requesterId = req.user.id;
+        const { targetUserId } = req.body;
+        if (!targetUserId || requesterId === targetUserId) {
+            return reply.code(400).send({ message: "ID d'ami invalide ou tentative d'ajout de soi-même." });
+        }
+        try {
+            await db.run(
+                `INSERT INTO friends (user_id, friend_id, status) VALUES (?, ?, 0)`,
+                [requesterId, targetUserId]
+            );
+            return reply.code(201).send({
+                message: "Demande d'ami envoyée avec succès.",
+                status: 0
+            });
+        } catch (err) {
+            if (err.code === 'SQLITE_CONSTRAINT') {
+                return reply.code(409).send({ message: "Une demande d'ami existe déjà entre ces utilisateurs." });
+            }
+            console.error("Erreur DB lors de l'ajout d'ami:", err);
+            return reply.code(500).send({ message: "Erreur interne du serveur." });
         }
     });
 

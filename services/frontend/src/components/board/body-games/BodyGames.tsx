@@ -3,6 +3,7 @@ import { useNavigate } from "react-router";
 import Modal from "./Modal";
 import Profile from "./Profile";
 import Stats from "./Stats";
+import AddFriend from "./AddFriend";
 import useBoard from "../../../hooks/useBoard";
 import UsernameInput from "../../game/UsernameInput";
 import type { BodyGamesProps } from "../../../interfaces/BodyGames";
@@ -15,9 +16,6 @@ export default function BodyGames(props: BodyGamesProps) {
 	const navigate = useNavigate();
 	const { words } = props;
 
-	// ESC key on Board.tsx to close UsernameInput.tsx
-	// || click on another mode to reopen right one
-	// + useUser() hook to get current login username for ALL
 	const handleGameSelect = (mode: string) => {
 		if (mode === 'tournament') {
 			navigate('/tournament');
@@ -47,11 +45,12 @@ export default function BodyGames(props: BodyGamesProps) {
 	return (
 		<main className="body-games">
 			{
-				openElement === "profile" || openElement === "stats" ?
+				openElement === "profile" || openElement === "stats" || openElement === "addfriend" ?
 				(
 					<Modal>
 						<Profile words={words} />
 						<Stats words={words} />
+						<AddFriend words={words} />
 					</Modal>
 				) :
 				(
