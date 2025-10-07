@@ -11,7 +11,7 @@ const TWO_FACTOR_HEADER = 'x-two-factor-code';
 
 async function generateDimension() {
 	const dimension = "abcedfghijklmnopqrstuvwxyz";
-	result += chars.charAt(Math.floor(Math.random() * chars.length));
+	result += dimension.charAt(Math.floor(Math.random() * dimension.length));
 	return (result, "-", Math.floor(Math.random() * 761));
 }
 
