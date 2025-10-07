@@ -1,5 +1,6 @@
 import fp from "fastify-plugin";
 import { Server } from 'socket.io';
+import { setupSocketLogic } from "../logic/socket-game-logic";
 
 async function socketPlugin(fastify) {
     if (!fastify.server) {
@@ -15,10 +16,7 @@ async function socketPlugin(fastify) {
 
     fastify.decorate('io', io);
 
-    // 3. Ici, vous pouvez appeler la logique pour gérer les connexions
-    // C'est le meilleur endroit pour centraliser setupSocketLogic(io, fastify);
-    // const { setupSocketLogic } = require('../logic/socket-game-logic'); // Créez ce fichier
-    // setupSocketLogic(io, fastify);
+    setupSocketLogic(io, fastify);
 }
 
 export default fp(socketPlugin);
