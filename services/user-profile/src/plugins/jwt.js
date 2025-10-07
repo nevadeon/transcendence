@@ -5,7 +5,7 @@ import { getVaultSecret } from "./vault.js";
 
 async function jwtPlugin(fastify) {
 
-	const JWT_SECRET = await getVaultSecret("user-profile/config", "JWT_SECRET");
+	const JWT_SECRET = await getVaultSecret("JWT_SECRET");
 
 	await fastify.register(jwt, {
 		secret: JWT_SECRET,

@@ -1,12 +1,7 @@
-import Fastify from "fastify";
-import cors from "@fastify/cors";
-import swagger from "@fastify/swagger";
-import swaggerUi from "@fastify/swagger-ui";
-
-
 import {getVaultSecret} from "./plugins/vault.js";
 import dbPlugins from "./plugins/db.js";
 import statsRoutes from "./routes/stats.js";
+import tournament from "./routes/tournament.js";
 
 const fastify = Fastify({ logger: true });
 
@@ -17,7 +12,7 @@ async function start() {
 		credentials: true,
 	});
 
-	const USER_STATS_PORT = await getVaultSecret("USER_STATS_PORT");
+	const USER_STATS_PORT = await getVaultSecret("TOURNAMENT_PORT");
 
 	await fastify.register(swagger, {
 		openapi: {
@@ -30,8 +25,7 @@ async function start() {
 		uiConfig: { docExpansion: "list", deepLinking: false },
 	});
 
-	await fastify.register(dbPlugins);
-	await fastify.register(statsRoutes);
+	await fastify.register(tournament);
 
 	try {
 		await fastify.listen({ port: USER_STATS_PORT, host: "0.0.0.0"});

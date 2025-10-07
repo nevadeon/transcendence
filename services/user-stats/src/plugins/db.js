@@ -5,7 +5,7 @@ import config from "../config.js";
 import { getVaultSecret } from "./vault.js"
 
 async function dbPlugin(fastify) {
-	const DB_PATH = await getVaultSecret("user-stats/config", "USER_STATS_DB_PATH");
+	const DB_PATH = await getVaultSecret("USER_STATS_DB_PATH");
 
 	const db = await open ({
 		filename: DB_PATH,

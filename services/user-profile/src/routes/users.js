@@ -85,7 +85,7 @@ async function userRoutes(fastify) {
 	fastify.put("/users/:id/email", async (req, reply) => {
 		const { email: rawEmail } = req.body;
 		const email = rawEmail.trim();
-		const SECRET_SALT = await getVaultSecret("user-profile/config", "SECRET_SALT");
+		const SECRET_SALT = await getVaultSecret("SECRET_SALT");
 		const newHashedEmail = crypto.createHash('sha256').update(email + SECRET_SALT).digest('hex');
 		try {
 			const currHashedEmail = await db.get("SELECT email FROM users WHERE id=?", [req.params.id]);

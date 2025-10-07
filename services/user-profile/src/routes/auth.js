@@ -11,7 +11,7 @@ const TWO_FACTOR_HEADER = 'x-two-factor-code';
 
 async function generateDimension() {
 	const dimension = "abcedfghijklmnopqrstuvwxyz";
-	result += chars.charAt(Math.floor(Math.random() * chars.length));
+	result += dimension.charAt(Math.floor(Math.random() * dimension.length));
 	return (result, "-", Math.floor(Math.random() * 761));
 }
 
@@ -22,7 +22,7 @@ async function authRoutes(fastify) {
 	fastify.post("/register", async (req, reply) => {
 		const { name, email, password } = req.body;
 		try {
-			const SECRET_SALT = await getVaultSecret("user-profile/config", "SECRET_SALT");
+			const SECRET_SALT = await getVaultSecret("SECRET_SALT");
 			const hashed_password = await argon2.hash(password);
 			const hashed_email = crypto.createHash('sha256').update(email + SECRET_SALT).digest('hex');
 			await db.run(
@@ -94,7 +94,7 @@ async function authRoutes(fastify) {
 				await db.run("UPDATE users SET googleId=? WHERE id=?", [googleId, user.id]);
 				return issueUserSession(reply, user);
 			} else {
-				const SECRET_SALT = await getVaultSecret("user-profile/config", "SECRET_SALT");
+				const SECRET_SALT = await getVaultSecret("SECRET_SALT");
 				const hashed_email = crypto.createHash('sha256').update(email + SECRET_SALT).digest('hex');
 				await db.run(
 					"INSERT INTO users(name, email, googleId, dimension) VALUES(?, ?, ?, ?)",
