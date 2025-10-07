@@ -5,7 +5,7 @@ interface GameState {
     // vertical pos (entre 0 et 100 pour être responsive, ou en pixels)
     pads: {
         [id: number]: number; // 1: 50, 2: 75
-    }; 
+    };
     ball: {
         x: number; // pixel
         y: number;
