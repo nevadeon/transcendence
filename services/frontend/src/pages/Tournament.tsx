@@ -1,16 +1,20 @@
 import { useState, type ChangeEvent } from "react";
 // import { useNavigate } from "react-router";
+// import { useAuth } from "../contexts/auth/useAuth.tsx";
 import Tournament from "../components/game/Tournament.tsx";
 import UsernameInput from "../components/game/UsernameInput.tsx";
 import useLanguage from "../hooks/useLanguage";
 import TeleportSrc from "../assets/tournament/teleport-bg.png";
 import "../styles/tournament/Tournament.css";
 
-// const BASE_URL = process.env.;
+const BASE_URL = import.meta.env.API_ADDR;
+const USER_STATS_PORT = import.meta.env.USER_STATS_PORT;
+const NUM_USERS = 4;
 
 export default function TournamentPage() {
-	const [ usernames, setUsernames ] = useState<string[]>(Array(3).fill(''));
+	const [ usernames, setUsernames ] = useState<string[]>(Array(NUM_USERS).fill(''));
 	const words = useLanguage();
+	// const { token } = useAuth();
 	// const navigate = useNavigate();
 
 	function handleInputChange(e: ChangeEvent<HTMLInputElement>, index: number): void {
@@ -36,7 +40,7 @@ export default function TournamentPage() {
 
 	async function handleFormSubmit(usernames: string[]) {
 		try {
-			const res = await fetch("http://localhost:3003/record_match", {
+			const res = await fetch(`${BASE_URL}${USER_STATS_PORT}/record_match`, {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify( {

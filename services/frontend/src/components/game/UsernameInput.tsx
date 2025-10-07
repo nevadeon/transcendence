@@ -7,7 +7,7 @@ export default function UsernameInput(props: UsernameInputProps) {
 	const { mode, users, onChange, onSubmit, words } = props;
 	let currLabels: string[] | undefined;
 
-	//...	
+	//...
 
 	function handleSubmit(e: FormEvent): void {
         e.preventDefault();
@@ -30,6 +30,7 @@ export default function UsernameInput(props: UsernameInputProps) {
             words.messages["portal-gun"].opponent + " 1",
             words.messages["portal-gun"].opponent + " 2",
             words.messages["portal-gun"].opponent + " 3",
+            words.messages["portal-gun"].opponent + " 4",
         ],
     };
 

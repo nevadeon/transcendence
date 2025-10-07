@@ -20,18 +20,16 @@ async function statsRoutes(fastify) {
 
 			const players = [red_team_A, red_team_B, blue_team_A, blue_team_B];
 			const VALID_MODES = ['versus', 'versusCoop', 'versusIa', 'tournament', 'billiards'];
-
 			if (!VALID_MODES.includes(mode))
 				throw new error(`Mode invalide: ${mode}`);
 
 			for (const playerId in players) {
 				await db.run (`UPDATE users_stats SET games = games + 1, ${mode} = ${mode} + 1 WHERE name = ?`,
 					[playerId]);
-			
+
 				if (winner === 'red' && (playerId === red_team_A || playerId === red_team_B) ||
 					winner === 'blue' && (playerId === blue_team_A || playerId === blue_team_B) ) {
-					await db.run (`
-						UPDATE users_stats SET wins = wins + 1, ${mode}_win = ${mode}_win + 1 WHERE name = ?`,
+					await db.run (`UPDATE users_stats SET wins = wins + 1, ${mode}_win = ${mode}_win + 1 WHERE name = ?`,
 					[playerId]);
 				}
 			}

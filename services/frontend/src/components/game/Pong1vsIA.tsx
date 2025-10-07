@@ -1,10 +1,9 @@
-import usePadsMove from "../../hooks/usePadsMove";
 import type { Pong1vsIAProps } from "../../interfaces/Pong1vsIA";
 import Avatar1Source from "../../../public/avatars/defaults/rick.png";
 import Avatar2Source from "../../../public/avatars/defaults/meeseeks.png";
 import ArenaSource from "../../assets/game/arena.svg";
 // import PadLeftSource from "../../assets/game/padleft.svg";
-import PadSource from "../../assets/game/padright.svg";
+// import PadSource from "../../assets/game/padright.svg";
 import BallSrc from "../../assets/game/balls/morty's_head_ball.png";
 import ArrowUpSrc from "../../assets/game/keybinds/arrow-up.svg";
 import ArrowDownSrc from "../../assets/game/keybinds/arrow-down.svg";
@@ -12,8 +11,7 @@ import ArrowDownSrc from "../../assets/game/keybinds/arrow-down.svg";
 // /game/1vsia
 // TODO: import Arena and Scores Component + canvas setup
 export default function Pong1vsIA(props: Pong1vsIAProps) {
-	const ctrl1 = { upKey: 'q', downKey: 'a' };
-	const { pad1Pos, pad2Pos } = usePadsMove(ctrl1, undefined, undefined, undefined);
+	// const ctrl1 = { upKey: 'q', downKey: 'a' };
 	const { words } = props;
 
 	return (
@@ -41,9 +39,9 @@ export default function Pong1vsIA(props: Pong1vsIAProps) {
 			<div className="pong-1vs1-arena">
 				<img src={ArenaSource} alt="Arena Image" className="pong-1vs1-arena-zone" />
 				<div className="pong-1vs1-arena-playzone">
-					<img src={PadSource} alt="Pad Image" className="pad left" style={{transform: `translateY(${pad1Pos - 50}%)`}} />
+					{/* <img src={PadSource} alt="Pad Image" className="pad left" style={{transform: `translateY(${pad1Pos - 50}%)`}} /> */}
 					<img src={BallSrc} alt="Morty Ball" className="ball" />
-					<img src={PadSource} alt="Pad Image" className="pad" style={{transform: `translateY(${pad2Pos - 50}%)`}} />
+					{/* <img src={PadSource} alt="Pad Image" className="pad" style={{transform: `translateY(${pad2Pos - 50}%)`}} /> */}
 				</div>
 			</div>
 			<div className="pong-1vs1-scores">

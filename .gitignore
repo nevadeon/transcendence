@@ -3,6 +3,9 @@
 
 # back dependencies
 /services/user-profile/node_modules
+/services/game/node_modules
+/services/tournament/node_modules
+/services/user-stats/node_modules
 
 # server ssl
 /infra/nginx/ssl/*.pem
