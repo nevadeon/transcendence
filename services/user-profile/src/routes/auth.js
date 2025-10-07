@@ -9,6 +9,12 @@ import crypto from 'crypto';
 // const googleClient = new OAuth2Client(GOOGLE_CLIENT_ID);
 const TWO_FACTOR_HEADER = 'x-two-factor-code';
 
+async function generateDimension() {
+	const dimension = "abcedfghijklmnopqrstuvwxyz";
+	result += chars.charAt(Math.floor(Math.random() * chars.length));
+	return (result, "-", Math.floor(Math.random() * 761));
+}
+
 async function authRoutes(fastify) {
 	const { db, auth } = fastify;
 
@@ -56,20 +62,20 @@ async function authRoutes(fastify) {
 	});
 
 	async function issueUserSession(reply, user) {
-        // user doit contenir l'id et le name
-        const token = auth.generateLongToken(user);
-        await saveToken(db, user.name, token, '+1 hour');
-        const user_data = await db.get( "SELECT id, name, species, planet, dimension, avatar FROM users WHERE id=?", [user.id] );
-        return reply.code(201).send({ user: user_data, token });
-    }
+		// user doit contenir l'id et le name
+		const token = auth.generateLongToken(user);
+		await saveToken(db, user.name, token, '+1 hour');
+		const user_data = await db.get( "SELECT id, name, species, planet, dimension, avatar FROM users WHERE id=?", [user.id] );
+		return reply.code(201).send({ user: user_data, token });
+	}
 
 	fastify.post("/register/google/verify", async (req, reply) => {
-        const { accessToken } = req.body;
+		const { accessToken } = req.body;
 
 		if (!accessToken)
 			return reply.code(400).send({ message: "Access Token manquant." });
 
-        try {
+		try {
 			const googleRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
 				headers: { 'Authorization': `Bearer ${accessToken}` }
 			});
@@ -81,30 +87,30 @@ async function authRoutes(fastify) {
 		
 			// CONNEXION / INSCRIPTION
 			let user = await db.get("SELECT * FROM users WHERE googleId=?", [googleId]);
-            if (user)
-                return issueUserSession(reply, user);
+			if (user)
+				return issueUserSession(reply, user);
 			user = await db.get("SELECT * FROM users WHERE email=?", [email]); // si deja log via credentials, et veux OAuth ensuite
 			if (user) {
-                await db.run("UPDATE users SET googleId=? WHERE id=?", [googleId, user.id]);
-                return issueUserSession(reply, user);
-            } else {
-                const SECRET_SALT = await getVaultSecret("user-profile/config", "SECRET_SALT");
-                const hashed_email = crypto.createHash('sha256').update(email + SECRET_SALT).digest('hex');
-                await db.run(
-                    "INSERT INTO users(name, email, googleId) VALUES(?, ?, ?)",
-                    [given_name, hashed_email, googleId]
-                );
-                const newUser = await db.get("SELECT * FROM users WHERE googleId=?", [googleId]);
-                if (newUser)
-                    return issueUserSession(reply, newUser); //RESPONSE
-                else
-                    throw new Error("Erreur lors de la récupération du nouvel utilisateur."); //RESPONSE(to catch)
-            }
+				await db.run("UPDATE users SET googleId=? WHERE id=?", [googleId, user.id]);
+				return issueUserSession(reply, user);
+			} else {
+				const SECRET_SALT = await getVaultSecret("user-profile/config", "SECRET_SALT");
+				const hashed_email = crypto.createHash('sha256').update(email + SECRET_SALT).digest('hex');
+				await db.run(
+					"INSERT INTO users(name, email, googleId, dimension) VALUES(?, ?, ?, ?)",
+					[given_name, hashed_email, googleId, generateDimension()]
+				);
+				const newUser = await db.get("SELECT * FROM users WHERE googleId=?", [googleId]);
+				if (newUser)
+					return issueUserSession(reply, newUser); //RESPONSE
+				else
+					throw new Error("Erreur lors de la récupération du nouvel utilisateur."); //RESPONSE(to catch)
+			}
 		} catch (err) {
-            fastify.log.error("Erreur Google Auth:", err.message);
-            return reply.code(401).send({ message: "Authentification via Google échouée." }); //RESPONSE
-        }
-    });
+			fastify.log.error("Erreur Google Auth:", err.message);
+			return reply.code(401).send({ message: "Authentification via Google échouée." }); //RESPONSE
+		}
+	});
 
 	// Login
 	fastify.post("/login", async (req, reply) => {
