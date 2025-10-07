@@ -15,11 +15,11 @@ const fastify = Fastify({ logger: true });
 async function start() {
 	await fastify.register(cors, {
 		origin: ["http://localhost:5173", "https://localhost:8443"],
-		methods: ["POST", "GET", "DELETE", "OPTION", "PUT"],
+		methods: ["POST", "GET", "DELETE", "OPTION", "PUT", "PATCH"],
 		credentials: true,
 	});
 
-	const USER_PROFILE_PORT = await getVaultSecret("user-profile/config", "USER_PROFILE_PORT");
+	const USER_PROFILE_PORT = await getVaultSecret("USER_PROFILE_PORT");
 
 	await fastify.register(swagger, {
 		openapi: {
