@@ -1,9 +1,9 @@
-# Authorize user-stats to read secret
-path "secret/data/user-stats/*" {
+# Authorize tournament to read secret
+path "secret/data/tournament/*" {
 	capabilities = ["read"]
 }
 
-path "secret/metadata/user-stats/*" {
+path "secret/metadata/tournament/*" {
   capabilities = ["read"]
 }
 

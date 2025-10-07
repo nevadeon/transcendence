@@ -9,7 +9,7 @@ RUN npm install
 COPY . .
 
 
-EXPOSE 3003
+EXPOSE 3004
 
 # Lancer l'application
 CMD ["node", "src/app.js"]
