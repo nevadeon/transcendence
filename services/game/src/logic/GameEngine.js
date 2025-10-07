@@ -1,8 +1,51 @@
-// Stocke toutes les sessions de jeu actives.
-const activeGames = {};
+// GameEngine.js
+// Constantes physiques
+const GAME_TICK = 1000 / 60; //60fps
+const PAD_SPEED = 7;         //speed, 5 units / 1fps
+const MAX_SCORE = 7;         //score to win
 
-export function createGameSession(gameId, io) {
-    const state = getInitialState();
+// Constantes de la taille de l'arène (doivent correspondre aux dimensions sur le front)
+const ARENA_WIDTH = 1200;
+const ARENA_HEIGHT = 751;
+const PAD_WIDTH = 32;
+const PAD_HEIGHT = 120;
+const BALL_SIZE = 48;
+const PAD_POS_Y_DEFAULT = ARENA_HEIGHT / 2;
+
+// init state of a game
+const getInitialState = (gameMode) => {
+    const pads = { 1: PAD_POS_Y_DEFAULT, 2: PAD_POS_Y_DEFAULT };
+    const scores = { p1: 0, p2: 0 };
+    const inputs = { 1: 0, 2: 0 };
+    // from emit("move", { direction, action, padId }) État de mouvement reçu du client (for Game Loop)
+    // 1: up, -1: down, 0: stop
+
+    if (gameMode === '2v2') {
+        pads[3] = PAD_POS_Y_DEFAULT;
+        pads[4] = PAD_POS_Y_DEFAULT;
+        inputs[3] = 0;
+        inputs[4] = 0;
+    }
+
+    return {
+        pads: pads,
+        ball: {
+            x: ARENA_WIDTH / 2,
+            y: ARENA_HEIGHT / 2,
+            vx: 6,      // init speed on x
+            vy: 3,      // init speed on y
+        },
+        score: scores,  // Utilise la structure de score dynamique
+        inputs: inputs,
+        isRunning: true,
+    };
+};
+
+// Stocke toutes les sessions de jeu actives.
+export const activeGames = {};
+
+export function createGameSession(gameId, io, gameMode) {
+    const state = getInitialState(gameMode);
     state.gameId = gameId;
     activeGames[gameId] = state;
 
@@ -11,7 +54,7 @@ export function createGameSession(gameId, io) {
         if (!state.isRunning) {
             clearInterval(gameLoop);
             // Si le jeu est terminé, on supprime la session de jeu
-            delete activeGames[gameId]; 
+            delete activeGames[gameId];
             return;
         }
 
@@ -44,7 +87,7 @@ export function createGameSession(gameId, io) {
             score: state.score
         });
 
-    }, GAME_TICK); 
+    }, GAME_TICK);
 
     return state;
 }
@@ -52,19 +95,22 @@ export function createGameSession(gameId, io) {
 // Fonction utilitaire pour limiter une valeur dans une plage
 const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
 
+
 function updatePads(state) {
-    // Le Game Loop met à jour la position Y des pads en fonction des inputs
-    for (const padId of [1, 2]) {
+    const padIds = Object.keys(state.pads).map(Number);
+
+    for (const padId of padIds) {
+        // 1. Vérif si une entrée de mouvement a été reçue pour ce pad
+        // Nous vérifions à la fois l'existence de l'input et si la valeur n'est pas 0 (arrêt)
         if (state.inputs[padId] !== 0) {
             const currentY = state.pads[padId];
-            const newY = currentY + (state.inputs[padId] * PAD_SPEED);
+            const newY = currentY + (state.inputs[padId] * PAD_SPEED); 
 
-            // S'assurer que le pad reste dans l'arène (entre le bord supérieur et le bord inférieur)
-            // La position est mesurée au centre du pad.
+            // 2. Appliquer les limites de l'arène (clamping)
             state.pads[padId] = clamp(
-                newY, 
-                PAD_HEIGHT / 2, 
-                ARENA_HEIGHT - PAD_HEIGHT / 2
+                newY,
+                PAD_HEIGHT / 2,         // Limite supérieure (centre du pad)
+                ARENA_HEIGHT - PAD_HEIGHT / 2 // Limite inférieure (centre du pad)
             );
         }
     }
@@ -102,6 +148,78 @@ function updateBallPhysics(state) {
         return true; // Un point a été marqué
     }
     // 4. Détection de Collision avec les Pads (À IMPLÉMENTER EN DÉTAIL)
-    // ... Logique de collision et de rebond sur les pads ici ...
+    const padIds = Object.keys(state.pads).map(Number);
+    const ballX = state.ball.x;
+    const ballY = state.ball.y;
+    const ballRadius = BALL_SIZE / 2;
+    const MAX_BALL_SPEED = 15;
+
+    for (const padId of padIds) {
+        // La position Y du pad est son CENTRE (comme géré par updatePads)
+        const padCenterY = state.pads[padId];
+        // Définir les limites du pad
+        const padTopY = padCenterY - PAD_HEIGHT / 2;
+        const padBottomY = padCenterY + PAD_HEIGHT / 2;
+        let padHitX;
+        let isLeftPad;
+        // Déterminer la position X du pad et sa direction
+        if (padId === 1 || padId === 3) { // Pads de Gauche (1 et 3)
+            padHitX = 64 + PAD_WIDTH; // La face du pad que la balle frappe(64px shift from left side)
+            isLeftPad = true;
+        } else { // Pads de Droite (2 et 4)
+            padHitX = ARENA_WIDTH - 64 - PAD_WIDTH; // La face du pad que la balle frappe(64px shift from right side)
+            isLeftPad = false;
+        }
+        // Vérif 1 : La balle est-elle à la bonne hauteur pour ce pad ?
+        if (ballY + ballRadius < padTopY || ballY - ballRadius > padBottomY) {
+            continue; // La balle est au-dessus ou en dessous du pad.
+        }
+        // Vérif 2 : La balle est-elle sur le plan X du pad ? (Collision réelle)
+        let collisionOccurred = false;
+        if (isLeftPad && state.ball.vx < 0) {
+             // Collision Pad Gauche : La balle doit venir de la droite (vx < 0) et toucher l'avant du pad
+            if (ballX - ballRadius <= padHitX && ballX - ballRadius > padHitX - state.ball.vx) {
+                collisionOccurred = true;
+                // Correction pour ne pas coller
+                state.ball.x = padHitX + ballRadius;
+            }
+        } else if (!isLeftPad && state.ball.vx > 0) {
+            // Collision Pad Droit : La balle doit venir de la gauche (vx > 0) et toucher l'avant du pad
+            if (ballX + ballRadius >= padHitX && ballX + ballRadius < padHitX - state.ball.vx) {
+                collisionOccurred = true;
+                // Correction pour ne pas coller
+                state.ball.x = padHitX - ballRadius;
+            }
+        }
+
+        // 5. Calcul du Rebond et de l'Angle
+        if (collisionOccurred) {
+            // Calculer la diff entre le centre de la balle et le centre du pad
+            const deltaY = ballY - padCenterY;
+            // Normaliser cette distance en une valeur entre -1.0 (haut du pad) et 1.0 (bas du pad)
+            // (La moitié de la hauteur est la distance maximale par rapport au centre)
+            const relativeIntersectY = deltaY / (PAD_HEIGHT / 2);
+            // Définir l'angle de rebond
+            // Plus relativeIntersectY est grand, plus l'angle sera vertical.
+            const BOUNCE_ANGLE_MAX = Math.PI / 4; // 45 degrés
+            const newAngle = relativeIntersectY * BOUNCE_ANGLE_MAX;
+            // Définir la nouvelle vitesse X
+            // 1. Inverser la direction X
+            state.ball.vx *= -1;
+            // 2. Augmenter la vitesse pour un jeu plus dynamique
+            let newSpeed = Math.sqrt(state.ball.vx * state.ball.vx + state.ball.vy * state.ball.vy) * 1.1;
+            // Limiter la vitesse pour éviter l'explosion
+            newSpeed = Math.min(newSpeed, MAX_BALL_SPEED);
+            // 3. Appliquer l'angle
+            state.ball.vx = newSpeed * Math.cos(newAngle);
+            // Si c'est un pad de droite, inverser la direction X
+            if (!isLeftPad) {
+                state.ball.vx *= -1;
+            }
+            state.ball.vy = newSpeed * Math.sin(newAngle);
+            // Sortir de la boucle pour traiter un seul rebond par tick
+            return false;
+        }
+    }
     return false;
 }
