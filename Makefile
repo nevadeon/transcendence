@@ -5,6 +5,8 @@ init-db :
 	touch services/user-profile/src/data/user-profile.sqlite
 	mkdir -p services/user-stats/src/data
 	touch services/user-stats/src/data/user-stats.sqlite
+	mkdir -p services/game/src/data
+	touch services/game/src/data/game.sqlite
 
 up :
 	docker compose -f infra/docker-compose.yml up -d

@@ -83,6 +83,25 @@ services:
       vault:
         condition: service_healthy
 
+  game:
+    build:
+      context: ../services/game
+      dockerfile: Dockerfile
+    container_name: game
+    ports:
+      - "3002:3002"
+    env_file:
+      - .env
+    networks:
+      - web
+      - backend
+    volumes:
+      - ../services/game/src:/usr/src/app/src   # monte ton code
+      - ../services/game/src/data/game.sqlite:/data/game.sqlite  # monte la DB
+    depends_on:
+      vault:
+        condition: service_healthy
+
   user-stats:
     build:
       context: ../services/user-stats
@@ -102,24 +121,10 @@ services:
       vault:
         condition: service_healthy
 
-  # game:
-    # build:
-      # context: ../services/game
-      # dockerfile: Dockerfile
-    # container_name: game
-    # env_file:
-      # - .env
-    # expose:
-      # - 3002
-    # networks:
-      # - web
-      # - backend
-    # volumes:
-      # - game-data:/data
-
 volumes:
   user-profile-data:
   user-stats-data:
+  game-data:
 
 networks:
   web:

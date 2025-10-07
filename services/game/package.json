@@ -1,0 +1,19 @@
+{
+	"name": "user-profile",
+	"version": "1.0.0",
+	"main": "src/app.js",
+	"type": "module",
+	"scripts": {
+		"start": "node src/app.js"
+	},
+	"dependencies": {
+		"@fastify/cors": "^11.1.0",
+		"@fastify/jwt": "^10.0.0",
+		"@fastify/swagger": "^9.5.1",
+		"@fastify/swagger-ui": "^5.0.0",
+		"fastify": "^5.6.0",
+		"socket.io": "^4.8.1",
+		"sqlite": "^5.1.1",
+		"sqlite3": "^5.1.7"
+	}
+}
