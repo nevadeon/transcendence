@@ -1,6 +1,6 @@
 import fp from "fastify-plugin";
 import { Server } from 'socket.io';
-import { setupSocketLogic } from "../logic/socket-game-logic";
+import { setupSocketLogic } from "../logic/socket-game-logic.js";
 
 async function socketPlugin(fastify) {
     if (!fastify.server) {

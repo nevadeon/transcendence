@@ -1,21 +1,22 @@
-import { activeGames, createGameSession } from './GameEngine';
+import { activeGames, createGameSession } from './GameEngine.js';
 
 export function setupSocketLogic(io, fastify) {
     io.on('connection', (socket) => {
         let gameId = null;
 
-        // 1. Gérer l'arrivée dans la partie
+        // 1. socket.emit('joinGame', { mode: gameMode, playerId: userId });   from usePongGame.tsx
         socket.on('joinGame', (data) => {
             // Utiliser l'ID du socket comme ID de la partie pour le 1v1 local
-            gameId = socket.id; 
-            socket.join(gameId); 
+            gameId = socket.id;
+            socket.join(gameId);
+            const gameMode = data.mode;
 
             // Démarrer la boucle de jeu pour cette session
-            const game = createGameSession(gameId, io); 
+            const game = createGameSession(gameId, io, gameMode);
 
             fastify.log.info(`New 1v1 local game started: ${gameId}`);
 
-            // Envoyer l'état initial
+            // 2. to socket.on('gameState', (state: GameState) => { setGameState(state); });   from usePongGame.tsx
             io.to(gameId).emit('gameState', {
                 pads: game.pads,
                 ball: { x: game.ball.x, y: game.ball.y },
