@@ -5,8 +5,7 @@ import "../../../styles/board/sidebar-user/AvatarSelector.css";
 const DEFAULT_AVATARS = [
     'rick.png',
     'morty.png',
-    'poopy.png',
-    'squanchy.png',
+    'summer.png',
 ];
 const BASE_AVATAR_PATH = '/avatars/defaults/';
 
