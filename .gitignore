@@ -10,7 +10,9 @@
 # server ssl
 /infra/nginx/ssl/*.pem
 
+# global .env
 /infra/.env
 
+# db data
 services/*/*/data
 services/*/data
