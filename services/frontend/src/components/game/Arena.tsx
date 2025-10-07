@@ -62,8 +62,8 @@ export default function Arena(props: any) {
             ctx.drawImage(arenaImage, 0, 0, ARENA_WIDTH, ARENA_HEIGHT);
 
 			// Center Y
-            const pad1Y = (pad1Pos / 100) * ARENA_HEIGHT - (PAD_HEIGHT / 2); 
-            const pad2Y = (pad2Pos / 100) * ARENA_HEIGHT - (PAD_HEIGHT / 2);
+            const pad1Y = pad1Pos - (PAD_HEIGHT / 2);
+            const pad2Y = pad2Pos - (PAD_HEIGHT / 2);
             // Dessin du Pad 1
             ctx.drawImage(padLeftImage, 64, pad1Y, PAD_WIDTH, PAD_HEIGHT);
             // Dessin du Pad 2
@@ -78,8 +78,6 @@ export default function Arena(props: any) {
                 ballSize
             );
         };
-        // En mode jeu, vous appelleriez `renderGame` dans une loop `requestAnimationFrame`
-        // only 1 render
         renderGame();
     }, [arenaImage, ballImage, padLeftImage, padRightImage, pad1Pos, pad2Pos, ballPos.x, ballPos.y]);
 

@@ -13,9 +13,9 @@ export default function Pong1vs1(props: Pong1vs1Props) {
 	const ctrl2 = { upKey: 'o', downKey: 'l' };
 	const { user } = useAuth();
 	const { gameState, sendInput } = usePongGame('versus', user.id);
-	// const { tmp_user } = useTemp(); //from inputs in /board = useContext
-	// const location = useLocation(); //tournament
-	// const navigate = useNavigate(); //tournament
+	// const { tmp_user } = useTemp(); //from inputs in /board = useContext? or in db before 30min erase?
+	// const location = useLocation(); //tournament matchmaking flow
+	// const navigate = useNavigate(); //tournament matchmaking flow
 	const { words } = props;
 
 	useGameControls(sendInput);
