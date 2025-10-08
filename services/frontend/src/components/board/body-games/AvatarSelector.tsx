@@ -6,6 +6,9 @@ const DEFAULT_AVATARS = [
     'rick.png',
     'morty.png',
     'summer.png',
+    'rockRick.png',
+    'spaceMorty.png',
+    'spaceBess.png',
 ];
 const BASE_AVATAR_PATH = '/avatars/defaults/';
 

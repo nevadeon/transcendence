@@ -3,8 +3,8 @@ import WinnerCard from "./WinnerCard";
 import type { TournamentProps } from "../../interfaces/Tournament";
 import AvatarSrc from "../../../public/avatars/defaults/rick.png";
 import Avatar2Src from "../../../public/avatars/defaults/morty.png";
-import Avatar3Src from "../../../public/avatars/defaults/squanchy.png";
-import Avatar4Src from "../../../public/avatars/defaults/poopy.png";
+import Avatar3Src from "../../../public/avatars/defaults/spaceMorty.png";
+import Avatar4Src from "../../../public/avatars/defaults/spaceMorty.png";
 import "../../styles/tournament/Tournament.css";
 
 // /tournament

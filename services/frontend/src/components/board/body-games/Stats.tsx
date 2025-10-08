@@ -2,9 +2,9 @@
 import useBoard from "../../../hooks/useBoard";
 import type { StatsProps } from "../../../interfaces/Stats.ts";
 import CrossSrc from "../../../assets/icons/cross.svg";
-import MeeseeksSrc from "../../../../public/avatars/defaults/meeseeks.png";
-import SquanchySrc from "../../../../public/avatars/defaults/squanchy.png";
-import PoopySrc from "../../../../public/avatars/defaults/poopy.png";
+import summerSrc from "../../../../public/avatars/defaults/summer.png";
+import spaceMortySrc from "../../../../public/avatars/defaults/spaceMorty.png";
+import rockRickSrc from "../../../../public/avatars/defaults/rockRick.png";
 import MortySrc from "../../../../public/avatars/defaults/morty.png";
 import "../../../styles/board/body-games/Stats.css";
 
@@ -14,15 +14,15 @@ const games = [
 		id: 1,
 		mode: "1vsIA",
 		scores: { score1: 7, score2: 2 },
-		opponent1: { avatar: MeeseeksSrc, username: "Mr.Meeseeks" },
+		opponent1: { avatar: summerSrc, username: "Mr.summer" },
 		date: "10-09-2025"
 	},
 	{
 		id: 2,
 		mode: "2vs2",
 		scores: { score1: 7, score2: 0 },
-		opponent1: { avatar: PoopySrc, username: "pamallet" },
-		opponent2: { avatar: SquanchySrc, username: "agilles" },
+		opponent1: { avatar: spaceMortySrc, rockRicksername: "pamallet" },
+		opponent2: { avatar: rockRickSrc, username: "agilles" },
 		ally: { avatar: MortySrc, username: "ttaquet" },
 		date: "10-09-2025"
 	},
@@ -30,7 +30,7 @@ const games = [
 		id: 3,
 		mode: "1vs1",
 		scores: { score1: 6, score2: 7 },
-		opponent1: { avatar: PoopySrc, username: "pamallet" },
+		opponent1: { avatar: spaceMortySrc, username: "pamallet" },
 		date: "10-09-2025"
 	},
 	{

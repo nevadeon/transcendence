@@ -30,7 +30,7 @@ async function dbPlugin(fastify) {
 			species TEXT DEFAULT 'Human',
 			planet TEXT DEFAULT 'Earth',
 			dimension TEXT DEFAULT 'C-137',
-			avatar TEXT DEFAULT 'defaults/poopy.png',
+			avatar TEXT DEFAULT 'defaults/spaceMorty.png',
 			status INTEGER NOT NULL DEFAULT 0 CHECK (status IN (0, 1)),
 			two_factor_secret TEXT NULL,
 			two_factor INTEGER NOT NULL DEFAULT 0 CHECK (two_factor IN (0, 1)),
