@@ -6,6 +6,7 @@ import Board from "../pages/Board";
 import Game from "../pages/Game";
 import App from "../components/App";
 import Tournament from "../pages/Tournament";
+import Billard from "../pages/Billard";
 
 const router = createBrowserRouter([
 	{ path: "/", element: <App /> },
@@ -17,6 +18,7 @@ const router = createBrowserRouter([
 			{ path: "/board", element: <Board /> },
 			{ path: "/game", element: <Game /> },
 			{ path: "/game/:mode", element: <Game /> },
+			{ path: "/game/billiard", element: <Billard /> },
 		]
 	},
 ])
