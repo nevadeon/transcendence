@@ -100,7 +100,7 @@ async function authRoutes(fastify) {
 				const hashed_email = crypto.createHash('sha256').update(email + SECRET_SALT).digest('hex');
 				await db.run(
 					"INSERT INTO users(name, email, googleId, dimension) VALUES(?, ?, ?, ?)",
-					[given_name, hashed_email, googleId, generateDimension()]
+					[given_name, hashed_email, googleId, await generateDimension()]
 				);
 				const newUser = await db.get("SELECT * FROM users WHERE googleId=?", [googleId]);
 				if (newUser)
