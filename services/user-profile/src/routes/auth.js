@@ -10,7 +10,7 @@ import crypto from 'crypto';
 const TWO_FACTOR_HEADER = 'x-two-factor-code';
 
 async function generateDimension() {
-	const dimension = "abcedfghijklmnopqrstuvwxyz";
+	const dimension = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	result += dimension.charAt(Math.floor(Math.random() * dimension.length));
 	return (result, "-", Math.floor(Math.random() * 761));
 }
