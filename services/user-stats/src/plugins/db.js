@@ -13,8 +13,8 @@ async function dbPlugin(fastify) {
 	});
 
 	await db.exec(`
-		DROP TABLE IF EXISTS users_stats;	
-		DROP TABLE IF EXISTS match_history;	
+		DROP TABLE IF EXISTS users_stats;
+		DROP TABLE IF EXISTS match_history;
 	`);
 
 	await db.exec(`
@@ -39,13 +39,17 @@ async function dbPlugin(fastify) {
 	await db.exec(`
 		CREATE TABLE IF NOT EXISTS match_history (
 			id INTEGER PRIMARY KEY AUTOINCREMENT,
-			red_team_A TEXT NOT NULL,
-			red_team_B TEXT,
-			blue_team_A TEXT DEFAULT 'IA',
-			blue_team_B TEXT,
+			left_team_A TEXT NOT NULL,
+			avatar_left_team_A TEXT,
+			left_team_B TEXT,
+			avatar_left_team_B TEXT,
+			right_team_A TEXT DEFAULT 'IA',
+			avatar_right_team_A TEXT DEFAULT 'defaults/meeseeks.png',
+			right_team_B TEXT,
+			avatar_right_team_B TEXT,
 			mode TEXT NOT NULL,
-			red_team_score INTEGER NOT NULL,
-			blue_team_score INTEGER NOT NULL,
+			left_team_score INTEGER NOT NULL,
+			right_team_score INTEGER NOT NULL,
 			winner TEXT NOT NULL,
 			date DATE DEFAULT (DATE('now'))
 		)

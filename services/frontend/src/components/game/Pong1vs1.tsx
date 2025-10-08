@@ -1,10 +1,10 @@
 // import { useLocation, useNavigate } from "react-router";
 import Scores from "./Scores";
 import Arena from "./Arena";
+import { useLocation } from "react-router";
 import usePongGame from "../../hooks/usePongGame";
 import { useGameControls } from "../../hooks/useGameControls";
 import { useAuth } from "../../contexts/auth/useAuth";
-import Avatar2Src from "../../../public/avatars/defaults/spaceMorty.png";
 import type { Pong1vs1Props } from "../../interfaces/Pong1vs1";
 
 // /game/1vs1
@@ -12,10 +12,10 @@ export default function Pong1vs1(props: Pong1vs1Props) {
 	const ctrl1 = { upKey: 'q', downKey: 'a' };
 	const ctrl2 = { upKey: 'o', downKey: 'l' };
 	const { user } = useAuth();
-	const { gameState, sendInput } = usePongGame('versus', user.id);
-	// pads[1], pads[3] for left side , then pads[2], pads[4]
-	// const { tmp_user } = useTemp(); //from inputs in /board = useContext? or in db before 30min erase?
-	// const location = useLocation(); //tournament matchmaking flow
+	const location = useLocation(); //{usernames<string[]> + avatars<string[]>} NEXT !!!
+	const { gameState, sendInput } = usePongGame('versus', user.name, location.state);
+
+	// pads[1], pads[3] for left side , then pads[2], pads[4] BUT pads[2] doesn't respond !!!
 	// const navigate = useNavigate(); //tournament matchmaking flow
 	const { words } = props;
 
@@ -28,8 +28,8 @@ export default function Pong1vs1(props: Pong1vs1Props) {
 	return (
 		<div className="pong">
 			<Scores
-				avatar={user.avatar}
-				name={user.name}
+				avatar={user.avatar ? user.avatar.slice(9) : location.state.avatars[0]}
+				name={user.name ? user.name : location.state.usernames[0]}
 				result={gameState.score.p1}
 				ctrl={ctrl1}
 				is2vs2={false}
@@ -41,8 +41,8 @@ export default function Pong1vs1(props: Pong1vs1Props) {
 				ballPos={gameState.ball}
 			/>
 			<Scores
-				avatar={Avatar2Src}
-				name={"tmp_usrname"}
+				avatar={user.avatar ? location.state.avatars[0] : location.state.avatars[1]}
+				name={user.name ? location.state.usernames[0] : location.state.usernames[1]}
 				result={gameState.score.p2}
 				ctrl={ctrl2}
 				is2vs2={false}

@@ -1,7 +1,7 @@
 // GameEngine.js
 // Constantes physiques
 const GAME_TICK = 1000 / 60; //60fps
-const PAD_SPEED = 7;         //speed, 5 units / 1fps
+const PAD_SPEED = 10;         //speed, 5 units / 1fps
 const MAX_SCORE = 7;         //score to win
 
 // Constantes de la taille de l'arène (doivent correspondre aux dimensions sur le front)
@@ -32,8 +32,8 @@ const getInitialState = (gameMode) => {
         ball: {
             x: ARENA_WIDTH / 2,
             y: ARENA_HEIGHT / 2,
-            vx: 6,      // init speed on x
-            vy: 3,      // init speed on y
+            vx: 4,      // init speed on x
+            vy: 2,      // init speed on y
         },
         score: scores,  // Utilise la structure de score dynamique
         inputs: inputs,
@@ -44,37 +44,38 @@ const getInitialState = (gameMode) => {
 // Stocke toutes les sessions de jeu actives.
 export const activeGames = {};
 
-export function createGameSession(gameId, io, gameMode) {
+export function createGameSession(gameId, io, gameMode, mainPlayerName, playersTemp) {
     const state = getInitialState(gameMode);
     state.gameId = gameId;
     activeGames[gameId] = state;
 
     // Le Game Loop
-    const gameLoop = setInterval(() => {
+    const gameLoop = setInterval( async () => {
         if (!state.isRunning) {
             clearInterval(gameLoop);
-            // Si le jeu est terminé, on supprime la session de jeu
             delete activeGames[gameId];
             return;
         }
 
-        // 1. Appliquer le Mouvement des Pads
         updatePads(state);
 
-        // 2. Appliquer la Physique de la Balle (à implémenter)
         const scored = updateBallPhysics(state);
 
         if (scored) {
-            // Un point a été marqué, vérifier la fin de partie
+            // Un point a été marqué, vérif la fin de partie
             if (state.score.p1 >= MAX_SCORE || state.score.p2 >= MAX_SCORE) {
                 state.isRunning = false;
                 const winnerId = state.score.p1 > state.score.p2 ? 1 : 2;
 
+                // await saveGameResults(state, gameMode, mainPlayerName, playersTemp); //db
+
                 // Envoyer la fin de partie à tous les clients dans cette salle (ici, un seul)
                 io.to(gameId).emit('gameOver', {
                     winnerId,
+                    scoreLeft: state.score.p1,
+                    scoreRight: state.score.p2,
                     finalScore: `${state.score.p1}-${state.score.p2}`,
-                    gameType: '1v1'
+                    gameType: gameMode
                 });
                 // TODO: Logique pour enregistrer le résultat dans le service user-stats
             }
@@ -104,7 +105,7 @@ function updatePads(state) {
         // Nous vérifions à la fois l'existence de l'input et si la valeur n'est pas 0 (arrêt)
         if (state.inputs[padId] !== 0) {
             const currentY = state.pads[padId];
-            const newY = currentY + (state.inputs[padId] * PAD_SPEED); 
+            const newY = currentY + (state.inputs[padId] * PAD_SPEED);
 
             // 2. Appliquer les limites de l'arène (clamping)
             state.pads[padId] = clamp(
@@ -143,8 +144,8 @@ function updateBallPhysics(state) {
         // Réinitialiser la balle au centre et inverser la direction de départ
         state.ball.x = ARENA_WIDTH / 2;
         state.ball.y = ARENA_HEIGHT / 2;
-        state.ball.vx = (scorer === 'p1' ? -8 : 8); // La balle repart du côté du perdant
-        state.ball.vy = Math.random() > 0.5 ? 4 : -4;
+        state.ball.vx = (scorer === 'p1' ? -4 : 4); // La balle repart du côté du perdant
+        state.ball.vy = Math.random() > 0.5 ? 2 : -2;
         return true; // Un point a été marqué
     }
     // 4. Détection de Collision avec les Pads (À IMPLÉMENTER EN DÉTAIL)

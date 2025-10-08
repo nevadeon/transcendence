@@ -17,23 +17,28 @@ interface GameState {
     // others too (ex: puissance de la balle, nom du vainqueur du set...)
 }
 
+interface UsersTemp {
+    name: string,
+    avatar: string
+}
+
 const INTERPOLATION_DELAY_MS = 50;
 
-export default function usePongGame(gameMode: string, userId: number) {
+export default function usePongGame(gameMode: string, mainUserName: string | null, usersTemp: UsersTemp[]) { //usersTemp: UsersTemp[]
 	const socketRef = useRef<Socket | null>(null);
 	const stateHistoryRef = useRef<Array<GameState & { receivedAt: number }>>([]);
 	const [gameState, setGameState] = useState<GameState | null>(null);
 
 	useEffect(() => {
-		// 1. Initialiser la connexion
-		const socket = io('http://localhost:3002'); // À remplacer par votre URL de Fastify
+		// 1. init la connexion
+		const socket = io('http://localhost:3002'); // url du back
 		socketRef.current = socket;
-		// 2. Événement de connexion réussi (envoyer l'ID pour rejoindre le salon)
+		// 2. event de co réussi (envoyer l'ID pour rejoindre le salon(room))
 		socket.on('connect', () => {
-			socket.emit('joinGame', { mode: gameMode, playerId: userId });
+			socket.emit('joinGame', { mode: gameMode, mainUserName: mainUserName, usersTemp: usersTemp });
 		});
 
-		// new with interpolation logic
+		// interpolation logic
 		socket.on('gameState', (state: GameState) => {
 			// Ajouter un timestamp à l'état reçu
 			const stampedState = { ...state, receivedAt: Date.now() };
@@ -52,7 +57,7 @@ export default function usePongGame(gameMode: string, userId: number) {
 		});
 
 		return () => { socket.disconnect(); };
-	}, [gameMode, userId]);
+	}, [gameMode, mainUserName]);
 
 
     useEffect(() => {
