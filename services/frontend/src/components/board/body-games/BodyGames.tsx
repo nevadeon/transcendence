@@ -25,7 +25,9 @@ export default function BodyGames(props: BodyGamesProps) {
 			setModeToLaunch(mode);
 		} else if (mode === '2vs2') {
 			setModeToLaunch(mode);
-		}
+		}// else if (mode == 'billiard') {
+			// navigate('/billard_game');
+		// }
     };
 
 	// DRY !!!
@@ -69,6 +71,9 @@ export default function BodyGames(props: BodyGamesProps) {
 			</button>
 			<button className="body-games-btn 1vs1" onClick={() => handleGameSelect('tournament')}>
 				{words.messages.board.tournament}
+			</button>
+			<button className="body-games-btn billiard" onClick={() => handleGameSelect('billiard')}>
+				{words.messages.board["billiard"]}
 			</button>
 		</main>
 	);
