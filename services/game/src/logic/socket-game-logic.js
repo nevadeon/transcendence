@@ -37,7 +37,7 @@ export function setupSocketLogic(io, fastify) {
             const actionValue = data.action === 'start' ? directionValue : 0;
 
             game.inputs[data.padId] = actionValue;
-            console.log(`Input reçu pour Pad ${data.padId}: ${data.action}. Nouvel input: ${game.inputs[data.padId]}`);
+            console.log(`Input reçu pour Pad ${data.padId}: ${data.action}. Nouvel input: ${game.inputs[data.padId]}. Direction: ${data.direction}`);
         });
 
         // 3. Gérer la déconnexion

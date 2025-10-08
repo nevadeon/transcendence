@@ -29,7 +29,7 @@ export const useGameControls = (sendInput: SendInputFn) => {
             if (control && !keysPressed.current.has(key)) {
                 event.preventDefault();
                 keysPressed.current.add(key);
-                // 'q': ('up', 'start', 1) = key pressed au server
+                // 'q': ('up', 'start', -1) = key pressed au server
                 sendInput(control.direction, 'start', control.padId);
             }
         };
@@ -41,7 +41,6 @@ export const useGameControls = (sendInput: SendInputFn) => {
             if (control) {
                 event.preventDefault();
                 keysPressed.current.delete(key);
-                // Envoie l'action 'stop' (touche relâchée) au serveur
                 sendInput(control.direction, 'stop', control.padId);
             }
         };
@@ -52,11 +51,6 @@ export const useGameControls = (sendInput: SendInputFn) => {
         return () => {
             window.removeEventListener('keydown', handleKeyDown);
             window.removeEventListener('keyup', handleKeyUp);
-            // keysPressed.current.forEach(key => {
-            //     const control = CONTROL_MAP[key];
-            //     if (control)
-			// 		sendInput(control.direction, 'stop', control.padId);
-            // });
         };
     }, [sendInput]);
 };

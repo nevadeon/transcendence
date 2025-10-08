@@ -11,12 +11,12 @@ import './styles/index.css'
 
 createRoot(document.getElementById('root')!).render(
 	<StrictMode>
-		<AuthProvider>
-			<LanguageProvider>
-				<BoardProvider>
-					<RouterProvider router={router} />
-				</BoardProvider>
-			</LanguageProvider>
-		</AuthProvider>
+			<AuthProvider>
+				<LanguageProvider>
+					<BoardProvider>
+						<RouterProvider router={router} />
+					</BoardProvider>
+				</LanguageProvider>
+			</AuthProvider>
 	</StrictMode>,
 )
