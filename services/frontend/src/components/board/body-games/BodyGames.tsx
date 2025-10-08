@@ -25,9 +25,9 @@ export default function BodyGames(props: BodyGamesProps) {
 			setModeToLaunch(mode);
 		} else if (mode === '2vs2') {
 			setModeToLaunch(mode);
-		}// else if (mode == 'billiard') {
-			// navigate('/billard_game');
-		// }
+		} else if (mode == 'billiard') {
+			navigate('/billiard_game/');
+		}
     };
 
 	// DRY !!!

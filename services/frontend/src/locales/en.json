@@ -69,6 +69,11 @@
                 "title": "TOURNAMENT",
                 "wins": "Wins",
                 "loses": "Losses"
+            },
+			 "billiard": {
+                "title": "BILLIARD",
+                "wins": "Wins",
+                "loses": "Losses"
             }
         }
     },
