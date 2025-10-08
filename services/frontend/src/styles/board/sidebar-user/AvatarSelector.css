@@ -3,12 +3,12 @@
 	display: flex;
 	flex-direction: column;
 	margin-right: 32px;
-	flex-wrap: wrap;
 }
 
 .avatar-selector {
 	display: flex;
 	align-items: center;
+	flex-wrap: wrap;
 }
 
 .avatar-selector div {

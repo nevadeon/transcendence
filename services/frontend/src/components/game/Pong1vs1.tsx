@@ -4,7 +4,7 @@ import Arena from "./Arena";
 import usePongGame from "../../hooks/usePongGame";
 import { useGameControls } from "../../hooks/useGameControls";
 import { useAuth } from "../../contexts/auth/useAuth";
-import Avatar2Src from "../../../public/avatars/defaults/poopy.png";
+import Avatar2Src from "../../../public/avatars/defaults/spaceMorty.png";
 import type { Pong1vs1Props } from "../../interfaces/Pong1vs1";
 
 // /game/1vs1

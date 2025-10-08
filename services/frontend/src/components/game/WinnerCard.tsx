@@ -1,5 +1,5 @@
 import type { WinnerCardProps } from "../../interfaces/WinnerCard";
-import AvatarSrc from "../../../public/avatars/defaults/squanchy.png";
+import AvatarSrc from "../../../public/avatars/defaults/spaceMorty.png";
 import "../../styles/tournament/WinnerCard.css";
 
 export default function WinnerCard(props: WinnerCardProps) {
