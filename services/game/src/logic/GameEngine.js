@@ -5,7 +5,7 @@ const PAD_SPEED = 10;         //speed, 5 units / 1fps
 const MAX_SCORE = 7;         //score to win
 
 // Constantes de la taille de l'arène (doivent correspondre aux dimensions sur le front)
-const ARENA_WIDTH = 1200;
+const ARENA_WIDTH = 1200 - 64 - 64;
 const ARENA_HEIGHT = 751;
 const PAD_WIDTH = 32;
 const PAD_HEIGHT = 120;
@@ -168,10 +168,10 @@ function updateBallPhysics(state) {
         let isLeftPad;
         // Déterminer la position X du pad et sa direction
         if (padId === 1 || padId === 3) { // Pads de Gauche (1 et 3)
-            padHitX = 64 + PAD_WIDTH; // La face du pad que la balle frappe(64px shift from left side)
+            padHitX = PAD_WIDTH; // La face du pad que la balle frappe(64px shift from left side)
             isLeftPad = true;
         } else { // Pads de Droite (2 et 4)
-            padHitX = ARENA_WIDTH - 64 - PAD_WIDTH; // La face du pad que la balle frappe(64px shift from right side)
+            padHitX = ARENA_WIDTH - PAD_WIDTH; // La face du pad que la balle frappe(64px shift from right side)
             isLeftPad = false;
         }
         // Vérif 1 : La balle est-elle à la bonne hauteur pour ce pad ?

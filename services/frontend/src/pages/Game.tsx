@@ -1,3 +1,4 @@
+import { Profiler } from "react";
 import { useParams } from "react-router";
 import Pong1vs1 from "../components/game/Pong1vs1";
 import Pong2vs2 from "../components/game/Pong2vs2";
@@ -31,14 +32,25 @@ export default function GamePage() {
   		return backgrounds[randomIndex];
 	}
 
+	function onRender(id: any, phase: any, actualDuration: any, baseDuration: any, startTime: any, commitTime: any) {
+		console.log({
+			id,
+			phase,
+			actualDuration: actualDuration + 'ms',
+			baseDuration: baseDuration + 'ms',
+			startTime: startTime.toFixed(2) + 'ms',
+			commitTime: commitTime.toFixed(2) + 'ms'
+		});
+	}
+
 	function renderMode() {
 		switch(mode) {
 			case '1vs1':
-				return <Pong1vs1 words={words} />;
+				return <Profiler id="Pong1vs1" onRender={onRender}> <Pong1vs1 words={words} /> </Profiler>;
 			case '2vs2':
-				return <Pong2vs2 words={words} />;
+				return <Profiler id="Pong2vs2" onRender={onRender}> <Pong2vs2 words={words} /> </Profiler>;
 			case '1vsia':
-				return <Pong1vsIA words={words} />;
+				return <Profiler id="Pong1vsIA" onRender={onRender}> <Pong1vsIA words={words} /> </Profiler>;
 			default:
 				return ; //<Tournament words={words} /> ???
 		}
