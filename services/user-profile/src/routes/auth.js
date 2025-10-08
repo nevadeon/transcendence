@@ -11,8 +11,9 @@ const TWO_FACTOR_HEADER = 'x-two-factor-code';
 
 async function generateDimension() {
 	const dimension = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-	result += dimension.charAt(Math.floor(Math.random() * dimension.length));
-	return (result, "-", Math.floor(Math.random() * 761));
+	const letter = dimension.charAt(Math.floor(Math.random() * dimension.length));
+	const number = String(Math.floor(Math.random() * 25)).padStart(3, '0');
+	return `${letter}-${number}`;
 }
 
 async function authRoutes(fastify) {
@@ -26,8 +27,8 @@ async function authRoutes(fastify) {
 			const hashed_password = await argon2.hash(password);
 			const hashed_email = crypto.createHash('sha256').update(email + SECRET_SALT).digest('hex');
 			await db.run(
-				"INSERT INTO users(name, email, password) VALUES(?, ?, ?)",
-				[name, hashed_email, hashed_password]
+				"INSERT INTO users(name, email, password, dimension) VALUES(?, ?, ?, ?)",
+				[name, hashed_email, hashed_password, await generateDimension()]
 			);
 			const user = await db.get("SELECT * FROM users WHERE name=?", [name]);
 			const token = auth.generateLongToken(user);
@@ -35,6 +36,7 @@ async function authRoutes(fastify) {
 			const user_data = await db.get("SELECT id, name, species, planet, dimension, avatar FROM users WHERE name=?",
 				[name]
 			);
+			console.log(user_data.dimension);
 			return reply.code(201).send({ user: user_data, token });
 		} catch (err) {
 			fastify.log.error("Erreur SQL :", err.message);

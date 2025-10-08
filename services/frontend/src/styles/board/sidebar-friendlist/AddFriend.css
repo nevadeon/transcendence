@@ -12,11 +12,8 @@
 }
 
 .profile-card-data-header span:nth-child(2) {
-	display: inline-block;
-    width: 12px;
-    height: 12px;
     margin-left: 4px;
-    border-radius: 12px;
+	white-space: nowrap;
 }
 
 .online {
