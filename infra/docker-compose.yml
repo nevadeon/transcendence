@@ -40,9 +40,6 @@ services:
       start_period: 30s
     cap_add:
       - IPC_LOCK
-    environment:
-    - VAULT_ADDR=http://0.0.0.0:8200
-    - VAULT_TOKEN=root
     env_file:
       - .env
     ports:
@@ -120,6 +117,28 @@ services:
     depends_on:
       vault:
         condition: service_healthy
+
+  # game:
+    # build:
+      # context: ../services/game
+      # dockerfile: Dockerfile
+    # container_name: game
+    # env_file:
+      # - .env
+    # expose:
+      # - 3002
+    # networks:
+      # - web
+      # - backend
+    # volumes:
+      # - game-data:/data
+
+  socket_server:
+    build:
+      context: ../services/socket_server
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
 
 volumes:
   user-profile-data:
