@@ -98,6 +98,7 @@ async function authRoutes(fastify) {
 			} else {
 				const SECRET_SALT = await getVaultSecret("SECRET_SALT");
 				const hashed_email = crypto.createHash('sha256').update(email + SECRET_SALT).digest('hex');
+				console.log();
 				await db.run(
 					"INSERT INTO users(name, email, googleId, dimension) VALUES(?, ?, ?, ?)",
 					[given_name, hashed_email, googleId, await generateDimension()]

@@ -148,6 +148,9 @@ function updateBallPhysics(state) {
         state.ball.vy = Math.random() > 0.5 ? 2 : -2;
         return true; // Un point a été marqué
     }
+
+
+
     // 4. Détection de Collision avec les Pads (À IMPLÉMENTER EN DÉTAIL)
     const padIds = Object.keys(state.pads).map(Number);
     const ballX = state.ball.x;
@@ -192,6 +195,8 @@ function updateBallPhysics(state) {
                 state.ball.x = padHitX - ballRadius;
             }
         }
+
+
 
         // 5. Calcul du Rebond et de l'Angle
         if (collisionOccurred) {
