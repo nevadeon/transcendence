@@ -22,6 +22,7 @@ export default function BodyGames(props: BodyGamesProps) {
 		} else if (mode === '1vsIA') {
 			navigate('/game/1vsia');
 		} else if (mode === '1vs1') {
+			setUsernames(Array(1).fill(''));
 			setModeToLaunch(mode);
 		} else if (mode === '2vs2') {
 			setModeToLaunch(mode);
@@ -40,8 +41,8 @@ export default function BodyGames(props: BodyGamesProps) {
 		});
 	}
 
-	const handleFormSubmit = (usernames: string[]) => {
-        navigate(`/game/${modeToLaunch}`, { state: { usernames } });
+	const handleFormSubmit = (usernames: string[], avatars: string[]) => {
+        navigate(`/game/${modeToLaunch}`, { state: { usernames, avatars } }); //+random avatars here??? avatars: string[]
     };
 
 	return (

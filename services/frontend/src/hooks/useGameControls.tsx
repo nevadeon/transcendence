@@ -52,11 +52,11 @@ export const useGameControls = (sendInput: SendInputFn) => {
         return () => {
             window.removeEventListener('keydown', handleKeyDown);
             window.removeEventListener('keyup', handleKeyUp);
-            keysPressed.current.forEach(key => {
-                const control = CONTROL_MAP[key];
-                if (control)
-					sendInput(control.direction, 'stop', control.padId);
-            });
+            // keysPressed.current.forEach(key => {
+            //     const control = CONTROL_MAP[key];
+            //     if (control)
+			// 		sendInput(control.direction, 'stop', control.padId);
+            // });
         };
     }, [sendInput]);
 };

@@ -10,9 +10,12 @@ export function setupSocketLogic(io, fastify) {
             gameId = socket.id;
             socket.join(gameId);
             const gameMode = data.mode;
+            const mainPlayerName = data.mainUserName;
+            const playersTemp = data.usersTemp;
+            console.log(gameMode, mainPlayerName, playersTemp); //mainPlayerName to SELECT in TABLE
 
-            // Démarrer la boucle de jeu pour cette session
-            const game = createGameSession(gameId, io, gameMode);
+            // Start la boucle de jeu pour cette session
+            const game = createGameSession(gameId, io, gameMode, mainPlayerName, playersTemp);
 
             fastify.log.info(`New 1v1 local game started: ${gameId}`);
 
@@ -34,6 +37,7 @@ export function setupSocketLogic(io, fastify) {
             const actionValue = data.action === 'start' ? directionValue : 0;
 
             game.inputs[data.padId] = actionValue;
+            console.log(`Input reçu pour Pad ${data.padId}: ${data.action}. Nouvel input: ${game.inputs[data.padId]}`);
         });
 
         // 3. Gérer la déconnexion
