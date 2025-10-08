@@ -60,20 +60,21 @@ export default function BodyGames(props: BodyGamesProps) {
 					<UsernameInput mode={modeToLaunch} users={usernames} onChange={handleInputChange} onSubmit={handleFormSubmit} words={words} />
 				)
 			}
-			<button className="body-games-btn 1vs1" onClick={() => handleGameSelect('1vs1')}>
-				{words.messages.board["1vs1"]}
+			
+			<button className="body-games-btn" onClick={() => handleGameSelect('1vs1')}>
+				<span>{words.messages.board["1vs1"]}</span>
 			</button>
-			<button className="body-games-btn 2vs2" onClick={() => handleGameSelect('2vs2')}>
-				{words.messages.board["2vs2"]}
+			<button className="body-games-btn" onClick={() => handleGameSelect('2vs2')}>
+				<span>{words.messages.board["2vs2"]}</span>
 			</button>
-			<button className="body-games-btn 1vs1" onClick={() => handleGameSelect('1vsIA')}>
-				{words.messages.board["1vsia"]}
+			<button className="body-games-btn" onClick={() => handleGameSelect('1vsIA')}>
+				<span>{words.messages.board["1vsia"]}</span>
 			</button>
-			<button className="body-games-btn 1vs1" onClick={() => handleGameSelect('tournament')}>
-				{words.messages.board.tournament}
+			<button className="body-games-btn" onClick={() => handleGameSelect('tournament')}>
+				<span>{words.messages.board.tournament}</span>
 			</button>
-			<button className="body-games-btn billiard" onClick={() => handleGameSelect('billiard')}>
-				{words.messages.board["billiard"]}
+			<button className="body-games-btn" onClick={() => handleGameSelect('billiard')}>
+				<span>{words.messages.board["billiard"]}</span>
 			</button>
 		</main>
 	);
