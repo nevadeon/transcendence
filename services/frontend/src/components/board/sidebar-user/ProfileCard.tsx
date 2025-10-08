@@ -6,12 +6,8 @@ import type { ProfileCardProps } from "../../../interfaces/ProfileCard";
 import '../../../styles/board/sidebar-user/ProfileCard.css';
 
 export default function ProfileCard( props: ProfileCardProps ) {
-	const { avatar, username, ingame, isElim, words } = props;
+	const { avatar, username, dimension, ingame, isElim, words } = props;
 	const { toggleElement } = useBoard();
-
-	function randomID(max: number) {
-		return Math.floor(Math.random() * max);
-	}
 
 	return (
 		<div className={ingame ? "profile-card-ingame" : "profile-card"} onClick={() => toggleElement('profile')}>
@@ -22,7 +18,7 @@ export default function ProfileCard( props: ProfileCardProps ) {
 			<div className="profile-card-data">
 				<div className={ingame ? "profile-card-data-ingame" : "profile-card-data-header"}>
 					<span>{username}</span>
-					<span>N. {randomID(999)}</span>
+					<span>{dimension}</span>
 				</div>
 				{
 					!ingame &&
@@ -37,7 +33,7 @@ export default function ProfileCard( props: ProfileCardProps ) {
 						</div>
 						<div>
 							<img src={DimensionSource} alt="Dimension Icon" />
-							<span>C-137</span>
+							<span>{dimension}</span>
 						</div>
 					</div>
 				}
