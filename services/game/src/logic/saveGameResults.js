@@ -1,3 +1,3 @@
-// export async function saveGameResults(db, state, gameMode, playerId) {
-	
+// export async function saveGameResults(state, gameMode, mainPlayerName, playersTemp) {
+// 	//...
 // }

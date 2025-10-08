@@ -30,7 +30,6 @@ export default function usePongGame(gameMode: string, mainUserName: string | nul
 	const [gameState, setGameState] = useState<GameState | null>(null);
 
 	useEffect(() => {
-		// 1. init la connexion
 		const socket = io('http://localhost:3002'); // url du back
 		socketRef.current = socket;
 		// 2. event de co réussi (envoyer l'ID pour rejoindre le salon(room))
@@ -40,17 +39,14 @@ export default function usePongGame(gameMode: string, mainUserName: string | nul
 
 		// interpolation logic
 		socket.on('gameState', (state: GameState) => {
-			// Ajouter un timestamp à l'état reçu
 			const stampedState = { ...state, receivedAt: Date.now() };
 			// Mise à jour de la REF au lieu de l'état React pour éviter un re-rendu inutile
             stateHistoryRef.current.push(stampedState as any);
-            // Limiter la taille de l'historique
             if (stateHistoryRef.current.length > 60) {
                 stateHistoryRef.current.shift();
             }
 		});
 
-		// 4. Écouter la fin de partie (pour sauvegarder)
 		socket.on('gameOver', (results: any) => {
 			// Logique de navigation/sauvegarde ici
 			console.log("Jeu terminé, résultats:", results);
