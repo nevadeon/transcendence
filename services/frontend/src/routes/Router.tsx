@@ -6,7 +6,7 @@ import Board from "../pages/Board";
 import Game from "../pages/Game";
 import App from "../components/App";
 import Tournament from "../pages/Tournament";
-import Billiard from "../pages/billiard";
+import Billiard from "../pages/Billiard";
 
 const router = createBrowserRouter([
 	{ path: "/", element: <App /> },
