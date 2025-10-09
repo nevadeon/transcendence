@@ -74,7 +74,7 @@ export default function BodyGames(props: BodyGamesProps) {
 			<button className="body-games-btn" onClick={() => handleGameSelect('tournament')}>
 				<span>{words.messages.board.tournament}</span>
 			</button>
-			<button className="body-games-btn" onClick={() => handleGameSelect('billiard')}>
+			<button className="body-games-btn" onClick={() => navigate('/game/billiard')}>
 				<span>{words.messages.board["billiard"]}</span>
 			</button>
 		</main>

@@ -1,15 +1,15 @@
-import "../styles/billard/Billard.css";
+import "../styles/billiard/billiard.css";
 
-export default function Billard() {
+export default function billiard() {
 
 	// #TODO useNavigate after received game results
 
 	return (
-		<div className="billard-container">
+		<div className="billiard-container">
 			<iframe
-				title="Billard Game"
-				src="/billard_game/index.html"
-				className="billard-iframe"
+				title="billiard Game"
+				src="/billiard_game/index.html"
+				className="billiard-iframe"
 				allowFullScreen
 			/>
 		</div>

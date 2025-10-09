@@ -1,10 +1,10 @@
-.billard-container {
+.billiard-container {
 	position: relative;
 	width: 100dvw;
 	height: 100dvh;
 }
 
-.billard-iframe {
+.billiard-iframe {
 	width: 70.6%;
 	height: 99.4%;
 	border: none;
