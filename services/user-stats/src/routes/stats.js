@@ -19,7 +19,7 @@ async function statsRoutes(fastify) {
 			);
 
 			const players = [red_team_A, red_team_B, blue_team_A, blue_team_B];
-			const VALID_MODES = ['versus', 'versusCoop', 'versusIa', 'tournament', 'billiards'];
+			const VALID_MODES = ['versus', 'versusCoop', 'versusIa', 'tournament', 'billard'];
 			if (!VALID_MODES.includes(mode))
 				throw new error(`Mode invalide: ${mode}`);
 
@@ -39,30 +39,30 @@ async function statsRoutes(fastify) {
 			reply.code(500).send({ error: "Failed to record match." });
 		}
 	})
-	
-	fastify.get("/game_history/:username", async (req, reply) => {
-		const { username } = req.param.username;
-		try {
-			const matches = await db.get(`
-				SELECT * FROM match_history 
-				WHERE red_team_A = ? 
-					OR red_team_B = ? 
-					OR blue_team_A = ? 
-					OR blue_team_B = ?
-				ORDER BY date DESC
-				`, [username, username, username, username]
-			);
 
-			reply.code(201).send({
-				matches: matches,
-				count: matchMedia.length
-			});
+	// fastify.get("/game_history/:username", async (req, reply) => {
+	// 	const { username } = req.param.username;
+	// 	try {
+	// 		const matches = await db.get(`
+	// 			SELECT * FROM match_history 
+	// 			WHERE red_team_A = ? 
+	// 				OR red_team_B = ? 
+	// 				OR blue_team_A = ? 
+	// 				OR blue_team_B = ?
+	// 			ORDER BY date DESC
+	// 			`, [username, username, username, username]
+	// 		);
 
-		} catch (err) {
-			fastify.log.error(err);
-			reply.code(500).send({ error: "Failed to get match history."})
-		}
-	})
+	// 		reply.code(201).send({
+	// 			matches: matches,
+	// 			count: matchMedia.length
+	// 		});
+
+	// 	} catch (err) {
+	// 		fastify.log.error(err);
+	// 		reply.code(500).send({ error: "Failed to get match history."})
+	// 	}
+	// })
 }
 
 export default statsRoutes;	

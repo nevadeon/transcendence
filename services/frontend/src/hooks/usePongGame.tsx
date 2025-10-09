@@ -52,7 +52,7 @@ export default function usePongGame(gameMode: string, mainUser: UsersTemp | unde
 		});
 
 		return () => { socket.disconnect(); };
-	}, [gameMode]);
+	}, []);
 
 
     useEffect(() => {
