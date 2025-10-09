@@ -1,8 +1,8 @@
 ### Web
-[x] Maj: back fastify
-[] Min: front tailwind css
-[x] Min: DB for back
-[] Maj: store tournament's score in blockchain
+[x] Maj: back fastify  
+[] Min: front tailwind css  
+[x] Min: DB for back  
+[] Maj: store tournament's score in blockchain  
 
 ### User Management
 [] Maj: Standard user management :  
