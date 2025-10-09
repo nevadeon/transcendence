@@ -27,7 +27,7 @@ export default function BodyGames(props: BodyGamesProps) {
 		} else if (mode === '2vs2') {
 			setModeToLaunch(mode);
 		} else if (mode == 'billiard') {
-			navigate('/billiard_game/');
+			navigate('/game/billiard');
 		}
     };
 
@@ -55,28 +55,37 @@ export default function BodyGames(props: BodyGamesProps) {
 						<Stats words={words} />
 						<AddFriend words={words} />
 					</Modal>
-				) :
-				(
+				) : (
 					modeToLaunch &&
-					<UsernameInput mode={modeToLaunch} users={usernames} onChange={handleInputChange} onSubmit={handleFormSubmit} words={words} />
+						<UsernameInput
+						mode={modeToLaunch}
+						users={usernames}
+						onChange={handleInputChange}
+						onSubmit={handleFormSubmit}
+						words={words} />
 				)
 			}
-			
-			<button className="body-games-btn" onClick={() => handleGameSelect('1vs1')}>
-				<span>{words.messages.board["1vs1"]}</span>
-			</button>
-			<button className="body-games-btn" onClick={() => handleGameSelect('2vs2')}>
-				<span>{words.messages.board["2vs2"]}</span>
-			</button>
-			<button className="body-games-btn" onClick={() => handleGameSelect('1vsIA')}>
-				<span>{words.messages.board["1vsia"]}</span>
-			</button>
-			<button className="body-games-btn" onClick={() => handleGameSelect('tournament')}>
-				<span>{words.messages.board.tournament}</span>
-			</button>
-			<button className="body-games-btn" onClick={() => navigate('/game/billiard')}>
-				<span>{words.messages.board["billiard"]}</span>
-			</button>
+			{
+			 <div className={
+				"body-games-btn-group" + 
+				(openElement === "profile" || openElement === "stats" || openElement === "addfriend" ? " hidden" : "")}>
+				<button className="body-games-btn" onClick={() => handleGameSelect('1vs1')}>
+					<span>{words.messages.board["1vs1"]}</span>
+				</button>
+				<button className="body-games-btn" onClick={() => handleGameSelect('2vs2')}>
+					<span>{words.messages.board["2vs2"]}</span>
+				</button>
+				<button className="body-games-btn" onClick={() => handleGameSelect('1vsIA')}>
+					<span>{words.messages.board["1vsia"]}</span>
+				</button>
+				<button className="body-games-btn" onClick={() => handleGameSelect('tournament')}>
+					<span>{words.messages.board.tournament}</span>
+				</button>
+				<button className="body-games-btn" onClick={() => handleGameSelect('billiard')}>
+					<span>{words.messages.board["billiard"]}</span>
+				</button>
+			</div> 
+			}
 		</main>
 	);
 }

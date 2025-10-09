@@ -1,4 +1,5 @@
 .body-games {
+	z-index: 0;
 	position: relative;
 	display: flex;
 	flex-direction: column;
@@ -11,10 +12,19 @@
 }
 
 
+.body-games-btn-group {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 16px;
+	width: 100%;
+}
 
 .body-games-btn {
-	width: 50%;
-	height: 15%;
+	z-index: 0;
+	width: 45%;
+	height: 30%;
 	margin: 8px 0;
 	padding: 24px 0;
 	background:var(--color-bhologram-low-opa-400);
@@ -33,11 +43,6 @@
 	overflow: hidden;
 }
 
-
-@keyframes spin {
-	0% { transform: rotate(0deg);}
-	100% { transform: rotate(360deg);}
-}
 
 .body-games-btn:hover::after {
 	content: "";
@@ -61,4 +66,8 @@
 .body-games-btn .btn-label {
 	position: relative;
 	z-index: 2;
+}
+
+.hidden {
+	display: none;
 }
