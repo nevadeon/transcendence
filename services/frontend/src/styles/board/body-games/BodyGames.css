@@ -6,6 +6,7 @@
 	justify-content: center;
 	width: calc(50% + 480px);
 	height: var(--height-mobile-screen);
+	background-image: url('../../../../public/wallpaper2.jpg');
 }
 
 
