@@ -6,7 +6,7 @@ import type { ProfileCardProps } from "../../../interfaces/ProfileCard";
 import '../../../styles/board/sidebar-user/ProfileCard.css';
 
 export default function ProfileCard( props: ProfileCardProps ) {
-	const { avatar, username, dimension, ingame, isElim, words } = props;
+	const { avatar, username, species, planet, dimension, ingame, isElim, words } = props;
 	const { toggleElement } = useBoard();
 
 	return (
@@ -25,11 +25,11 @@ export default function ProfileCard( props: ProfileCardProps ) {
 					<div className="profile-card-data-extra">
 						<div>
 							<img src={SpeciesSource} alt="Species Icon" />
-							<span>{words.messages.board["profile-card"].species}</span>
+							<span>{species}</span>
 						</div>
 						<div>
 							<img src={PlanetSource} alt="Planet Icon" />
-							<span>{words.messages.board["profile-card"].planet}</span>
+							<span>{planet}</span>
 						</div>
 						<div>
 							<img src={DimensionSource} alt="Dimension Icon" />

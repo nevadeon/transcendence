@@ -17,10 +17,6 @@
 		"oauth2": "Log in with Google"
 	},
 	"board": {
-        "profile-card": {
-            "species": "Human",
-            "planet": "Earth"
-        },
         "stats": "STATISTICS",
         "logout": "LOGOUT",
         "1vs1": "DIMENSIONAL DUEL",

@@ -17,10 +17,6 @@
 		"oauth2": "Inicia sesión con Google"
 	},
 	"board": {
-        "profile-card": {
-            "species": "Humano",
-            "planet": "Tierra"
-        },
         "stats": "ESTADÍSTICAS",
         "logout": "CERRAR SESIÓN",
         "1vs1": "DUELO DIMENSIONAL",
