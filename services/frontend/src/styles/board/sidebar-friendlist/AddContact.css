@@ -11,6 +11,7 @@
 	font-weight: var(--font-weight-bold);
 	color: var(--color-computer-300);
 	background: var(--color-bhologram-low-opa-400);
+	border-radius: 20px;
 }
 
 .add-contact img {

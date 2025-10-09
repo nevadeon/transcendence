@@ -1,9 +1,9 @@
 .stats-graph {
 	position: relative;
 	display: flex;
-	align-items: center;
+	place-items: center;
 	justify-content: space-around;
-	width: 100%;
+	width: 90%;
 	height: var();
-	margin: 16px 0 16px 0;
+	margin: 12px 16px;
 }

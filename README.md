@@ -19,14 +19,14 @@
 
 ### Gameplay & UX
 [] Maj: Remote player  
-[V] Maj: mutltiplayer  
+[x] Maj: mutltiplayer  
 [V] Min: add another game with matchmacking and game history  
 [] Min: custom game option  
 [] Maj: live chat  
  
 ### IA-Algo
 [V] Maj: IA opponent  
-[V] Min: User & game stat dash board  
+[x] Min: User & game stat dash board  	
 
 ### Cybersecurity
 [] Maj: Implement WAF/modsecurity and hashicorp vault  
@@ -43,10 +43,10 @@
 
 ### Accessibility
 [] Min: support on all devices  
-[V] Min: Expanding browser compatibility  
-[V] Min: Multiple language support  
+[x] Min: Expanding browser compatibility  
+[x] Min: Multiple language support  
 [] Min: Add accessibility for Visually Impaired Users  
-[V] Min: Server-Side Rendering (SSR) Integration  
+[x] Min: Server-Side Rendering (SSR) Integration  
 
 ### Server-Side Pong
 [V] Maj: Replace Basic Pong with Server-Side Pong and Implementing an API  

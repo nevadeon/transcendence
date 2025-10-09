@@ -17,6 +17,8 @@ export default function Stats(props: StatsProps) {
 	const { user, token } = useAuth();
 	const isOpen = openElement === 'stats';
 	const { words } = props;
+	gameHistory;
+	isLoading;
 
 	useEffect(() => {
 		if (!isOpen || !token || !user)
@@ -48,21 +50,21 @@ export default function Stats(props: StatsProps) {
 			allUsers();
 	}, [isOpen, token]);
 
-	const statsByMode = games.reduce((acc: StatsByMode, curr) => {
-		const mode = curr.mode;
-		if (!acc[mode])
-			acc[mode] = { mode: mode, wins: 0, loses: 0 };
-		if (curr.scores.score1 > curr.scores.score2)
-			acc[mode].wins += 1;
-		else if (curr.scores.score1 < curr.scores.score2)
-			acc[mode].loses += 1;
-		return acc;
-	}, {});
+	// const statsByMode = games.reduce((acc: StatsByMode, curr) => {
+	// 	const mode = curr.mode;
+	// 	if (!acc[mode])
+	// 		acc[mode] = { mode: mode, wins: 0, loses: 0 };
+	// 	if (curr.scores.score1 > curr.scores.score2)
+	// 		acc[mode].wins += 1;
+	// 	else if (curr.scores.score1 < curr.scores.score2)
+	// 		acc[mode].loses += 1;
+	// 	return acc;
+	// }, {});
 
-	const computedGames = Object.values(statsByMode).map((stats, index) => ({
-		id: index + 1,
-		...stats,
-	}));
+	// const computedGames = Object.values(statsByMode).map((stats, index) => ({
+	// 	id: index + 1,
+	// 	...stats,
+	// }));
 
 	function handleClose() {
 		toggleElement(null);
@@ -108,7 +110,7 @@ export default function Stats(props: StatsProps) {
 						</div>
 					*/}
 					<tbody>
-						{games.map((game) => (
+						{/* {games.map((game) => (
 							<tr key={game.id}>
 								<td> {game.mode} </td>
 								<td> {game.scores.score1} - {game.scores.score2} </td>
@@ -143,10 +145,10 @@ export default function Stats(props: StatsProps) {
 								</td>
 								<td> {game.date} </td>
 							</tr>
-						))}
+						))} */}
 					</tbody>
 				</table>
-				<div className="stats-data-cards">
+				{/* <div className="stats-data-cards">
 					{computedGames.map((game) => (
 						<div key={game.id} className={"card-container"}>
 							<h3>{game.mode.toUpperCase()}</h3>
@@ -162,7 +164,7 @@ export default function Stats(props: StatsProps) {
 							</div>
 						</div>
 					))}
-				</div>
+				</div> */}
 			</div>
 		</div>
 	);
