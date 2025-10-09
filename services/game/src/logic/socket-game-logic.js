@@ -6,16 +6,13 @@ export function setupSocketLogic(io, fastify) {
 
         // 1. socket.emit('joinGame', { mode: gameMode, playerId: userId });   from usePongGame.tsx
         socket.on('joinGame', (data) => {
-            // Utiliser l'ID du socket comme ID de la partie pour le 1v1 local
             gameId = socket.id;
             socket.join(gameId);
             const gameMode = data.mode;
-            const mainPlayerName = data.mainUserName;
+            const mainPlayer = data.mainUser; //HERE !!!
             const playersTemp = data.usersTemp;
-            console.log(gameMode, mainPlayerName, playersTemp); //mainPlayerName to SELECT in TABLE
 
-            // Start la boucle de jeu pour cette session
-            const game = createGameSession(gameId, io, gameMode, mainPlayerName, playersTemp);
+            const game = createGameSession(fastify, gameId, io, gameMode, mainPlayer, playersTemp);
 
             fastify.log.info(`New 1v1 local game started: ${gameId}`);
 

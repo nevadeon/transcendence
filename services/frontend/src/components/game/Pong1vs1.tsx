@@ -12,8 +12,10 @@ export default function Pong1vs1(props: Pong1vs1Props) {
 	const ctrl1 = { upKey: 'q', downKey: 'a' };
 	const ctrl2 = { upKey: 'o', downKey: 'l' };
 	const { user } = useAuth();
-	const location = useLocation(); //{usernames<string[]> + avatars<string[]>} NEXT !!!
-	const { gameState, sendInput } = usePongGame('versus', user.name, location.state);
+	const location = useLocation();
+	let userLogin;
+	user ? userLogin = {name: user.name, avatar: user.avatar.slice(9)} : null;
+	const { gameState, sendInput } = usePongGame('versus', userLogin, location.state);
 
 	// pads[1], pads[3] for left side , then pads[2], pads[4] BUT pads[2] doesn't respond !!!
 	// const navigate = useNavigate(); //tournament matchmaking flow

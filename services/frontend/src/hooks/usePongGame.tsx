@@ -24,7 +24,7 @@ interface UsersTemp {
 
 const INTERPOLATION_DELAY_MS = 50;
 
-export default function usePongGame(gameMode: string, mainUserName: string | null, usersTemp: UsersTemp[]) { //usersTemp: UsersTemp[]
+export default function usePongGame(gameMode: string, mainUser: UsersTemp | undefined, usersTemp: UsersTemp[]) { //usersTemp: UsersTemp[]
 	const socketRef = useRef<Socket | null>(null);
 	const stateHistoryRef = useRef<Array<GameState & { receivedAt: number }>>([]);
 	const [gameState, setGameState] = useState<GameState | null>(null);
@@ -33,7 +33,7 @@ export default function usePongGame(gameMode: string, mainUserName: string | nul
 		const socket = io('http://localhost:3002'); // url du back
 		socketRef.current = socket;
 		socket.on('connect', () => {
-			socket.emit('joinGame', { mode: gameMode, mainUserName: mainUserName, usersTemp: usersTemp });
+			socket.emit('joinGame', { mode: gameMode, mainUser: mainUser, usersTemp: usersTemp });
 		});
 
 		// interpolation logic
@@ -50,7 +50,7 @@ export default function usePongGame(gameMode: string, mainUserName: string | nul
 		});
 
 		return () => { socket.disconnect(); };
-	}, [gameMode, mainUserName]);
+	}, [gameMode, mainUser]);
 
 
     useEffect(() => {

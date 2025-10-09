@@ -1,11 +1,10 @@
-// GameEngine.js
-// Constantes physiques
-const GAME_TICK = 1000 / 60; //60fps
-const PAD_SPEED = 10;         //speed, 5 units / 1fps
-const MAX_SCORE = 7;         //score to win
+import { saveGameResults } from "./saveGameResults.js";
 
-// Constantes de la taille de l'arène (doivent correspondre aux dimensions sur le front)
-const ARENA_WIDTH = 1200 - 64 - 64;
+const GAME_TICK = 1000 / 60;  //60fps
+const PAD_SPEED = 10;         //speed, 10 units / 1fps
+const MAX_SCORE = 7;          //score to win
+
+const ARENA_WIDTH = 1200 - 64 - 64; //#TODO
 const ARENA_HEIGHT = 751;
 const PAD_WIDTH = 32;
 const PAD_HEIGHT = 120;
@@ -44,7 +43,7 @@ const getInitialState = (gameMode) => {
 // Stocke toutes les sessions de jeu actives.
 export const activeGames = {};
 
-export function createGameSession(gameId, io, gameMode, mainPlayerName, playersTemp) {
+export function createGameSession(fastify, gameId, io, gameMode, mainPlayer, playersTemp) {
     const state = getInitialState(gameMode);
     state.gameId = gameId;
     activeGames[gameId] = state;
@@ -65,11 +64,12 @@ export function createGameSession(gameId, io, gameMode, mainPlayerName, playersT
             // Un point a été marqué, vérif la fin de partie
             if (state.score.p1 >= MAX_SCORE || state.score.p2 >= MAX_SCORE) {
                 state.isRunning = false;
+                try {
+                    await saveGameResults(fastify, state, gameMode, mainPlayer, playersTemp); //fastify -> db, log...
+                } catch (err) {
+                    console.error(err);
+                }
                 const winnerId = state.score.p1 > state.score.p2 ? 1 : 2;
-
-                // await saveGameResults(state, gameMode, mainPlayerName, playersTemp); //db
-
-                // Envoyer la fin de partie à tous les clients dans cette salle (ici, un seul)
                 io.to(gameId).emit('gameOver', {
                     winnerId,
                     scoreLeft: state.score.p1,
@@ -77,7 +77,6 @@ export function createGameSession(gameId, io, gameMode, mainPlayerName, playersT
                     finalScore: `${state.score.p1}-${state.score.p2}`,
                     gameType: gameMode
                 });
-                // TODO: Logique pour enregistrer le résultat dans le service user-stats
             }
         }
 
