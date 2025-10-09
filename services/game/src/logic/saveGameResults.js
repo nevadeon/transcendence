@@ -15,7 +15,6 @@ export async function saveGameResults(fastify, state, gameMode, mainPlayer, play
 		\nplayersTemp 1 avatar: ${avatars[0]}
 		\nwinnerId: ${winnerId}\n`);
 
-	//if (mainPlayerName) = login, else playersTemp[4x]
 	if (mainPlayer && gameMode === "versus") {
 		try {
 			await db.run(
@@ -38,7 +37,34 @@ export async function saveGameResults(fastify, state, gameMode, mainPlayer, play
 					score.p2,
 					winnerId]
 			);
-			console.log("Successfully wrote 1vs1 in match_history");
+
+			const VALID_MODES = ['versus', 'versusCoop', 'versusIa', 'tournament', 'billard'];
+			if (!VALID_MODES.includes(gameMode))
+				throw new error(`Mode invalide: ${gameMode}`);
+
+			await db.run (`
+				UPDATE users_stats
+				SET games = games + 1,
+				${gameMode} = ${gameMode} + 1
+				WHERE name = ?`,
+			[name]);
+
+			if (winnerId === 1) {
+				await db.run (`
+					UPDATE users_stats
+					SET wins = wins + 1,
+					${gameMode}_wins = ${gameMode}_wins + 1
+					WHERE name = ?`,
+				[name]);
+			} else {
+				await db.run (`
+					UPDATE users_stats
+					SET losses = losses + 1,
+					${gameMode}_losses = ${gameMode}_losses + 1
+					WHERE name = ?`,
+				[name]);
+			}
+			console.log("Successfully wrote 2vs2 in match_history & users_stats");
             return { success: true };
 		} catch (err) {
 			console.error("Failed to record match in DB:", err);
@@ -74,7 +100,34 @@ export async function saveGameResults(fastify, state, gameMode, mainPlayer, play
 					score.p2,
 					winnerId]
 			);
-			console.log("Successfully wrote 2vs2 in match_history");
+
+			const VALID_MODES = ['versus', 'versusCoop', 'versusIa', 'tournament', 'billard'];
+			if (!VALID_MODES.includes(gameMode))
+				throw new error(`Mode invalide: ${gameMode}`);
+
+			await db.run (`
+				UPDATE users_stats
+				SET games = games + 1,
+				${gameMode} = ${gameMode} + 1
+				WHERE name = ?`,
+			[name]);
+
+			if (winnerId === 1) {
+				await db.run (`
+					UPDATE users_stats
+					SET wins = wins + 1,
+					${gameMode}_wins = ${gameMode}_wins + 1
+					WHERE name = ?`,
+				[name]);
+			} else {
+				await db.run (`
+					UPDATE users_stats
+					SET losses = losses + 1,
+					${gameMode}_losses = ${gameMode}_losses + 1
+					WHERE name = ?`,
+				[name]);
+			}
+			console.log("Successfully wrote 2vs2 in match_history & users_stats");
             return { success: true };
 		} catch (err) {
 			console.error("Failed to record match in DB:", err);

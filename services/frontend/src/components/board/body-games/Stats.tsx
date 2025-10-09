@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import useBoard from "../../../hooks/useBoard";
 import { useAuth } from "../../../contexts/auth/useAuth.tsx";
 import type { StatsProps } from "../../../interfaces/Stats.ts";
@@ -22,8 +22,34 @@ export interface GamesProps {
 	date: string
 }
 
+export interface TotalStatsProps {
+	versus: number,
+	versus_wins: number,
+	versus_losses: number,
+	versusCoop: number,
+	versusCoop_wins: number,
+	versusCoop_losses: number,
+	versusIa: number,
+	versusIa_wins: number,
+	versusIa_losses: number,
+	tournament: number,
+	tournament_wins: number,
+	tournament_losses: number,
+	billard: number,
+	billard_wins: number,
+	billard_losses: number
+}
+
+interface ModeStats {
+  mode: string; // Ex: 'Versus', 'Tournoi'
+  total: number;
+  wins: number;
+  losses: number;
+}
+
 export default function Stats(props: StatsProps) {
 	const [ gameHistory, setGameHistory ] = useState<GamesProps[]>([]);
+	const [ userStats, setUserStats ] = useState<TotalStatsProps[]>([]);
 	const [ isLoading, setIsLoading ] = useState<boolean>(false);
 	const { openElement, toggleElement } = useBoard();
 	const { user, token } = useAuth();
@@ -31,10 +57,17 @@ export default function Stats(props: StatsProps) {
 	const { words } = props;
 	gameHistory;
 	isLoading;
+	const rawStats = userStats?.[0];
+
+	const statsForMapping = useMemo(() => {
+		if (!rawStats) return [];
+		return transformStats(rawStats);
+	}, [rawStats]);
 
 	useEffect(() => {
 		if (!isOpen || !token || !user)
 			return ;
+
 		async function allGames() {
 			setIsLoading(true);
 			try {
@@ -48,7 +81,7 @@ export default function Stats(props: StatsProps) {
 				const data = await res.json();
 				console.log("data: ", data);
 				if (res.ok) {
-					setGameHistory(data);
+					setGameHistory(data.matches);
 				} else {
 					console.error('Failed to retreive all users: ', data.message);
 				}
@@ -58,25 +91,64 @@ export default function Stats(props: StatsProps) {
 				setIsLoading(false);
 			}
 		}
-		if (isOpen)
+
+		async function allStats() {
+			setIsLoading(true);
+			try {
+				const res = await fetch(`http://localhost:3002/users_stats/${user.name}`, {
+					method: 'GET',
+					headers: {
+						'Content-Type': 'application/json',
+						'Authorization': `Bearer ${token}`
+					}
+				});
+				const data = await res.json();
+				console.log("data: ", data);
+				if (res.ok) {
+					setUserStats(data.stats);
+				} else {
+					console.error('Failed to retreive all users: ', data.message);
+				}
+			} catch (err) {
+				console.error(err);
+			} finally {
+				setIsLoading(false);
+			}
+		}
+
+		if (isOpen) {
 			allGames();
+			allStats();
+		}
 	}, [isOpen, token, user]);
 
-	// const statsByMode = games.reduce((acc: StatsByMode, curr) => {
-	// 	const mode = curr.mode;
-	// 	if (!acc[mode])
-	// 		acc[mode] = { mode: mode, wins: 0, loses: 0 };
-	// 	if (curr.scores.score1 > curr.scores.score2)
-	// 		acc[mode].wins += 1;
-	// 	else if (curr.scores.score1 < curr.scores.score2)
-	// 		acc[mode].loses += 1;
-	// 	return acc;
-	// }, {});
+	function transformStats(stats: any): ModeStats[] {
+	// Définir les préfixes de modes de jeu (le nom de la carte)
+		const modePrefixes = [
+			'versus',
+			'versusCoop',
+			'versusIa',
+			'tournament',
+			'billard',
+		];
 
-	// const computedGames = Object.values(statsByMode).map((stats, index) => ({
-	// 	id: index + 1,
-	// 	...stats,
-	// }));
+		const transformedArray: ModeStats[] = [];
+			for (const prefix of modePrefixes) {
+				const totalKey = prefix; // Ex: 'versus'
+				const winsKey = `${prefix}_wins`; // Ex: 'versus_wins'
+				const lossesKey = `${prefix}_losses`; // Ex: 'versus_losses'
+
+				if (stats[totalKey] !== undefined) {
+				transformedArray.push({
+					mode: prefix.charAt(0).toUpperCase() + prefix.slice(1), 
+					total: stats[totalKey] as number,
+					wins: stats[winsKey] as number,
+					losses: stats[lossesKey] as number,
+				});
+			}
+		}
+		return transformedArray;
+	}
 
 	function handleClose() {
 		toggleElement(null);
@@ -118,14 +190,14 @@ export default function Stats(props: StatsProps) {
 						</tr>
 					</thead>
 					<tbody>
-						{gameHistory.map((game) => (
+						{gameHistory.slice(0, 3).map((game) => (
 							<tr key={game.id}>
 								<td> {game.mode} </td>
 								<td> {game.left_team_score} - {game.right_team_score} </td>
 								<td>
 									<div className="opponents-container">
 										<div className="opponent1">
-											<img src={game.avatar_right_team_A} alt="Opponent Avatar" />
+											<img src={`/avatars/${game.avatar_right_team_A}`} alt="Opponent Avatar" />
 											<span> {game.right_team_A} </span>
 										</div>
 										{
@@ -133,7 +205,7 @@ export default function Stats(props: StatsProps) {
 											(
 												<div className="opponent2">
 													<span>+</span>
-													<img src={game.avatar_right_team_B} alt="Opponent2 Avatar" />
+													<img src={`/avatars/${game.avatar_right_team_B}`} alt="Opponent2 Avatar" />
 													<span> {game.right_team_B} </span>
 												</div>
 											)
@@ -145,7 +217,7 @@ export default function Stats(props: StatsProps) {
 										game.left_team_B && game.avatar_left_team_B ?
 										(
 											<div>
-												<img src={game.avatar_left_team_B} alt="Ally Avatar" />
+												<img src={`/avatars/${game.avatar_left_team_B}`} alt="Ally Avatar" />
 												<span> {game.left_team_B} </span>
 											</div>
 										) : "none"
@@ -156,23 +228,23 @@ export default function Stats(props: StatsProps) {
 						))} */}
 					</tbody>
 				</table>
-				{/* <div className="stats-data-cards">
-					{computedGames.map((game) => (
-						<div key={game.id} className={"card-container"}>
-							<h3>{game.mode.toUpperCase()}</h3>
+				<div className="stats-data-cards">
+					{statsForMapping.map((stat) => (
+						<div key={stat.mode} className={"card-container"}>
+							<h3>{stat.mode}</h3>
 							<div className="card-container-totals">
 								<div className="wins">
-									<span>{game.wins < 10 ? "0" + game.wins : game.wins}</span>
+									<span>{stat.wins < 10 ? "0" + stat.wins : stat.wins}</span>
 									<span>{words.messages.statistics.cards["1vs1"].wins}</span>
 								</div>
 								<div className="loses">
-									<span>{game.loses < 10 ? "0" + game.loses : game.loses}</span>
+									<span>{stat.losses < 10 ? "0" + stat.losses : stat.losses}</span>
 									<span>{words.messages.statistics.cards["1vs1"].loses}</span>
 								</div>
 							</div>
 						</div>
 					))}
-				</div> */}
+				</div>
 			</div>
 		</div>
 	);

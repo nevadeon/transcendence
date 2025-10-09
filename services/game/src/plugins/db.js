@@ -27,16 +27,22 @@ async function dbPlugin(fastify) {
 			name TEXT NOT NULL UNIQUE,
 			games INTEGER DEFAULT 0,
 			wins INTEGER DEFAULT 0,
-			tournaments INTEGER DEFAULT 0,
-			tournaments_win INTEGER DEFAULT 0,
-			versus INTEGER DEFAULT 0,
-			versus_win INTEGER DEFAULT 0,
+			losses INTEGER DEFAULT 0,
+			INTEGER DEFAULT 0,
+			versus_wins INTEGER DEFAULT 0,
+			versus_losses INTEGER DEFAULT 0,
 			versusCoop INTEGER DEFAULT 0,
-			versusCoop_win INTEGER DEFAULT 0,
+			versusCoop_wins INTEGER DEFAULT 0,
+			versusCoop_losses INTEGER DEFAULT 0,
 			versusIa INTEGER DEFAULT 0,
-			versusIa_win INTEGER DEFAULT 0,
+			versusIa_wins INTEGER DEFAULT 0,
+			versusIa_losses INTEGER DEFAULT 0,
+			tournament INTEGER DEFAULT 0,
+			tournament_wins INTEGER DEFAULT 0,
+			tournament_losses INTEGER DEFAULT 0,
 			billard INTEGER DEFAULT 0,
-			billard_win INTEGER DEFAULT 0
+			billard_wins INTEGER DEFAULT 0
+			billard_losses INTEGER DEFAULT 0
 		)
 	`);
 
