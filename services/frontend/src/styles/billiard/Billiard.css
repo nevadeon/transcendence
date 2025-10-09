@@ -1,11 +1,22 @@
 .billiard-container {
-	position: relative;
-	width: 100dvw;
-	height: 100dvh;
+	display: flex;
+	justify-content: center;
+	place-items: center;
+	min-height: 100vh;
+	background-size: contain;
+	background-image: url("../../../public/bar1.png");
+	background-position: center;
+	background-size: contain;
 }
 
-.billiard-iframe {
-	width: 70.6%;
-	height: 99.4%;
+.billiard-frame {
+	width: min(90vw, 1280px);
+	aspect-ratio: 16 / 10;
+	height: auto;
+	max-width: 1280px;
+	max-height: 720px;
 	border: none;
+	overflow: hidden;
+	border-radius: 12px;
+	box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
 }
