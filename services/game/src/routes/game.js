@@ -83,7 +83,6 @@ async function gameRoutes(fastify) {
 			);
 			return reply.code(201).send({
                 matches: matches,
-                numMatches: matches.length,
                 message: "Successfully get last 4 games from game_history" });
 		} catch (err) {
 			fastify.log.error(err);
