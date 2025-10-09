@@ -4,7 +4,8 @@ import useLanguage from "../contexts/language/useLanguage";
 import audioEnSource from "../assets/locales/en.svg";
 import audioFrSource from "../assets/locales/fr.svg";
 import audioEsSource from "../assets/locales/es.svg";
-import "../styles/board/sidebar-friendlist/Settings.css";
+import "../styles/board/sidebar-friendlist/DeleteBtn.css";
+// import "../styles/board/sidebar-friendlist/LanguageBtn.css";
 
 const languageData = {
 	en: { label: 'English', flagPath: audioEnSource },
@@ -25,7 +26,7 @@ export default function LanguageSwitcher() {
 		setLocale(locales[nextIndex] as 'en' | 'fr' | 'es');
 	};
 
-    return (
+	return (
 		<button
 			onClick={handleClick}
 			className={path === "/register" || path === "/login" ? "auth-languages" : "sidebar auth-languages"}>

@@ -56,7 +56,7 @@ export default function AvatarSelector() {
                             className={ isActive ? 'active' : '' }
                             onClick={() => handleAvatarChange(file)}
                         >
-                            <img
+                            <img className="avatarMiniature"
                                 src={avatarPath}
                                 alt={`Miniature ${file.split('.')[0]}`}
                             />

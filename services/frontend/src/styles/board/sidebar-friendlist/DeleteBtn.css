@@ -1,0 +1,43 @@
+.delete-btn {
+	background: var(--color-warning-low-opa-300)!important;
+	box-shadow: 0px 0px 16px var(--color-infos-low-opa-100)!important;
+	border: 4px solid var(--color-warning-low-opa-200)!important;
+	border-radius: 20px!important;
+	transition: border-radius 180ms ease,
+				box-shadow 180ms ease,
+				background-color 180ms ease,
+				transform 180ms ease!important;
+}
+
+.delete-btn:hover {
+	border-radius: 28px!important;
+	background: var(--color-warning-low-opa-200, var(--color-warning-low-opa-300));
+	box-shadow: 0 0 12px var(--color-warning-400);
+	transform: translateY(-5px);
+}
+
+.delete-btn::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	border-radius: inherit;
+	pointer-events: none;
+	opacity: 0;
+	transition: opacity 180ms ease;
+	box-shadow: inset 0 0 24px var(--color-warning-400);
+}
+
+.delete-btn:hover::after {
+	opacity: 1;
+}
+
+.delete-btn svg {
+	width: 40px;
+	height: 40px;
+	color: var(--color-infos-100);
+}
+
+.in-profile {
+	border-radius: 20px;
+	position: relative!important;
+}
