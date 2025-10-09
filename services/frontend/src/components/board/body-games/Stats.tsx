@@ -1,59 +1,52 @@
-// import type { StatsProps } from "../../../interfaces/Stats.ts";
+import { useState, useEffect } from "react";
 import useBoard from "../../../hooks/useBoard";
+import { useAuth } from "../../../contexts/auth/useAuth.tsx";
 import type { StatsProps } from "../../../interfaces/Stats.ts";
 import CrossSrc from "../../../assets/icons/cross.svg";
-import summerSrc from "../../../../public/avatars/defaults/summer.png";
-import spaceMortySrc from "../../../../public/avatars/defaults/spaceMorty.png";
-import rockRickSrc from "../../../../public/avatars/defaults/rockRick.png";
-import MortySrc from "../../../../public/avatars/defaults/morty.png";
 import "../../../styles/board/body-games/Stats.css";
 
-// curr.user === score1 + 4 <tr> max, then scrollbar !!!
-const games = [
-	{
-		id: 1,
-		mode: "1vsIA",
-		scores: { score1: 7, score2: 2 },
-		opponent1: { avatar: summerSrc, username: "Mr.summer" },
-		date: "10-09-2025"
-	},
-	{
-		id: 2,
-		mode: "2vs2",
-		scores: { score1: 7, score2: 0 },
-		opponent1: { avatar: spaceMortySrc, rockRicksername: "pamallet" },
-		opponent2: { avatar: rockRickSrc, username: "agilles" },
-		ally: { avatar: MortySrc, username: "ttaquet" },
-		date: "10-09-2025"
-	},
-	{
-		id: 3,
-		mode: "1vs1",
-		scores: { score1: 6, score2: 7 },
-		opponent1: { avatar: spaceMortySrc, username: "pamallet" },
-		date: "10-09-2025"
-	},
-	{
-		id: 4,
-		mode: "Tournament",
-		scores: { score1: 7, score2: 5 },
-		opponent1: { avatar: MortySrc, username: "ttaquet" },
-		date: "09-09-2025"
-	},
-];
-
-interface ModeStats {
-    mode: string;
-    wins: number;
-    loses: number;
-};
-
-type StatsByMode = { [key: string]: ModeStats };
+export interface GamesProps {
+	id: number,
+	// based on game/db.js
+}
 
 export default function Stats(props: StatsProps) {
-	const {openElement, toggleElement} = useBoard();
+	const [ gameHistory, setGameHistory ] = useState<GamesProps[]>([]);
+	const [ isLoading, setIsLoading ] = useState<boolean>(false);
+	const { openElement, toggleElement } = useBoard();
+	const { user, token } = useAuth();
 	const isOpen = openElement === 'stats';
 	const { words } = props;
+
+	useEffect(() => {
+		if (!isOpen || !token || !user)
+			return ;
+		async function allUsers() {
+			setIsLoading(true);
+			try {
+				const res = await fetch(`http://localhost:3002/match_history/${user.name}`, {
+					method: 'GET',
+					headers: {
+						'Content-Type': 'application/json',
+						'Authorization': `Bearer ${token}`
+					}
+				});
+				const data = await res.json();
+				console.log("data: ", data);
+				if (res.ok) {
+					setGameHistory(data);
+				} else {
+					console.error('Failed to retreive all users: ', data.message);
+				}
+			} catch (err) {
+				console.error(err);
+			} finally {
+				setIsLoading(false);
+			}
+		}
+		if (isOpen)
+			allUsers();
+	}, [isOpen, token]);
 
 	const statsByMode = games.reduce((acc: StatsByMode, curr) => {
 		const mode = curr.mode;

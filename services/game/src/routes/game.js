@@ -2,45 +2,94 @@
 async function gameRoutes(fastify) {
     const { db } = fastify;
 
-    // 1. ROUTE DE DIAGNOSTIC DE SANTÉ
-    fastify.get("/health", async (req, reply) => {
-        try {
-            await db.get("SELECT 1"); 
-            reply.code(200).send({ 
-                status: "ok", 
-                message: "Game service is running and DB is connected."
-            });
-        } catch (err) {
-            fastify.log.error(err);
-            reply.code(503).send({ 
-                status: "error", 
-                message: "DB connection failed."
-            });
-        }
-    });
+    // fastify.post("/record_game", async (req, reply) => {
+	// 	const {
+	// 		left_team_A,
+	// 		avatar_left_team_A,
+	// 		left_team_B,
+    //         avatar_left_team_B,
+	// 		right_team_A,
+    //         avatar_right_team_A,
+	// 		right_team_B,
+    //         avatar_right_team_B,
+	// 		mode,
+	// 		left_team_score,        //state.score.p1 = 1
+	// 		right_team_score,       //state.score.p2 = 2
+	// 		winnerId } = req.body;  //winnerId? (1(left, where loginUser always is) or 2(right))
+	// 	try {
+	// 		await db.run(
+	// 			`INSERT INTO match_history(
+    //                 left_team_A,
+	// 		        avatar_left_team_A,
+    //                 left_team_B,
+	// 		        avatar_left_team_B,
+    //                 right_team_A,
+	// 		        avatar_right_team_A,
+    //                 right_team_B,
+	// 		        avatar_right_team_B,
+    //                 mode,
+    //                 left_team_score,
+    //                 right_team_score,
+    //                 winnerId)
+    //                 VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    //             `, [left_team_A,
+    //                 avatar_left_team_A,
+    //                 left_team_B,
+    //                 avatar_left_team_B,
+    //                 right_team_A,
+    //                 avatar_right_team_A,
+    //                 right_team_B,
+    //                 avatar_right_team_B,
+    //                 mode,
+    //                 left_team_score,
+    //                 right_team_score,
+    //                 winnerId]
+	// 		);
 
-    // 2. ROUTE DE VÉRIFICATION DES SESSIONS ACTIVES
-    fastify.get("/sessions", async (req, reply) => {
-        try {
-            const sessions = await db.all(`
-                SELECT id, mode, status, user_host_id, created_at 
-                FROM game_sessions 
-                WHERE status != 'completed'
-            `);
-            reply.code(200).send({ 
-                count: sessions.length,
-                active_sessions: sessions 
-            });
-        } catch (err) {
-            fastify.log.error(err);
-            reply.code(500).send({ error: "Failed to retrieve game sessions."})
-        }
-    });
+	// 		const playersNames = [left_team_A, left_team_B]; //login user always on left_team ! //, right_team_A, right_team_B];
+	// 		const VALID_MODES = ['versus', 'versusCoop', 'versusIa', 'tournament', 'billard'];
+	// 		if (!VALID_MODES.includes(mode))
+	// 			throw new error(`Mode invalide: ${mode}`);
 
-    // Ancien placeholder (maintenant à supprimer ou remplacer par une logique réelle)
-    fastify.get("/game_history", async (req, reply) => {
-        reply.code(200).send({ message: "Game history endpoint - functionality not yet implemented here." });
-    });
+	// 		for (const playerName in playersNames) {
+	// 			await db.run (`UPDATE users_stats SET games = games + 1, ${mode} = ${mode} + 1 WHERE name = ?`,  //check if works
+	// 				[playerName]);
+
+	// 			if (winnerId === 1 && (playerName === left_team_A || playerName === left_team_B) ||
+	// 				winnerId === 2 && (playerName === right_team_A || playerName === right_team_B) ) {
+	// 				await db.run (`UPDATE users_stats SET wins = wins + 1, ${mode}_win = ${mode}_win + 1 WHERE name = ?`,
+	// 				[playerName]);
+	// 			}
+	// 		}
+	// 		return reply.code(201).send({ message: "match Recorded Succesfully." });
+	// 	} catch (err) {
+	// 		fastify.log.error(err);
+	// 		return reply.code(500).send({ message: "Failed to record match." });
+	// 	}
+	// });
+
+    fastify.get("/match_history/:username", async (req, reply) => {
+		const { username } = req.param.username;
+		try {
+			const matches = await db.get(`
+				SELECT * FROM match_history
+				WHERE left_team_A = ?
+					OR left_team_B = ?
+					OR right_team_A = ?
+					OR right_team_B = ?
+				ORDER BY date DESC
+                LIMIT 4
+				`, [username, username, username, username]
+			);
+			return reply.code(201).send({
+                matches: matches,
+                numMatches: matches.length,
+                message: "Successfully get last 4 games from game_history" });
+		} catch (err) {
+			fastify.log.error(err);
+			return reply.code(500).send({ message: "Failed to get match history."})
+		}
+	});
 }
 
 export default gameRoutes;
