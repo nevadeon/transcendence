@@ -13,4 +13,5 @@
 	box-shadow: inset 0px 0px 24px var(--color-computer-vlow-opa-300);
 	background-size: 96px 96px;
 	border-left: 8px solid black;
+	width: 20%;
 }

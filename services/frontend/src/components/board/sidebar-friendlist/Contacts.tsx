@@ -1,5 +1,5 @@
 import type ContactsProps from "../../../interfaces/Contacts";
-import PhoneSource from "../../../assets/icons/phone.svg";
+// import PhoneSource from "../../../assets/icons/phone.svg";
 import "../../../styles/board/sidebar-friendlist/Contacts.css";
 
 export default function Contacts(props: ContactsProps) {
@@ -19,7 +19,6 @@ export default function Contacts(props: ContactsProps) {
 						<span>{words.messages.board["friend-list"].infos}</span>
 					</div>
 				</div>
-				<img src={PhoneSource} alt="Phone Icon" />
 			</div>
 		</div>
 	);

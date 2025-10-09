@@ -11,12 +11,45 @@
 	font-weight: var(--font-weight-bold);
 	color: var(--color-computer-300);
 	background: var(--color-bhologram-low-opa-400);
+	border-radius: 20px;
+	overflow: hidden;
+	transition: border-radius 180ms ease, box-shadow 180ms ease, background-color 180ms ease, transform 180ms ease;
 }
 
-.contacts img:nth-child(1) {
+.contacts:hover {
+	border-radius: 28px;
+	background: var(--color-bhologram-low-opa-300, var(--color-bhologram-low-opa-400));
+	box-shadow: 0 0 12px var(--color-computer-vlow-opa-400);
+	transform: translateY(-2px);
+}
+
+.contacts::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	border-radius: inherit;
+	pointer-events: none;
+	opacity: 0;
+	transition: opacity 180ms ease;
+	/* léger highlight interne */
+	box-shadow: inset 0 0 24px var(--color-computer-vlow-opa-400);
+}
+.contacts:hover::after {
+	opacity: 1;
+}
+
+.contacts img {
 	width: 48px;
 	height: 48px;
 	margin-right: 8px;
+	border-radius: 10px;
+	transition: border-radius 180ms ease, box-shadow 180ms ease, background-color 180ms ease,
+				transform 180ms ease, filter 180ms ease;
+}
+
+.contacts:hover img {
+	border-radius: 18px;
+	box-shadow: 0 0 8px var(--color-computer-vlow-opa-400);
 }
 
 .contacts-data {
@@ -28,42 +61,17 @@
 	width: 100%;
 }
 
-.contacts-data img:nth-child(2) {
-	width: 40px;
-	height: 40px;
-}
-
 .contacts-data-inner {
 	position: relative;
 	display: flex;
 	flex-direction: column;
 }
 
-.contacts-data-header span:nth-child(1) {
-	font-size: .875em;
-	font-weight: var(--font-weight-bold);
-	color: var(--color-computer-300);
-}
-
-.contacts-data-header span:nth-child(2) {
-	display: inline-block;
-	width: 12px;
-	height: 12px;
-	margin-left: 4px;
-	border-radius: 12px;
-}
-
 .contacts-data-extra span {
 	color: var(--color-computer-300);
 	font-family: var(--font-text);
 	font-size: .75em;
-    font-weight: 400;
-}
-
-.contacts-data-extra span:nth-child(2) {
-	width: 12px;
-	height: 12px;
-	border-radius: 12px;
+	font-weight: 400;
 }
 
 .online {
