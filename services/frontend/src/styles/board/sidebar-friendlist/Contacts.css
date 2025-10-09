@@ -45,8 +45,11 @@
 	height: 48px;
 	margin-right: 8px;
 	border-radius: 10px;
-	transition: border-radius 180ms ease, box-shadow 180ms ease, background-color 180ms ease,
-				transform 180ms ease, filter 180ms ease;
+	transition: border-radius 180ms ease,
+				box-shadow 180ms ease,
+				background-color 180ms ease,
+				transform 180ms ease,
+				filter 180ms ease;
 }
 
 .contacts:hover img {

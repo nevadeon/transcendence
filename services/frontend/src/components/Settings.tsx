@@ -12,7 +12,6 @@ export default function Settings(props: SettingsProps) {
 				inProfile &&
 				<DeleteButton inProfile={inProfile} />
 			}
-			{/* SoundToggler */}
 		</div>
 	);
 }

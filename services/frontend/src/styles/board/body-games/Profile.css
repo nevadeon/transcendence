@@ -23,12 +23,13 @@
 .profile-data-portrait {
 	width: 300px;
 	height: 300px;
+	border-radius: 30px;
 }
 
 .profile-input {
 	width:  304px;
 	height: var(--height-input);
-	/* margin-right: 32px; */
+	margin-left: 5%;
 	padding: 16px;
 	font-family: var(--font-titles);
 	font-size: var(--font-size-profile-card-header);
@@ -36,9 +37,35 @@
 	color: var(--color-computer-400);
 	background: var(--color-bhologram-low-opa-400);
 	border: 4px solid var(--color-computer-400);
-	border-radius: 8px;
+	border-radius: 20px;
 	box-shadow: 0px 0px 12px var(--color-computer-vlow-opa-400);
 	text-shadow: 0px 0px 4px var(--color-infos-vlow-opa-100);
+	transition: border-radius 180ms ease,
+				box-shadow 180ms ease,
+				background-color 180ms ease,
+				transform 180ms ease;
+}
+
+.profile-input:hover {
+	border-radius: 28px;
+	background: var(--color-bhologram-low-opa-300, var(--color-bhologram-low-opa-400));
+	box-shadow: 0 0 12px var(--color-computer-vlow-opa-400);
+	transform: translateY(-5px);
+}
+
+.profile-input::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	border-radius: inherit;
+	pointer-events: none;
+	opacity: 0;
+	transition: opacity 180ms ease;
+	box-shadow: inset 0 0 24px var(--color-computer-vlow-opa-400);
+}
+
+.profile-input:hover::after {
+	opacity: 1;
 }
 
 .checkbox-2fa {
@@ -46,6 +73,7 @@
 	width: 72px;
 	height: var(--height-input);
 	margin: 0 32px 16px 0;
+	margin-left: 5%;
 }
 
 .checkbox-2fa input[type="checkbox"] {
@@ -110,14 +138,41 @@
 }
 
 .profile-btn {
+	margin-left: 3%;
 	height: var(--height-input);
 	margin-right: 32px;
 	padding: 16px;
 	background: var(--color-bhologram-low-opa-400);
 	border: 4px solid var(--color-computer-400);
-	border-radius: 8px;
+	border-radius: 20px;
 	box-shadow: 0px 0px 12px var(--color-computer-vlow-opa-400);
 	text-shadow: 0px 0px 4px var(--color-infos-vlow-opa-100);
+	transition: border-radius 180ms ease,
+				box-shadow 180ms ease,
+				background-color 180ms ease,
+				transform 180ms ease;
+}
+
+.profile-btn:hover {
+	border-radius: 28px;
+	background: var(--color-bhologram-low-opa-300, var(--color-bhologram-low-opa-400));
+	box-shadow: 0 0 12px var(--color-computer-vlow-opa-400);
+	transform: translateY(-5px);
+}
+
+.profile-btn::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	border-radius: inherit;
+	pointer-events: none;
+	opacity: 0;
+	transition: opacity 180ms ease;
+	box-shadow: inset 0 0 24px var(--color-computer-vlow-opa-400);
+}
+
+.profile-btn:hover::after {
+	opacity: 1;
 }
 
 .profile-btn img {
