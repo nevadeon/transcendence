@@ -2,19 +2,17 @@
 	display: flex;
 	justify-content: center;
 	place-items: center;
-	min-height: 100vh;
 	background-size: contain;
-	background-image: url("../../../public/bar1.png");
 	background-position: center;
 	background-size: contain;
+	background: url("../../../public/bar1.png") no-repeat;
+	background-size: 100%;
 }
 
 .billiard-frame {
-	width: min(90vw, 1280px);
-	aspect-ratio: 16 / 10;
-	height: auto;
-	max-width: 1280px;
-	max-height: 720px;
+	aspect-ratio: 16 / 9;
+	height: 900px;
+	width: 1920px;
 	border: none;
 	overflow: hidden;
 	border-radius: 12px;

@@ -11,56 +11,11 @@ html, body, #canvas {
 	border: 0;
 }
 
-html, body {
-	height: 100%;
-	margin: 0;
-	padding: 0;
-}
-
-.game-background {
-	position: relative;
-	width: 100vw;
-	height: 100vh;
-	background: url('../bar1.png') center/cover no-repeat;
-	overflow: hidden;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-}
-
-.game-container {
-	position: relative;
-	z-index: 2;
-	background: #111; /* ou transparent */
-	border-radius: 16px;
-	box-shadow: 0 0 32px #000a;
-	padding: 16px;
-}
-
-.decor {
-	position: absolute;
-	z-index: 1;
-	/* positionne tes décors selon le besoin */
-}
-
-.decor-top {
-	top: 0;
-	left: 50%;
-	transform: translateX(-50%);
-}
-
-.decor-bottom {
-	bottom: 0;
-	left: 50%;
-	transform: translateX(-50%);
-}
-
 body {
-	display: grid;
-	place-items: center;
-	margin: 0;
-	min-height: 100vh;
-	/* background: "../background_bar"; */
+	color: white;
+	background-color: black;
+	overflow: hidden;
+	touch-action: none;
 }
 
 #canvas {
@@ -95,11 +50,6 @@ body {
 	max-height: 100%;
 	max-width: 100%;
 	margin: auto;
-}
-
-canvas, #canvas, .godot-canvas {
-	display: block;
-	margin: 0 auto;
 }
 
 #status-splash.show-image--false {
@@ -159,7 +109,7 @@ canvas, #canvas, .godot-canvas {
 
 		<script src="index.js"></script>
 		<script>
-const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":529116,"index.wasm":38057390},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
+const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":2497332,"index.wasm":38057390},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
 const GODOT_THREADS_ENABLED = false;
 const engine = new Engine(GODOT_CONFIG);
 
