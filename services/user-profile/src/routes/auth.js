@@ -16,6 +16,18 @@ async function generateDimension() {
 	return `${letter}-${number}`;
 }
 
+async function generateSpecies() {
+	const species = ["Brogh", "Human", "Chud", "Glorzo", "Harold", "Kitler", "Penp", "Varrix"];
+	const specie = species[(Math.floor(Math.random() * species.length))];
+	return `${specie}`;
+}
+
+async function generateplanets() {
+	const planets = ["Biggum", "Delphi6", "Dorian5", "E-10", "Earth", "Ferkus9", "Flump", "Gaia", "Jupiter", "Mars", "Neptune", "Pluto", "Saturn", "Scrotia", "Snorlab", "Timbus", "Uranus", "Venus", "Yarple7", "Zipple"];
+	const planet = planets[(Math.floor(Math.random() * planets.length))];
+	return `${planet}`;
+}
+
 async function authRoutes(fastify) {
 	const { db, auth } = fastify;
 
@@ -27,8 +39,8 @@ async function authRoutes(fastify) {
 			const hashed_password = await argon2.hash(password);
 			const hashed_email = crypto.createHash('sha256').update(email + SECRET_SALT).digest('hex');
 			await db.run(
-				"INSERT INTO users(name, email, password, dimension) VALUES(?, ?, ?, ?)",
-				[name, hashed_email, hashed_password, await generateDimension()]
+				"INSERT INTO users(name, email, password, species, planet, dimension) VALUES(?, ?, ?, ?, ?, ?)",
+				[name, hashed_email, hashed_password, await generateSpecies(), await generateplanets(), await generateDimension()]
 			);
 			const user = await db.get("SELECT * FROM users WHERE name=?", [name]);
 			const token = auth.generateLongToken(user);
@@ -98,10 +110,9 @@ async function authRoutes(fastify) {
 			} else {
 				const SECRET_SALT = await getVaultSecret("SECRET_SALT");
 				const hashed_email = crypto.createHash('sha256').update(email + SECRET_SALT).digest('hex');
-				console.log();
 				await db.run(
-					"INSERT INTO users(name, email, googleId, dimension) VALUES(?, ?, ?, ?)",
-					[given_name, hashed_email, googleId, await generateDimension()]
+					"INSERT INTO users(name, email, googleId, species, planet, dimension) VALUES(?, ?, ?, ?, ?, ?)",
+					[given_name, hashed_email, googleId, await generateSpecies(), await generateplanets(), await generateDimension()]
 				);
 				const newUser = await db.get("SELECT * FROM users WHERE googleId=?", [googleId]);
 				if (newUser)

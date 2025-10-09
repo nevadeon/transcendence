@@ -16,23 +16,23 @@ export default function Tournament(props: TournamentProps) {
 		<div className="tournament-board">
 			<div className="demis">
 				<div className="match">
-					<ProfileCard id={1} avatar={AvatarSrc} username="ttaquet" dimension="test" ingame={true} isElim={true} words={words} />
+					<ProfileCard id={1} avatar={AvatarSrc} username="ttaquet" planet="testbis" species="bonkou" dimension="test"  ingame={true} isElim={true} words={words} />
 					<div className="progressive-line-demis player1 top invisible"></div>
-					<ProfileCard id={1} avatar={Avatar2Src} username={users[0].length !== 0 ? users[0] : "?????"} dimension="test" ingame={true} isElim={false} words={words} />
+					<ProfileCard id={1} avatar={Avatar2Src} username={users[0].length !== 0 ? users[0] : "?????"} planet="testbis" species="bonkou" dimension="test"  ingame={true} isElim={false} words={words} />
 					<div className="progressive-line-demis player2 top"></div>
 				</div>
 				<div className="match">
-					<ProfileCard id={1} avatar={Avatar3Src} username={users[1].length !== 0 ? users[1] : "?????"} dimension="test" ingame={true} isElim={true} words={words} />
+					<ProfileCard id={1} avatar={Avatar3Src} username={users[1].length !== 0 ? users[1] : "?????"} planet="testbis" species="bonkou" dimension="test"  ingame={true} isElim={true} words={words} />
 					<div className="progressive-line-demis player3 bot invisible"></div>
-					<ProfileCard id={1} avatar={Avatar4Src} username={users[2].length !== 0 ? users[2] : "?????"} dimension="test" ingame={true} isElim={false} words={words} />
+					<ProfileCard id={1} avatar={Avatar4Src} username={users[2].length !== 0 ? users[2] : "?????"} planet="testbis" species="bonkou" dimension="test"  ingame={true} isElim={false} words={words} />
 					<div className="progressive-line-demis player4 bot"></div>
 				</div>
 			</div>
 			<div className="finals">
 				<div className="match">
-					<ProfileCard id={1} avatar={Avatar2Src} username="agilles" dimension="test" ingame={true} isElim={true} words={words} />
+					<ProfileCard id={1} avatar={Avatar2Src} username="agilles" planet="testbis" species="bonkou" dimension="test"  ingame={true} isElim={true} words={words} />
 					<div className="progressive-line-finals player1-game3 mid invisible"></div>
-					<ProfileCard id={1} avatar={Avatar4Src} username="bchedru" dimension="test" ingame={true} isElim={false} words={words} />
+					<ProfileCard id={1} avatar={Avatar4Src} username="bchedru" planet="testbis" species="bonkou" dimension="test"  ingame={true} isElim={false} words={words} />
 					<div className="progressive-line-finals player2-game3 mid"></div>
 				</div>
 			</div>

@@ -113,7 +113,7 @@
 
 .profile-card-data-extra div span {
 	font-size: .875em;
-	font-weight: 400;
-	color: var(--color-bhologram-400);
-	opacity: .75;
+	font-weight: 600;
+	color: var(--color-bhologram-200);
+	opacity: 0.85;
 }
