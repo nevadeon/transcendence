@@ -11,11 +11,56 @@ html, body, #canvas {
 	border: 0;
 }
 
-body {
-	color: white;
-	background-color: black;
+html, body {
+	height: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+.game-background {
+	position: relative;
+	width: 100vw;
+	height: 100vh;
+	background: url('../bar1.png') center/cover no-repeat;
 	overflow: hidden;
-	touch-action: none;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.game-container {
+	position: relative;
+	z-index: 2;
+	background: #111; /* ou transparent */
+	border-radius: 16px;
+	box-shadow: 0 0 32px #000a;
+	padding: 16px;
+}
+
+.decor {
+	position: absolute;
+	z-index: 1;
+	/* positionne tes décors selon le besoin */
+}
+
+.decor-top {
+	top: 0;
+	left: 50%;
+	transform: translateX(-50%);
+}
+
+.decor-bottom {
+	bottom: 0;
+	left: 50%;
+	transform: translateX(-50%);
+}
+
+body {
+	display: grid;
+	place-items: center;
+	margin: 0;
+	min-height: 100vh;
+	/* background: "../background_bar"; */
 }
 
 #canvas {
@@ -50,6 +95,11 @@ body {
 	max-height: 100%;
 	max-width: 100%;
 	margin: auto;
+}
+
+canvas, #canvas, .godot-canvas {
+	display: block;
+	margin: 0 auto;
 }
 
 #status-splash.show-image--false {

@@ -1,17 +1,16 @@
 import "../styles/billiard/Billiard.css";
 
-export default function billiard() {
-
-	// #TODO useNavigate after received game results
-
+const Billiard: React.FC = () => {
 	return (
 		<div className="billiard-container">
 			<iframe
-				title="billiard Game"
 				src="/billiard_game/index.html"
-				className="billiard-iframe"
+				className="billiard-frame"
 				allowFullScreen
+				title="billard"
 			/>
 		</div>
 	);
-}
+};
+
+export default Billiard;
