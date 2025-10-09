@@ -47,10 +47,12 @@ export default function usePongGame(gameMode: string, mainUser: UsersTemp | unde
 
 		socket.on('gameOver', (results: any) => {
 			console.log("Jeu terminé, résultats:", results);
+            // 
+            // redirect to board
 		});
 
 		return () => { socket.disconnect(); };
-	}, [gameMode, mainUser]);
+	}, [gameMode]);
 
 
     useEffect(() => {
