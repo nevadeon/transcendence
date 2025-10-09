@@ -30,7 +30,7 @@ export async function saveGameResults(fastify, state, gameMode, mainPlayer, play
 					winnerId)
 					VALUES(?, ?, ?, ?, ?, ?, ?, ?)
 				`, [name,
-					avatar, //mainPlayerAvatar !!!
+					avatar,
 					usernames[0],
 					avatars[0],
 					gameMode,
