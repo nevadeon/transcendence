@@ -10,6 +10,27 @@
 	border-radius: 20px;
 }
 
+.profile-card:hover {
+	background: var(--color-bhologram-low-opa-300, var(--color-warning-low-opa-3=400));
+	box-shadow: 0 0 12px var(--color-bhologram-low-opa-400);
+	transform: translateY(-2px);
+}
+
+.profile-card::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	border-radius: inherit;
+	pointer-events: none;
+	opacity: 0;
+	transition: opacity 180ms ease;
+	box-shadow: inset 0 0 24px var(--color-computer-vlow-opa-400);
+}
+
+.profile-card:hover::after {
+	opacity: 1;
+}
+
 .profile-card-ingame {
 	position: relative;
 	display: flex;
