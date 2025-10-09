@@ -1,4 +1,4 @@
-import "../styles/billiard/billiard.css";
+import "../styles/billiard/Billiard.css";
 
 export default function billiard() {
 
