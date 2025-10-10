@@ -1,7 +1,7 @@
 // import { useLocation, useNavigate } from "react-router";
 import Scores from "./Scores";
 import Arena from "./Arena";
-import { useLocation } from "react-router";
+import { useNavigate, useLocation } from "react-router";
 import usePongGame from "../../hooks/usePongGame";
 import { useGameControls } from "../../hooks/useGameControls";
 import { useAuth } from "../../contexts/auth/useAuth";
@@ -13,6 +13,8 @@ export default function Pong1vs1(props: Pong1vs1Props) {
 	const ctrl2 = { upKey: 'o', downKey: 'l' };
 	const { user } = useAuth();
 	const location = useLocation();
+	const navigate = useNavigate();
+	const { results } = useTournament();
 	let userLogin;
 	user ? userLogin = {name: user.name, avatar: user.avatar.slice(9)} : null;
 	const { gameState, sendInput } = usePongGame('versus', userLogin, location.state);
@@ -26,6 +28,10 @@ export default function Pong1vs1(props: Pong1vs1Props) {
 	if (!gameState) {
         return <p>Connexion au serveur de jeu...</p>;
     }
+
+	if (results) {
+		navigate( '/tournament' );
+	}
 
 	return (
 		<div className="pong">

@@ -2,7 +2,6 @@ import fp from "fastify-plugin";
 import sqlite3 from "sqlite3";
 import { open } from "sqlite";
 import { getVaultSecret } from "./vault.js"
-// import config from "../config.js";
 
 const CLEANUP_INTERVAL_MS = 30 * 60 * 1000; // 30min
 
@@ -41,7 +40,7 @@ async function dbPlugin(fastify) {
 			tournament_wins INTEGER DEFAULT 0,
 			tournament_losses INTEGER DEFAULT 0,
 			billard INTEGER DEFAULT 0,
-			billard_wins INTEGER DEFAULT 0
+			billard_wins INTEGER DEFAULT 0,
 			billard_losses INTEGER DEFAULT 0
 		)
 	`);
