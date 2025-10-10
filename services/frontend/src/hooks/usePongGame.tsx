@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Socket, io } from "socket.io-client";
 
-interface GameState {
+export interface GameState {
     // vertical pos (entre 0 et 100 pour être responsive, ou en pixels)
     pads: {
         [id: number]: number; // 1: 50, 2: 75, 3, 4
@@ -17,7 +17,7 @@ interface GameState {
     // others too (ex: puissance de la balle, nom du vainqueur du set...)
 }
 
-interface UsersTemp {
+export interface UsersTemp {
     name: string,
     avatar: string
 }
@@ -46,9 +46,8 @@ export default function usePongGame(gameMode: string, mainUser: UsersTemp | unde
 		});
 
 		socket.on('gameOver', (results: any) => {
+            setGameResult(results);
 			console.log("Jeu terminé, résultats:", results);
-            // 
-            // redirect to board
 		});
 
 		return () => { socket.disconnect(); };

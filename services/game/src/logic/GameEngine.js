@@ -88,7 +88,7 @@ export function createGameSession(fastify, gameId, io, gameMode, mainPlayer, pla
                 }
                 const winnerId = state.score.p1 > state.score.p2 ? 1 : 2;
                 io.to(gameId).emit('gameOver', {
-                    winnerId,
+                    winnerId: winnerId,
                     scoreLeft: state.score.p1,
                     scoreRight: state.score.p2,
                 });
@@ -104,6 +104,8 @@ export function createGameSession(fastify, gameId, io, gameMode, mainPlayer, pla
         });
         tickRunning = false;
     }, GAME_TICK_MS);
+
+    // 
 
     return state;
 }
