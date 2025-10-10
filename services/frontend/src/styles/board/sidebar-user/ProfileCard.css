@@ -45,7 +45,7 @@
 				transform 180ms ease;
 }
 
-.profile-card:hover .profile-card-avatar {
+.profile-card:hover .profile-card-avatar{
 	border-radius: 18px;
 	box-shadow: 0 0 8px var(--color-computer-vlow-opa-400);
 	transform: translateY(-2px);
@@ -141,6 +141,31 @@
 	background: var(--color-computer-400);
 	margin-right: 2px;
 	border-radius: 10px;
+	transition: border-radius 180ms ease,
+				box-shadow 180ms ease,
+				transform 180ms ease;
+}
+
+.profile-card:hover .profile-card-data-extra div {
+	border-radius: 28px;
+	background: var(--color-bhologram-low-opa-300, var(--color-warning-low-opa-3=400));
+	box-shadow: 0 0 12px var(--color-bhologram-low-opa-400);
+	transform: translateY(-2px);
+}
+
+.profile-card-data-extra::after div {
+	content: "";
+	position: absolute;
+	inset: 0;
+	border-radius: inherit;
+	pointer-events: none;
+	opacity: 0;
+	transition: opacity 180ms ease;
+	box-shadow: inset 0 0 24px var(--color-computer-vlow-opa-400);
+}
+
+.profile-card-data-extra:hover::after div{
+	opacity: 1;
 }
 
 .profile-card-data-extra div img {

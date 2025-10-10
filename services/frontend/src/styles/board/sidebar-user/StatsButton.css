@@ -6,7 +6,7 @@
 	font-weight: var(--font-weight-bold);
 	color: var(--color-computer-400);
 	background: var(--color-bhologram-low-opa-400);
-	border-radius: 30px;
+	border-radius: 20px;
 	box-shadow: 0px 0px 12px var(--color-computer-vlow-opa-400);
 	text-shadow: 0px 0px 4px var(--color-infos-vlow-opa-100);
 	border: 4px solid var(--darkreader-border--color-computer-400);
