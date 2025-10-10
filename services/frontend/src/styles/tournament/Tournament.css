@@ -4,7 +4,7 @@
 	align-items: center;
 	justify-content: center;
 	background-repeat: no-repeat;
-    background-position: center center;
+	background-position: center center;
 	background-size: cover;
 }
 
@@ -67,8 +67,8 @@
 
 .progressive-line-finals {
 	position: absolute;
-	left: calc((2 * 280px) + ((100% - (2 * 280px + 360px)) / 2));
-	width: calc((100% - (2 * 280px + 360px)) / 2);
+	left: calc(560px + (100% - 860px)/2);
+	width: calc((100% - 860px)/2);
 }
 
 .player1-game3 {

@@ -7,7 +7,6 @@ import ArenaSource from "../../assets/game/arena.svg";
 import BallSrc from "../../assets/game/balls/morty's_head_ball.png";
 import ArrowUpSrc from "../../assets/game/keybinds/arrow-up.svg";
 import ArrowDownSrc from "../../assets/game/keybinds/arrow-down.svg";
-
 // /game/1vsia
 // TODO: import Arena and Scores Component + canvas setup
 export default function Pong1vsIA(props: Pong1vsIAProps) {

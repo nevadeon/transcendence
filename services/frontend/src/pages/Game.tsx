@@ -8,6 +8,7 @@ import GameBackground from "../components/game/GameBackground";
 import useLanguage from "../hooks/useLanguage";
 import CitadelClashSrc from "../assets/game/backgrounds/planet8_bg.png";
 import "../styles/game/Game.css";
+import HomeButton from "../components/game/HomeButton";
 
 const backgrounds = [
 	() => import("../assets/game/backgrounds/planet1_bg.png"),
@@ -60,10 +61,12 @@ export default function GamePage() {
 		<>
 			{bgPath ? (
 				<GameBackground imgUrl={bgPath}>
+					<HomeButton/>
 					{renderMode()}
 				</GameBackground>
       		) : (
 				<div className="game-page" style={{ background: `url(${CitadelClashSrc})` }}>
+					<HomeButton/>
 					{renderMode()}
 				</div>
 	  		)}
