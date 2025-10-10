@@ -225,7 +225,7 @@ export default function Stats(props: StatsProps) {
 								</td>
 								<td> {game.date} </td>
 							</tr>
-						))} */}
+						))}
 					</tbody>
 				</table>
 				<div className="stats-data-cards">
