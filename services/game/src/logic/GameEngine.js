@@ -1,57 +1,72 @@
 import { saveGameResults } from "./saveGameResults.js";
 
-const GAME_TICK = 1000 / 60;  //60fps
-const PAD_SPEED = 10;         //speed, 10 units / 1fps
-const MAX_SCORE = 7;          //score to win
+const SCORE_TO_WIN = 5;
+const GAME_TICK_MS = 1000 / 60;
 
-const ARENA_WIDTH = 1200; //#TODO
+const ARENA_WIDTH = 1200;
 const ARENA_HEIGHT = 751;
+const BALL_DIAMETER = 48;
+const BALL_MAX_SPEED = 20;
+const PAD_SPEED = 10;
 const PAD_WIDTH = 32;
 const PAD_HEIGHT = 120;
-const BALL_SIZE = 48;
-const PAD_POS_Y_DEFAULT = ARENA_HEIGHT / 2;
+const PAD_OFFSET_X = 64;
+const PAD_OFFSET_X_2V2 = 32;
 
-// init state of a game
-const getInitialState = (gameMode) => {
-    const pads = { 1: PAD_POS_Y_DEFAULT, 2: PAD_POS_Y_DEFAULT };
-    const scores = { p1: 0, p2: 0 };
-    const inputs = { 1: 0, 2: 0 };
-    // from emit("move", { direction, action, padId }) État de mouvement reçu du client (for Game Loop)
-    // 1: up, -1: down, 0: stop
+export const activeGames = {};
 
+function initState(gameMode) {
+    const pads = {
+        1: {
+            x: PAD_OFFSET_X,
+            y: ARENA_HEIGHT / 2,
+            directionY: 0
+        },
+        2: {
+            x: ARENA_WIDTH - PAD_OFFSET_X - PAD_WIDTH,
+            y: ARENA_HEIGHT / 2,
+            directionY: 0
+        },
+    };
     if (gameMode === '2v2') {
-        pads[3] = PAD_POS_Y_DEFAULT;
-        pads[4] = PAD_POS_Y_DEFAULT;
-        inputs[3] = 0;
-        inputs[4] = 0;
+        pads[3] = {
+            x: PAD_OFFSET_X_2V2,
+            y: ARENA_HEIGHT / 2,
+            directionY: 0
+        };
+        pads[4] = {
+            x: ARENA_WIDTH - PAD_OFFSET_X_2V2 - PAD_WIDTH,
+            y: ARENA_HEIGHT / 2,
+            directionY: 0
+        };
     }
+
+    const scores = { p1: 0, p2: 0 };
 
     return {
         pads: pads,
         ball: {
             x: ARENA_WIDTH / 2,
             y: ARENA_HEIGHT / 2,
-            vx: 4,      // init speed on x
-            vy: 2,      // init speed on y
+            vx: 4,
+            vy: 2,
         },
-        score: scores,  // Utilise la structure de score dynamique
-        inputs: inputs,
+        score: scores,
         isRunning: true,
     };
 };
 
-// Stocke toutes les sessions de jeu actives.
-export const activeGames = {};
-
 export function createGameSession(fastify, gameId, io, gameMode, mainPlayer, playersTemp) {
-    const state = getInitialState(gameMode);
+    const state = initState(gameMode);
     state.gameId = gameId;
     activeGames[gameId] = state;
+    let tickRunning = false;
 
-    // Le Game Loop
-    const gameLoop = setInterval( async () => {
+    const gameLoopId = setInterval(async () => {
+        if (tickRunning) return;
+        tickRunning = true;
         if (!state.isRunning) {
-            clearInterval(gameLoop);
+            clearInterval(gameLoopId);
             delete activeGames[gameId];
             return;
         }
@@ -59,10 +74,8 @@ export function createGameSession(fastify, gameId, io, gameMode, mainPlayer, pla
         updatePads(state);
 
         const scored = updateBallPhysics(state);
-
         if (scored) {
-            // Un point a été marqué, vérif la fin de partie
-            if (state.score.p1 >= MAX_SCORE || state.score.p2 >= MAX_SCORE) {
+            if (state.score.p1 >= SCORE_TO_WIN || state.score.p2 >= SCORE_TO_WIN) {
                 state.isRunning = false;
                 try {
                     await saveGameResults(fastify, state, gameMode, mainPlayer, playersTemp); //fastify -> db, log...
@@ -78,14 +91,15 @@ export function createGameSession(fastify, gameId, io, gameMode, mainPlayer, pla
             }
         }
 
-        // 3. Envoyer le nouvel état aux clients (sans les données de physique interne)
         io.to(gameId).emit('gameState', {
-            pads: state.pads,
+            pads: Object.fromEntries(
+                Object.entries(state.pads).map(([padId, pad]) => [padId, pad.y])
+            ),
             ball: { x: state.ball.x, y: state.ball.y },
             score: state.score
         });
-
-    }, GAME_TICK);
+        tickRunning = false;
+    }, GAME_TICK_MS);
 
     return state;
 }
@@ -93,136 +107,128 @@ export function createGameSession(fastify, gameId, io, gameMode, mainPlayer, pla
 // Fonction utilitaire pour limiter une valeur dans une plage
 const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
 
-
+const PAD_MIN_HEIGHT = PAD_HEIGHT / 2;
+const PAD_MAX_HEIGHT = ARENA_HEIGHT - PAD_HEIGHT / 2;
 function updatePads(state) {
     const padIds = Object.keys(state.pads).map(Number);
-
     for (const padId of padIds) {
-        // 1. Vérif si une entrée de mouvement a été reçue pour ce pad
-        // Nous vérifions à la fois l'existence de l'input et si la valeur n'est pas 0 (arrêt)
-        if (state.inputs[padId] !== 0) {
-            const currentY = state.pads[padId];
-            const newY = currentY + (state.inputs[padId] * PAD_SPEED);
+        const directionY = state.pads[padId].directionY;
+        if (directionY === 0) continue;
 
-            // 2. Appliquer les limites de l'arène (clamping)
-            state.pads[padId] = clamp(
-                newY,
-                PAD_HEIGHT / 2,         // Limite supérieure (centre du pad)
-                ARENA_HEIGHT - PAD_HEIGHT / 2 // Limite inférieure (centre du pad)
-            );
-        }
+        const currentY = state.pads[padId].y;
+        const newY = currentY + (directionY * PAD_SPEED);
+        state.pads[padId].y = clamp(
+            newY,
+            PAD_MIN_HEIGHT,
+            PAD_MAX_HEIGHT
+        );
     }
 }
 
+// // This detects collision between two objects
+// function hitBoxesOverlap(box1, box2) {
+//     return (box1.right >= box2.left &&
+//             box1.left <= box2.right &&
+//             box1.bottom >= box2.top &&
+//             box1.top <= box2.bottom);
+// }
+
+const BALL_RADIUS = BALL_DIAMETER / 2;
+const BALL_MIN_HEIGHT = BALL_RADIUS;
+const BALL_MAX_HEIGHT = ARENA_HEIGHT - BALL_RADIUS;
 function updateBallPhysics(state) {
-    // 💡 TODO : Cette fonction est la plus complexe et nécessite la gestion des collisions
-    // Pour l'instant, on fait bouger la balle et on gère les rebonds sur les murs HAUT/BAS.
+    const ball = state.ball;
 
-    // 1. Mise à jour de la position de la balle
-    state.ball.x += state.ball.vx;
-    state.ball.y += state.ball.vy;
+    const prevX = ball.x;
+    const prevY = ball.y;
+    ball.x += ball.vx;
+    ball.y += ball.vy;
+    const ballTop = ball.y - BALL_RADIUS;
+    const ballBottom = ball.y + BALL_RADIUS;
 
-    // 2. Rebond sur les murs HAUT et BAS
-    const ballTop = state.ball.y - BALL_SIZE / 2;
-    const ballBottom = state.ball.y + BALL_SIZE / 2;
-
-    if (ballTop <= 8 || ballBottom >= ARENA_HEIGHT - 8) { // #TODO
-        state.ball.vy *= -1;
-        state.ball.vy *= 1.05;
-        // Correction de la position pour ne pas coller au mur
-        state.ball.y = clamp(state.ball.y, BALL_SIZE / 2, ARENA_HEIGHT - BALL_SIZE / 2);
+    // Bounce on top/bottom walls
+    if (ballTop <= 16 || ballBottom >= ARENA_HEIGHT - 16) {
+        ball.vy *= -1;
+        ball.y = clamp(ball.y, BALL_MIN_HEIGHT, BALL_MAX_HEIGHT);
+        return false;
     }
 
-    // 3. Détection de Score (mur GAUCHE ou DROIT)
-    if (state.ball.x < 40 || state.ball.x > ARENA_WIDTH - 40) { // #TODO
-        const scorer = state.ball.x < 0 ? 'p2' : 'p1';
+    // Scoring
+    if (ball.x < 40 || ball.x > ARENA_WIDTH - 40) {
+        const scorer = ball.x < ARENA_WIDTH / 2 ? 'p2' : 'p1';
         state.score[scorer]++;
-
-        // Réinitialiser la balle au centre et inverser la direction de départ
-        state.ball.x = ARENA_WIDTH / 2;
-        state.ball.y = ARENA_HEIGHT / 2;
-        state.ball.vx = (scorer === 'p1' ? -4 : 4); // La balle repart du côté du perdant
-        state.ball.vy = Math.random() > 0.5 ? 2 : -2;
-        return true; // Un point a été marqué
+        ball.x = ARENA_WIDTH / 2;
+        ball.y = ARENA_HEIGHT / 2;
+        ball.vx = (scorer === 'p1' ? 4 : -4);
+        ball.vy = (Math.random() - 0.5) * 8;
+        return true;
     }
 
-
-
-    // 4. Détection de Collision avec les Pads (À IMPLÉMENTER EN DÉTAIL)
+    // Collision with pads
     const padIds = Object.keys(state.pads).map(Number);
-    const ballX = state.ball.x;
-    const ballY = state.ball.y;
-    const ballRadius = BALL_SIZE / 2;
-    const MAX_BALL_SPEED = 15;
-
     for (const padId of padIds) {
-        // La position Y du pad est son CENTRE (comme géré par updatePads)
-        const padCenterY = state.pads[padId];
-        // Définir les limites du pad
-        const padTopY = padCenterY - PAD_HEIGHT / 2;
-        const padBottomY = padCenterY + PAD_HEIGHT / 2;
-        let padHitX;
-        let isLeftPad;
-        // Déterminer la position X du pad et sa direction
-        if (padId === 1 || padId === 3) { // Pads de Gauche (1 et 3)
-            padHitX = PAD_WIDTH; // La face du pad que la balle frappe(64px shift from left side)
-            isLeftPad = true;
-        } else { // Pads de Droite (2 et 4)
-            padHitX = ARENA_WIDTH - PAD_WIDTH; // La face du pad que la balle frappe(64px shift from right side)
-            isLeftPad = false;
-        }
-        // Vérif 1 : La balle est-elle à la bonne hauteur pour ce pad ?
-        if (ballY + ballRadius < padTopY || ballY - ballRadius > padBottomY) {
-            continue; // La balle est au-dessus ou en dessous du pad.
-        }
-        // Vérif 2 : La balle est-elle sur le plan X du pad ? (Collision réelle)
-        let collisionOccurred = false;
-        if (isLeftPad && state.ball.vx < 0) {
-             // Collision Pad Gauche : La balle doit venir de la droite (vx < 0) et toucher l'avant du pad
-            if (ballX - ballRadius <= padHitX && ballX - ballRadius > padHitX - state.ball.vx) {
-                collisionOccurred = true;
-                // Correction pour ne pas coller
-                state.ball.x = padHitX + ballRadius;
-            }
-        } else if (!isLeftPad && state.ball.vx > 0) {
-            // Collision Pad Droit : La balle doit venir de la gauche (vx > 0) et toucher l'avant du pad
-            if (ballX + ballRadius >= padHitX && ballX + ballRadius < padHitX - state.ball.vx) {
-                collisionOccurred = true;
-                // Correction pour ne pas coller
-                state.ball.x = padHitX - ballRadius;
-            }
-        }
+        const pad = state.pads[padId];
+        // Paul decided that pad.x is the left X of pad and pad.y is center Y
+        const padLeft = pad.x;
+        const padRight = pad.x + PAD_WIDTH;
+        const padTop = pad.y - PAD_HEIGHT / 2;
+        const padBottom = pad.y + PAD_HEIGHT / 2;
 
+        // Find closest point on rectangle to circle center
+        const closestX = Math.max(padLeft, Math.min(ball.x, padRight));
+        const closestY = Math.max(padTop, Math.min(ball.y, padBottom));
 
+        const dx = ball.x - closestX;
+        const dy = ball.y - closestY;
+        const dist2 = dx * dx + dy * dy;
 
-        // 5. Calcul du Rebond et de l'Angle
-        if (collisionOccurred) {
-            // Calculer la diff entre le centre de la balle et le centre du pad
-            const deltaY = ballY - padCenterY;
-            // Normaliser cette distance en une valeur entre -1.0 (haut du pad) et 1.0 (bas du pad)
-            // (La moitié de la hauteur est la distance maximale par rapport au centre)
-            const relativeIntersectY = deltaY / (PAD_HEIGHT / 2);
-            // Définir l'angle de rebond
-            // Plus relativeIntersectY est grand, plus l'angle sera vertical.
-            const BOUNCE_ANGLE_MAX = Math.PI / 4; // 45 degrés
-            const newAngle = relativeIntersectY * BOUNCE_ANGLE_MAX;
-            // Définir la nouvelle vitesse X
-            // 1. Inverser la direction X
-            state.ball.vx *= -1;
-            // 2. Augmenter la vitesse pour un jeu plus dynamique
-            let newSpeed = Math.sqrt(state.ball.vx * state.ball.vx + state.ball.vy * state.ball.vy) * 1.1;
-            // Limiter la vitesse pour éviter l'explosion
-            newSpeed = Math.min(newSpeed, MAX_BALL_SPEED);
-            // 3. Appliquer l'angle
-            state.ball.vx = newSpeed * Math.cos(newAngle);
-            // Si c'est un pad de droite, inverser la direction X
-            if (!isLeftPad) {
-                state.ball.vx *= -1;
+        if (dist2 <= BALL_RADIUS * BALL_RADIUS) {
+            let nx = 0;
+            let ny = 0;
+            const dist = Math.sqrt(dist2);
+            if (dist > 1e-6) {
+                nx = dx / dist;
+                ny = dy / dist;
+            } else {
+                // ball center is inside pad rect or extremely close: fallback to previous position
+                // determine penetration axis using previous position vs pad
+                const wasLeft = prevX + BALL_RADIUS <= padLeft;
+                const wasRight = prevX - BALL_RADIUS >= padRight;
+                const wasAbove = prevY + BALL_RADIUS <= padTop;
+                const wasBelow = prevY - BALL_RADIUS >= padBottom;
+
+                if (wasLeft) { nx = -1; ny = 0; }
+                else if (wasRight) { nx = 1; ny = 0; }
+                else if (wasAbove) { nx = 0; ny = -1; }
+                else if (wasBelow) { nx = 0; ny = 1; }
+                else {
+                    // As a last resort, pick horizontal normal based on ball.x vs pad center
+                    nx = ball.x < (padLeft + padRight) / 2 ? -1 : 1;
+                    ny = 0;
+                }
             }
-            state.ball.vy = newSpeed * Math.sin(newAngle);
-            // Sortir de la boucle pour traiter un seul rebond par tick
+
+            // move ball out of penetration along normal
+            const penetration = BALL_RADIUS - Math.sqrt(dist2);
+            ball.x += nx * penetration;
+            ball.y += ny * penetration;
+
+            // reflect velocity v' = v - 2*(v·n)*n
+            const vdotn = ball.vx * nx + ball.vy * ny;
+            ball.vx = ball.vx - 2 * vdotn * nx;
+            ball.vy = ball.vy - 2 * vdotn * ny;
+
+            // slightly increase speed for gameplay and clamp
+            let speed = Math.sqrt(ball.vx * ball.vx + ball.vy * ball.vy);
+            speed = Math.min(BALL_MAX_SPEED, Math.max(1, speed * 1.06));
+            const newVx = (ball.vx / Math.max(1e-6, Math.sqrt(ball.vx * ball.vx + ball.vy * ball.vy))) * speed;
+            const newVy = (ball.vy / Math.max(1e-6, Math.sqrt(ball.vx * ball.vx + ball.vy * ball.vy))) * speed;
+            ball.vx = newVx;
+            ball.vy = newVy;
+
             return false;
         }
     }
+
     return false;
 }
