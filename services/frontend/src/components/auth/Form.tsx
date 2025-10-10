@@ -6,6 +6,7 @@ import { useAuth } from "../../contexts/auth/useAuth";
 import ModifSrc from "../../assets/icons/modif.svg";
 import WarningSrc from "../../assets/icons/warning.svg";
 import TwoFactorSetup from "./TwoFactor";
+import  "../../styles/auth/Auth.css"
 // import audioSource from "../../assets/audios/start_hologram.mp3";
 // import audioSource2 from "../../assets/audios/keyboard.mp3";
 // import audioSource3 from "../../assets/audios/Voicy_Rick Sanchez Seriously_.mp3";
@@ -183,7 +184,7 @@ export default function Form(props: FormProps) {
 
 	return (
 		<>
-			<form onSubmit={handleSubmit} className={profile ? "form-profile" : ""}>
+			<form onSubmit={handleSubmit} className={profile ? "form-profile" : "form"}>
 				{
 					is2FARequired && (
 					<div className="twofa-input">
