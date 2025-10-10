@@ -9,22 +9,22 @@ import "../../styles/tournament/Tournament.css";
 
 // /tournament
 export default function Tournament(props: TournamentProps) {
-	const { users, words } = props;
+	const { users, winnerA, winnerB, words } = props;
 
 	//<EmptyCard /> to design for finals and winner
 	return (
 		<div className="tournament-board">
 			<div className="demis">
 				<div className="match">
-					<ProfileCard id={1} avatar={AvatarSrc} username="ttaquet" planet="testbis" species="bonkou" dimension="test"  ingame={true} isElim={true} words={words} />
+					<ProfileCard id={1} avatar={AvatarSrc} username="ttaquet" planet="Mars" species="blikon" dimension="Ici"  ingame={true} isElim={true} words={words} />
 					<div className="progressive-line-demis player1 top invisible"></div>
-					<ProfileCard id={1} avatar={Avatar2Src} username={users[0].length !== 0 ? users[0] : "?????"} planet="testbis" species="bonkou" dimension="test"  ingame={true} isElim={false} words={words} />
+					<ProfileCard id={1} avatar={Avatar2Src} username={users[0].length !== 0 ? users[0] : ""} planet="Mars" species="blikon" dimension="Ici"  ingame={true} isElim={false} words={words} />
 					<div className="progressive-line-demis player2 top"></div>
 				</div>
 				<div className="match">
-					<ProfileCard id={1} avatar={Avatar3Src} username={users[1].length !== 0 ? users[1] : "?????"} planet="testbis" species="bonkou" dimension="test"  ingame={true} isElim={true} words={words} />
+					<ProfileCard id={1} avatar={Avatar3Src} username={winnerA.length !== 0 ? winnerA : ""} planet="Mars" species="blikon" dimension="Ici"  ingame={true} isElim={true} words={words} />
 					<div className="progressive-line-demis player3 bot invisible"></div>
-					<ProfileCard id={1} avatar={Avatar4Src} username={users[2].length !== 0 ? users[2] : "?????"} planet="testbis" species="bonkou" dimension="test"  ingame={true} isElim={false} words={words} />
+					<ProfileCard id={1} avatar={Avatar4Src} username={winnerB.length !== 0 ? winnerA : ""} planet="Mars" species="blikon" dimension="Ici"  ingame={true} isElim={false} words={words} />
 					<div className="progressive-line-demis player4 bot"></div>
 				</div>
 			</div>

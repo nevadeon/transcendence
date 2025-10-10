@@ -6,6 +6,7 @@ import UsernameInput from "../components/game/UsernameInput.tsx";
 import useLanguage from "../hooks/useLanguage";
 import TeleportSrc from "../assets/tournament/teleport-bg.png";
 import "../styles/tournament/Tournament.css";
+import HomeButton from "../components/game/HomeButton.tsx";
 
 const BASE_URL = import.meta.env.API_ADDR;
 const USER_STATS_PORT = import.meta.env.USER_STATS_PORT;
@@ -54,7 +55,9 @@ export default function TournamentPage() {
 					winner: 'red'
 				} )
 			});
+			console.log("test");
 			const data = await res.json();
+			console.log("test");
 			if (res.ok) {
 				console.log('Registration successful', data);
 			} else {
@@ -69,8 +72,9 @@ export default function TournamentPage() {
 
 	return (
 		<div className="tournament-page" style={backgroundStyle}>
+			<HomeButton/>
 			<UsernameInput mode={"tournament"} users={usernames} onChange={handleInputChange} onSubmit={handleFormSubmit} words={words} />
-			<Tournament users={usernames} words={words} />
+			<Tournament users={usernames} words={words} winnerA="" winnerB=""/>
 			<div style={{position: 'absolute', top: '0', left: '0', width: '100%', height: '100%', background: '#214241', opacity: '50%'}}></div>
 		</div>
 	);

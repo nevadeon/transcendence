@@ -1,15 +1,19 @@
 .portal-gun-input {
-	position: absolute;
+	position: relative;
+	display: flex;
 	bottom: 0;
 	padding: 24px 32px 32px;
 	background: white;
 	border: 4px solid black;
 	z-index: 2;
+	border-radius: 30px;
+	align-items: center;
+	justify-content: center;
+	margin-right: 5%;
 }
 
-.portal-gun-input .container:nth-child(2),
-.portal-gun-input .container:nth-child(3) {
-	margin-top: 12px
+.portal-gun-input .container:nth-child {
+	margin-top: 12px;
 }
 
 .portal-gun-input .labels {
@@ -26,5 +30,26 @@
 	background: var(--color-warning-low-opa-600);
 	box-shadow: none;
 	border: 2px solid black;
-	border-radius: 0;
+	border-radius: 20px;
+	transition: transform 180ms ease,
+				border-radius 180ms ease;
+}
+
+.portal-gun-input input:hover{
+	border-radius: 28px;
+	background: var(--color-warning-low-opa-500, var(--color-warning-low-opa-600));
+	box-shadow: none;
+	transform: translateY(-5px);
+}
+
+.portal-gun-input input::after{
+	content: "";
+	position: absolute;
+	inset: 0;
+	border-radius: inherit;
+	pointer-events: none;
+}
+
+.portal-gun-input input:hover::after{
+	opacity: 1;
 }
