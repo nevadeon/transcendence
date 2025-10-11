@@ -1,73 +1,15 @@
-<<<<<<< HEAD
-// import { createContext, useState } from "react";
-// import type { OpenableElement, BoardContextType, BoardProviderProps } from "../../interfaces/Board";
-
-
-// import type { ReactNode } from "react";
-
-// export type OpenableElement = 'profile' | 'stats' | 'username' | 'addfriend' | null;
-
-// export interface TournamentContextType {
-// 	//return values...
-// }
-
-// export interface TournamentProviderProps {
-// 	children: ReactNode
-// }
-
-// export interface TournamentStates {
-
-// }
-
-// export const TournamentContext = createContext<TournamentContextType | undefined>(undefined);
-
-// export function TournamentProvider({ children }: TournamentProviderProps) {
-// 	const [tournament, setTournament] = useState<TournamentStates | null>(null);
-=======
 import { createContext, useState } from "react";
 import type { ReactNode } from "react";
-
-
-// /tournament inputs onSubmit -> { update(phase: "demi1", challengers[x4], mode) } = useTournament();
-// in 1vs1, useLocation just for 1vs1 mode, useTournament instead as values
-// challengers[x4]
-// [{name: 'loginName', avatar}, {name: 'input1Name', ...}, {name: 'input2Name', ...}, {name: 'input3Name', ...}]
-// [{name: 'input1Name', avatar}, {name: 'input2Name', ...}, {name: 'input3Name', ...}, {name: 'input4Name', ...}]
-// "demi1" = [0] vs [1], "demi2" = [2] vs [3]
-// final = "demi1" winnerId(2) = [1] vs "demi2" winnerId(1) = [2]
-
-// !!! ALL 1vs1 matches are saved in db if user's login !!!
-// useTournament context to handle state to /tournament only
-
-// types:
-// status = "not" | "in_progress" | "complete"
-// ...
-// useContext approach (F5 (tournament === null && mode === "tournament") -> navigate(/board)
-//  + alert(), backward navigate('/board', { replace: true }) )
-// -> /tournament
-//		random avatars x3 or x4 directly(at load)
-//		{ user } = useAuth();
-//		handleRandomAvatars(user.avatar, 4, null);
-// 		{ tournament } = useTournament();
-//		initTournament(randAvatars);
-// 		tournament.results.challengers(from user.(name + avatar.slice(9)) + inputs(names + avatars(random)))
-// 		onSubmit() -> navigate('/game/1vs1', { !nothing! }); useTournament instead
-
-// -> /1vs1
-// 		{ tournament } = useTournament();
-//		...
-// 		saved in db.match_history, db.users_stats as gameMode = "tournament"
-// -> tournament({ demi1: results })
-// -> 1vs1(if useLocation(state.tournament === true)), saved in db.match_history, db.users_stats as tournament
-// -> tournament({ demi1: results, demi2: results })
-// -> 1vs1(if useLocation(state.tournament === true)), saved in db.match_history, db.users_stats as tournament
-// -> tournament({ demi1: results, demi2: results, final: results })
-// -> board
+import type { UserDataProps } from "../../interfaces/UserData";
 
 export interface TournamentContextType {
 	tournament: TournamentStates | null;
-	initTournament: (randAvatars: string[]) => void;
-	updateMatches: () => void;
+	initTournament: (user: UserDataProps, randAvatars: string[]) => void;
+	updateMatches: (data: {
+        challengers?: MatchUsersTemp[],
+        phase?: string,
+        matchResults?: { winnerId: number, scoreLeft: number, scoreRight: number }
+    }) => void;
 	closeTournament: () => void;
 }
 
@@ -91,7 +33,6 @@ export interface Matches {
 export interface TournamentResults {
 	challengers: MatchUsersTemp[] | null; // handle userLogin too, x4, tournament
 	matches: Matches[]; // x2 after input see below
-	// (demi1 = challengers[0] vs [1], demi2 = challengers[2] vs [3]), final = winnerId vs winnerId
 }
 
 export interface TournamentStates {
@@ -102,25 +43,9 @@ export interface TournamentStates {
 }
 
 export const TournamentContext = createContext<TournamentContextType | undefined>(undefined);
->>>>>>> 713e6c0 (added tournament context functions, still need to fix possibly null values)
 
-// 	const toggleElement = (element: OpenableElement) => {
-// 		setOpenElement(prev => {
-// 			if (prev === element)
-// 				return null;
-// 			return element;
-// 		});
-// 	};
-
-<<<<<<< HEAD
-// 	return (
-// 		<TournamentContext.Provider value={{ openElement, toggleElement }}>
-// 			{children}
-// 		</TournamentContext.Provider>
-//   );
-// }
-=======
-	function initTournament(randAvatars: string[]) {
+	function initTournament(user: UserDataProps, randAvatars: string[]) {
+        console.log(randAvatars);
         if (randAvatars.length === 4) {
             setTournament({
                 tournamentId: Math.floor(Math.random() * 100000), // ID unique
@@ -131,6 +56,20 @@ export const TournamentContext = createContext<TournamentContextType | undefined
                     matches: [
                         { phase: "demi1", opponents: randAvatars.slice(0, 2).map(avatar => ({ name: null, avatar })), winnerId: null, scoreLeft: null, scoreRight: null },
                         { phase: "demi2", opponents: randAvatars.slice(2, 4).map(avatar => ({ name: null, avatar })), winnerId: null, scoreLeft: null, scoreRight: null },
+                        { phase: "final", opponents: [{ name: null, avatar: null }, { name: null, avatar: null }], winnerId: null, scoreLeft: null, scoreRight: null },
+                    ],
+                }
+            });
+        } else if (randAvatars.length === 3) {
+            setTournament({
+                tournamentId: Math.floor(Math.random() * 100000), // ID unique
+                isTournament: true,
+                mode: "tournament",
+                results: { // J'ai simplifié results à être un seul objet TournamentResults
+                    challengers: randAvatars.map((avatar) => ({ name: null, avatar })),
+                    matches: [
+                        { phase: "demi1", opponents: [{ name: user.name, avatar: user.avatar }, { name: null, avatar: randAvatars[0] }], winnerId: null, scoreLeft: null, scoreRight: null },
+                        { phase: "demi2", opponents: randAvatars.slice(1, 3).map(avatar => ({ name: null, avatar })), winnerId: null, scoreLeft: null, scoreRight: null },
                         { phase: "final", opponents: [{ name: null, avatar: null }, { name: null, avatar: null }], winnerId: null, scoreLeft: null, scoreRight: null },
                     ],
                 }
@@ -167,10 +106,12 @@ export const TournamentContext = createContext<TournamentContextType | undefined
                     matchToUpdate.winnerId = data.matchResults.winnerId;
                     matchToUpdate.scoreLeft = data.matchResults.scoreLeft;
                     matchToUpdate.scoreRight = data.matchResults.scoreRight;
+
                     if (data.phase === 'demi1' || data.phase === 'demi2') {
                         const demi1Winner = currentResults.matches[0].winnerId;
                         const demi2Winner = currentResults.matches[1].winnerId;
-                        if (demi1Winner !== null && demi2Winner !== null) {
+
+                        if (demi1Winner !== null && demi2Winner !== null && currentResults.challengers) {
                             const demi1WinnerData = currentResults.challengers[demi1Winner === 1 ? 0 : 1];
                             const demi2WinnerData = currentResults.challengers[demi2Winner === 1 ? 2 : 3];
                             currentResults.matches[2].opponents[0] = demi1WinnerData;
@@ -193,4 +134,3 @@ export const TournamentContext = createContext<TournamentContextType | undefined
 		</TournamentContext.Provider>
   );
 }
->>>>>>> 713e6c0 (added tournament context functions, still need to fix possibly null values)
