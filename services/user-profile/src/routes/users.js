@@ -65,7 +65,7 @@ async function userRoutes(fastify) {
 							OR (af.user_id = u.id AND af.friend_id = ?))
 							AND af.status = 1
 						)`,
-				[userId, userId, userId, userId, userId, userId, userId, userId, userId]
+				[userId, userId, userId, userId, userId]
 			);
 			return reply.code(200).send(users);
 		} catch (err) {
