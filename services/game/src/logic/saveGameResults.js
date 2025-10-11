@@ -38,30 +38,25 @@ export async function saveGameResults(fastify, state, gameMode, mainPlayer, play
 					winnerId]
 			);
 
+			console.log("\n\n", gameMode, "\n\n");
 			const VALID_MODES = ['versus', 'versusCoop', 'versusIa', 'tournament', 'billard'];
 			if (!VALID_MODES.includes(gameMode))
 				throw new error(`Mode invalide: ${gameMode}`);
 
-			await db.run (`
-				UPDATE users_stats
-				SET games = games + 1,
-				${gameMode} = ${gameMode} + 1
-				WHERE name = ?`,
+			await db.run(`
+				UPDATE users_stats SET games = games + 1,
+				${gameMode} = ${gameMode} + 1 WHERE name = ?`,
 			[name]);
 
 			if (winnerId === 1) {
-				await db.run (`
-					UPDATE users_stats
-					SET wins = wins + 1,
-					${gameMode}_wins = ${gameMode}_wins + 1
-					WHERE name = ?`,
+				await db.run(`
+					UPDATE users_stats SET wins = wins + 1,
+					${gameMode}_wins = ${gameMode}_wins + 1 WHERE name = ?`,
 				[name]);
 			} else {
-				await db.run (`
-					UPDATE users_stats
-					SET losses = losses + 1,
-					${gameMode}_losses = ${gameMode}_losses + 1
-					WHERE name = ?`,
+				await db.run(`
+					UPDATE users_stats SET losses = losses + 1,
+					${gameMode}_losses = ${gameMode}_losses + 1 WHERE name = ?`,
 				[name]);
 			}
 			console.log("Successfully wrote 2vs2 in match_history & users_stats");
@@ -101,30 +96,25 @@ export async function saveGameResults(fastify, state, gameMode, mainPlayer, play
 					winnerId]
 			);
 
+			console.log("mode: ", gameMode);
 			const VALID_MODES = ['versus', 'versusCoop', 'versusIa', 'tournament', 'billard'];
 			if (!VALID_MODES.includes(gameMode))
 				throw new error(`Mode invalide: ${gameMode}`);
 
 			await db.run (`
-				UPDATE users_stats
-				SET games = games + 1,
-				${gameMode} = ${gameMode} + 1
-				WHERE name = ?`,
+				UPDATE users_stats SET games = games + 1,
+				${gameMode} = ${gameMode} + 1 WHERE name = ?`,
 			[name]);
 
 			if (winnerId === 1) {
 				await db.run (`
-					UPDATE users_stats
-					SET wins = wins + 1,
-					${gameMode}_wins = ${gameMode}_wins + 1
-					WHERE name = ?`,
+					UPDATE users_stats SET wins = wins + 1,
+					${gameMode}_wins = ${gameMode}_wins + 1 WHERE name = ?`,
 				[name]);
 			} else {
 				await db.run (`
-					UPDATE users_stats
-					SET losses = losses + 1,
-					${gameMode}_losses = ${gameMode}_losses + 1
-					WHERE name = ?`,
+					UPDATE users_stats SET losses = losses + 1,
+					${gameMode}_losses = ${gameMode}_losses + 1 WHERE name = ?`,
 				[name]);
 			}
 			console.log("Successfully wrote 2vs2 in match_history & users_stats");

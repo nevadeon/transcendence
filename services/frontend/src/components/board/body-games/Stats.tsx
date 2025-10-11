@@ -48,8 +48,8 @@ interface ModeStats {
 }
 
 export default function Stats(props: StatsProps) {
-	const [ gameHistory, setGameHistory ] = useState<GamesProps[]>([]);
-	const [ userStats, setUserStats ] = useState<TotalStatsProps[]>([]);
+	const [ gameHistory, setGameHistory ] = useState<GamesProps[] | null>(null);
+	const [ userStats, setUserStats ] = useState<TotalStatsProps[] | null>(null);
 	const [ isLoading, setIsLoading ] = useState<boolean>(false);
 	const { openElement, toggleElement } = useBoard();
 	const { user, token } = useAuth();
@@ -190,7 +190,7 @@ export default function Stats(props: StatsProps) {
 						</tr>
 					</thead>
 					<tbody>
-						{gameHistory.slice(0, 3).map((game) => (
+						{gameHistory?.slice(0, 3).map((game) => (
 							<tr key={game.id}>
 								<td> {game.mode} </td>
 								<td> {game.left_team_score} - {game.right_team_score} </td>

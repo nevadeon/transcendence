@@ -1,60 +1,16 @@
-// import { useState, useEffect, type ChangeEvent } from "react";
 import type { FormEvent } from "react";
 import { useAuth } from "../../contexts/auth/useAuth";
+import { handleRandomAvatars } from "../../utils/handleRandAvatars";
 import type { UsernameInputProps } from "../../interfaces/UsernameInput";
 import "../../styles/tournament/UsernameInput.css";
-
-const avatarPaths = [
-	'defaults/rick.png',
-	'defaults/morty.png',
-	'defaults/rockRick.png',
-	'defaults/spaceBess.png',
-	'defaults/spaceMorty.png',
-	'defaults/summer.png',
-]
 
 export default function UsernameInput(props: UsernameInputProps) {
 	const { mode, users, onChange, onSubmit, words } = props;
 	const { user } = useAuth();
-	let currLabels: string[] | undefined;
-
-	function shuffleArray<T>(array: T[]): T[] {
-		const newArray = [...array];
-		for (let i = newArray.length - 1; i > 0; i--) {
-			const j = Math.floor(Math.random() * (i + 1));
-			[newArray[i], newArray[j]] = [newArray[j], newArray[i]];
-		}
-		return newArray;
-	}
-
-	function handleRandomAvatars( userAvatarPath: string | undefined, numberOfPlayers: number ): string[] {
-		let finalAvatars: string[] = [];
-
-		const playerOneAvatar = userAvatarPath ? userAvatarPath
-			: avatarPaths[Math.floor(Math.random() * avatarPaths.length)];
-
-		if (!user)
-			finalAvatars.push(playerOneAvatar);
-
-		let availableDefaults = avatarPaths.filter( (path) => path !== playerOneAvatar );
-		const shuffledAvatars = shuffleArray(availableDefaults);
-		let remainingSlots;
-		if (!user)
-			remainingSlots = numberOfPlayers - 1;
-		else
-			remainingSlots = numberOfPlayers;
-		for (let i = 0; i < remainingSlots; i++) {
-			// Utilise l'opérateur modulo pour boucler si nécessaire (ex: tournoi à 4 joueurs
-			// alors qu'il ne reste que 3 avatars par défaut disponibles)
-			const avatarPath = shuffledAvatars[i % shuffledAvatars.length];
-			finalAvatars.push(avatarPath);
-		}
-		return finalAvatars;
-	}
-
 	const userAvatar = user?.avatar.slice(9);
     const numberOfPlayers = users.length;
-    const avatars = handleRandomAvatars(userAvatar, numberOfPlayers);
+    const avatars = handleRandomAvatars(userAvatar, numberOfPlayers, user);
+	let currLabels: string[] | undefined;
 
 	function handleSubmit(e: FormEvent): void {
         e.preventDefault();

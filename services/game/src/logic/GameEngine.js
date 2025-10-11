@@ -73,8 +73,7 @@ export function createGameSession(fastify, gameId, io, gameMode, mainPlayer, pla
                 io.to(gameId).emit('gameOver', {
                     winnerId: winnerId,
                     scoreLeft: state.score.p1,
-                    scoreRight: state.score.p2,
-                    mode: gameMode
+                    scoreRight: state.score.p2
                 });
             }
         }

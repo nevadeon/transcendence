@@ -17,7 +17,7 @@ async function gameRoutes(fastify) {
 				`, [username, username, username, username]
 			);
 			return reply.code(201).send({
-                matches: Array(matches),
+                matches: matches,
                 message: "Successfully get last 4 games from game_history" });
 		} catch (err) {
 			fastify.log.error(err);
@@ -29,7 +29,7 @@ async function gameRoutes(fastify) {
 		const { username } = req.params;
 		console.log(username);
 		try {
-			const stats = await db.get(`
+			const stats = await db.all(`
 				SELECT versus, versus_wins, versus_losses,
 				versusCoop, versusCoop_wins, versusCoop_losses,
 				versusIa, versusIa_wins, versusIa_losses,
@@ -39,7 +39,7 @@ async function gameRoutes(fastify) {
 				`, [username]
 			);
 			return reply.code(201).send({
-                stats: Array(stats),
+                stats: stats,
                 message: "Successfully get totals from users_stats" });
 		} catch (err) {
 			fastify.log.error(err);

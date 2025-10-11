@@ -1,6 +1,6 @@
-import "../styles/billiard/Billiard.css";
+import "../styles/billard/Billard.css";
 
-const Billiard: React.FC = () => {
+const Billard: React.FC = () => {
 	return (
 		<div className="billiard-container">
 			<iframe
@@ -13,4 +13,4 @@ const Billiard: React.FC = () => {
 	);
 };
 
-export default Billiard;
+export default Billard;
