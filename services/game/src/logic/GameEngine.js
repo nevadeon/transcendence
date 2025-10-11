@@ -4,7 +4,7 @@ const GAME_TICK = 1000 / 60;  //60fps
 const PAD_SPEED = 10;         //speed, 10 units / 1fps
 const MAX_SCORE = 7;          //score to win
 
-const ARENA_WIDTH = 1200 - 64 - 64; //#TODO
+const ARENA_WIDTH = 1200; //#TODO
 const ARENA_HEIGHT = 751;
 const PAD_WIDTH = 32;
 const PAD_HEIGHT = 120;
@@ -74,8 +74,6 @@ export function createGameSession(fastify, gameId, io, gameMode, mainPlayer, pla
                     winnerId,
                     scoreLeft: state.score.p1,
                     scoreRight: state.score.p2,
-                    finalScore: `${state.score.p1}-${state.score.p2}`,
-                    gameType: gameMode
                 });
             }
         }
@@ -128,15 +126,15 @@ function updateBallPhysics(state) {
     const ballTop = state.ball.y - BALL_SIZE / 2;
     const ballBottom = state.ball.y + BALL_SIZE / 2;
 
-    if (ballTop <= 0 || ballBottom >= ARENA_HEIGHT) {
-        state.ball.vy *= -1; // Inverse la direction Y
-        state.ball.vy *= 1.05; // Augmente légèrement la vitesse (bonus)
+    if (ballTop <= 8 || ballBottom >= ARENA_HEIGHT - 8) { // #TODO
+        state.ball.vy *= -1;
+        state.ball.vy *= 1.05;
         // Correction de la position pour ne pas coller au mur
         state.ball.y = clamp(state.ball.y, BALL_SIZE / 2, ARENA_HEIGHT - BALL_SIZE / 2);
     }
 
     // 3. Détection de Score (mur GAUCHE ou DROIT)
-    if (state.ball.x < 0 || state.ball.x > ARENA_WIDTH) {
+    if (state.ball.x < 40 || state.ball.x > ARENA_WIDTH - 40) { // #TODO
         const scorer = state.ball.x < 0 ? 'p2' : 'p1';
         state.score[scorer]++;
 
