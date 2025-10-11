@@ -41,7 +41,7 @@ async function dbPlugin(fastify) {
 			tournament_wins INTEGER DEFAULT 0,
 			tournament_losses INTEGER DEFAULT 0,
 			billard INTEGER DEFAULT 0,
-			billard_wins INTEGER DEFAULT 0
+			billard_wins INTEGER DEFAULT 0,
 			billard_losses INTEGER DEFAULT 0
 		)
 	`);
