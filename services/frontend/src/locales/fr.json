@@ -26,7 +26,8 @@
 		"billiard": "Billiard Multidimensionnel",
 		"friend-list": {
 			"title": "Liste de Contacts",
-			"withoutFriendMessage": "t'es tout seul, c'est triste :)"
+			"withoutFriendMessage": "t'es tout seul, c'est triste :)",
+			"searchingForFriends": "recherche d'utilisateurs..."
 		}
 	},
 	"profile": {

@@ -48,7 +48,7 @@ export default function FriendList(props: FriendListProps) {
 
 		}
 		UserFriends();
-	});
+	}, [token]);
 
 	return (
 		<div className="friendlist">
@@ -56,14 +56,21 @@ export default function FriendList(props: FriendListProps) {
 				{words.messages.board["friend-list"].title}
 			</div>
 				<div>{ isLoading ? (
-						<p className="friend-list-message" >Searching for users...</p>
+						<p className="friend-list-message" >{words.messages.board["friend-list"].searchingForFriends}</p>
 					) : (
-						UserFriends.length === 0
-						? ( <p className="friend-list-message">{words.messages.board["friend-list"].withoutFriendMessage}</p> )
+						UserFriends.length === 0 ? (
+						<p className="friend-list-message">{words.messages.board["friend-list"].withoutFriendMessage}</p> )
 						: (
 							UserFriends.map((user) => (
-								<Contacts id={user.id} name={user.name} species={user.species} planet={user.planet} dimension={user.dimension} avatar={user.avatar} status={user.status} />
-							)) )
+								<Contacts 
+									id={user.id} 
+									name={user.name} 
+									species={user.species} 
+									planet={user.planet} 
+									dimension={user.dimension} 
+									avatar={user.avatar} 
+									status={user.status} />
+							 )))
 						)
 					}
 				</div>
