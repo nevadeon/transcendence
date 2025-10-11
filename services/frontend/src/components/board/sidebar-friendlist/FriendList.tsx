@@ -69,7 +69,8 @@ export default function FriendList(props: FriendListProps) {
 									planet={user.planet} 
 									dimension={user.dimension} 
 									avatar={user.avatar} 
-									status={user.status} />
+									status={user.status}
+								/>
 							 )))
 						)
 					}

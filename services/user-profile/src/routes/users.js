@@ -63,7 +63,6 @@ async function userRoutes(fastify) {
 						FROM accepted_friends af
 						WHERE ((af.user_id = ? AND af.friend_id = u.id)
 							OR (af.user_id = u.id AND af.friend_id = ?))
-							AND af.status = 1
 						)`,
 				[userId, userId, userId, userId, userId]
 			);

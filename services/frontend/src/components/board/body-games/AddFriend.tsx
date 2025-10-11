@@ -192,7 +192,7 @@ export default function AddFriend(props: any) {
 						)
 					}
 				</div>
-				<div className="profile-friend-request-receive">
+				<div className="profile-friend-request-can-send">
 				<h3>{words.messages["friend-request"].table.received}</h3>
 					{ isLoading ? (
 						<p>Searching for users...</p>
