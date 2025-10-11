@@ -18,13 +18,15 @@ export default function UsernameInput(props: UsernameInputProps) {
 		const allFieldsValid = trimmedUsernames.every((name) => name.length > 0);
 
 		if (allFieldsValid)
-			onSubmit(trimmedUsernames, avatars);
+			onSubmit(trimmedUsernames, avatars); //#TODO
 		else
 			console.error("Veuillez remplir tous les champs utilisateur.");
     }
 
 	const inputLabels = {
-        '1vs1': [words.messages["portal-gun"].opponent],
+        '1vs1': [
+			words.messages["portal-gun"].opponent
+		],
         '2vs2': [
             words.messages["portal-gun"].ally,
             words.messages["portal-gun"].opponent + " 1",
