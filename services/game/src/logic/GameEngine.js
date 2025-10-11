@@ -111,17 +111,31 @@ const PAD_MIN_HEIGHT = PAD_HEIGHT / 2;
 const PAD_MAX_HEIGHT = ARENA_HEIGHT - PAD_HEIGHT / 2;
 function updatePads(state) {
     const padIds = Object.keys(state.pads).map(Number);
+    const ball = state.ball;
     for (const padId of padIds) {
-        const directionY = state.pads[padId].directionY;
+        const pad = state.pads[padId];
+        const directionY = pad.directionY;
         if (directionY === 0) continue;
 
-        const currentY = state.pads[padId].y;
-        const newY = currentY + (directionY * PAD_SPEED);
-        state.pads[padId].y = clamp(
-            newY,
-            PAD_MIN_HEIGHT,
-            PAD_MAX_HEIGHT
-        );
+        const nextY = pad.y + (directionY * PAD_SPEED);
+        const clampedY = clamp(nextY, PAD_MIN_HEIGHT, PAD_MAX_HEIGHT);
+
+        // Compute pad rect at proposed position and test against ball circle.
+        // If moving to clampedY would overlap the ball, skip the movement to avoid
+        // pushing the ball inside the pad (this implements the "don't push the ball" policy).
+        const padLeft = pad.x;
+        const padRight = pad.x + PAD_WIDTH;
+        const padTop = clampedY - PAD_HEIGHT / 2;
+        const padBottom = clampedY + PAD_HEIGHT / 2;
+
+        const closestX = Math.max(padLeft, Math.min(ball.x, padRight));
+        const closestY = Math.max(padTop, Math.min(ball.y, padBottom));
+        const dx = ball.x - closestX;
+        const dy = ball.y - closestY;
+        const dist2 = dx * dx + dy * dy;
+        if (dist2 < BALL_RADIUS * BALL_RADIUS) continue;
+
+        pad.y = clampedY;
     }
 }
 
