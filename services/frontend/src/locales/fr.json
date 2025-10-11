@@ -68,6 +68,13 @@
 			}
 		}
 	},
+	"friend-request": {
+		"title": "Demande d'amis",
+		"table": {
+			"received": "Demande reçu",
+			"send": ""
+		}
+	},
 	"games": {
 		"keys": {
 			"up": "HAUT",

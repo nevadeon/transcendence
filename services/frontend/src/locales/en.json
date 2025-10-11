@@ -73,6 +73,13 @@
             }
         }
     },
+	"friend-request": {
+		"title": "Friends requests",
+		"table": {
+			"received": "Requests received",
+			"send": "Requests sent"
+		}
+	},
     "games": {
         "keys": {
             "up": "UP",
