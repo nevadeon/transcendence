@@ -66,7 +66,7 @@ async function userRoutes(fastify) {
 							OR (af.user_id = u.id AND af.friend_id = ?))
 							AND af.status = 1
 						)`,
-				[userId, userId, userId, userId, userId]
+				[userId, userId, userId, userId, userId, userId, userId, userId, userId]
 			);
 			return reply.code(200).send(users);
 		} catch (err) {
@@ -351,7 +351,7 @@ async function userRoutes(fastify) {
 			return reply.code(200).send(rows);
 		} catch (err) {
 			fastify.log.error(err);
-			return reply.code(500).send({ message: "Failed to fetch incoming requests." });
+			return reply.code(500).send({ error: "Failed to fetch incoming requests." });
 		}
 	});
 
@@ -359,6 +359,23 @@ async function userRoutes(fastify) {
 		const result = await db.run("DELETE FROM users WHERE id=?", [req.params.id]);
 		if (result.changes === 0) return reply.code(404).send({ message: "User not found." });
 		return reply.code(201).send({ message: "User deleted successfully." });
+	});
+
+	fastify.get("/users/friends/:id", async (req, reply) => {
+		try {await authenticate(req, reply); } catch { return; }
+		const me = req.user.id;
+		try {
+			const rows = await db.all(
+				`SELECT u.id, u.name, u.avatar, u.status, u.species, u.planet, u.dimension
+				FROM accepted_friends f
+				JOIN users u ON u.id = f.user_id
+				WHERE f.friend_id = ?`,
+				[me]
+			);
+			reply.code(201).esnd(rows);
+		} catch (err) {
+			return reply.code(500).send({ error: "Failed to fetch incoming requests."})
+		}
 	});
 }
 

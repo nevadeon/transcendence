@@ -1,0 +1,11 @@
+.friend-list-message {
+	font-family: var(--font-titles);
+	font-size: var(--font-size-profile-card-header, 2rem);
+	font-weight: 900;
+	color: var(--color-computer-300);
+
+	display: block;
+	width: 100%;
+	text-align: center;
+	white-space: normal;
+}
