@@ -24,8 +24,12 @@
 }
 
 .stats-bar-fill {
+	position: relative;
 	width: 100%;
+	height: var(--fill, 60%);
 	background: var(--color-computer-300);
+	margin: 0;
+	border: none;
 }
 
 .stats-bar img {
