@@ -365,11 +365,25 @@ async function userRoutes(fastify) {
 		const me = req.user.id;
 		try {
 			const rows = await db.all(
-				`SELECT u.id, u.name, u.avatar, u.status, u.species, u.planet, u.dimension
+				`SELECT 
+					CASE 
+						WHEN f.user_id = ? THEN f.friend_id
+						ELSE f.user_id
+					END AS friend_id,
+					u.name,
+					u.avatar,
+					u.status,
+					u.species,
+					u.planet,
+					u.dimension
 				FROM accepted_friends f
-				JOIN users u ON u.id = f.user_id
-				WHERE f.friend_id = ? OR f.user_id = ?`,
-				[me, me]
+				JOIN users u 
+					ON u.id = CASE 
+								WHEN f.user_id = ? THEN f.friend_id 
+								ELSE f.user_id 
+							END
+				WHERE ? IN (f.user_id, f.friend_id)`,
+				[me, me, me]
 			);
 			reply.code(201).send(rows);
 		} catch (err) {
