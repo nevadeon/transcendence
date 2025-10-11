@@ -1,8 +1,8 @@
 import { useState, type ChangeEvent } from "react";
 // import { useNavigate } from "react-router";
-// import { useAuth } from "../contexts/auth/useAuth.tsx";
 import Tournament from "../components/game/Tournament.tsx";
 import UsernameInput from "../components/game/UsernameInput.tsx";
+import { useAuth } from "../contexts/auth/useAuth.tsx";
 import useLanguage from "../hooks/useLanguage";
 import TeleportSrc from "../assets/tournament/teleport-bg.png";
 import "../styles/tournament/Tournament.css";
@@ -14,7 +14,8 @@ const NUM_USERS = 4;
 export default function TournamentPage() {
 	const [ usernames, setUsernames ] = useState<string[]>(Array(NUM_USERS).fill(''));
 	const words = useLanguage();
-	// const { token } = useAuth();
+	const { user, token } = useAuth();
+	const 
 	// const navigate = useNavigate();
 
 	function handleInputChange(e: ChangeEvent<HTMLInputElement>, index: number): void {
@@ -26,6 +27,10 @@ export default function TournamentPage() {
 		});
 	}
 
+	async function handleFormSubmit(trimmedUsernames, avatars) {
+		//...
+	};
+	
 	const backgroundStyle = {
 		display: 'flex',
 		alignItems: 'center',
@@ -37,35 +42,6 @@ export default function TournamentPage() {
 		backgroundPosition: 'center center',
 		backgroundSize: 'cover',
 	};
-
-	async function handleFormSubmit(usernames: string[]) {
-		try {
-			const res = await fetch(`${BASE_URL}${USER_STATS_PORT}/record_match`, {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify( {
-					red_team_A: 'username1',
-					red_team_B: usernames[0],
-					blue_team_A: usernames[1],
-					blue_team_B: usernames[2],
-					mode: 'versus',
-					red_team_score: 7,
-					blue_team_score: 4,
-					winner: 'red'
-				} )
-			});
-			const data = await res.json();
-			if (res.ok) {
-				console.log('Registration successful', data);
-			} else {
-				console.error('Registration failed');
-			}
-		} catch(err) {
-			console.error('Registration error: ', err)
-		}
-		//timeout(5000) + {state: {users: usernames, demis: ... }}
-		// navigate('/game/1vs1', { state: usernames });
-    };
 
 	return (
 		<div className="tournament-page" style={backgroundStyle}>
