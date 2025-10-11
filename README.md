@@ -26,7 +26,7 @@
  
 ### IA-Algo
 [V] Maj: IA opponent  
-[x] Min: User & game stat dash board  	
+[x] Min: User & game stat dash board  
 
 ### Cybersecurity
 [] Maj: Implement WAF/modsecurity and hashicorp vault  

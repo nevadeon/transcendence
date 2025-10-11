@@ -22,10 +22,12 @@ export interface UsersProps {
 
 export default function AddFriend(props: any) {
 	const [ allUsers, setAllUsers ] = useState<UsersProps[]>([]);
+	const [ friendRequest, setFriendRequest ] = useState<UsersProps[]>([]);
 	const [ isLoading, setIsLoading ] = useState<boolean>(false);
 	const { openElement, toggleElement } = useBoard();
-	const [ isInviteSent, setIsInviteSend ] = useState<boolean>(false);
-	const { token } = useAuth();
+	// const [ isInviteSent, setIsInviteSend ] = useState<boolean>(false);
+	const [sentIds, setSentIds] = useState<Set<number>>(new Set());
+	const { user, token } = useAuth();
 	const isOpen = openElement === 'addfriend';
 	const { words } = props;
 
@@ -35,7 +37,7 @@ export default function AddFriend(props: any) {
 		async function allUsers() {
 			setIsLoading(true);
 			try {
-				const res = await fetch(`http://localhost:3001/users`, {
+				const res = await fetch(`http://localhost:3001/users/to-request`, {
 					method: 'GET',
 					headers: {
 						'Content-Type': 'application/json',
@@ -43,9 +45,8 @@ export default function AddFriend(props: any) {
 					}
 				});
 				const data = await res.json();
-				console.log("data: ", data);
 				if (res.ok) {
-					setAllUsers(data);
+					setAllUsers(data as UsersProps[]);
 				} else {
 					console.error('Failed to retreive all users: ', data.message);
 				}
@@ -55,8 +56,36 @@ export default function AddFriend(props: any) {
 				setIsLoading(false);
 			}
 		}
-		if (isOpen)
+
+		async function friendRequest() {
+			setIsLoading(true);
+			try {
+				const res = await fetch(`http://localhost:3001/friends/request/:${user.id}`, {
+					method: 'GET',
+					headers: {
+						'Content-Type': 'application/json',
+						'Authorization': `Bearer ${token}`
+					}
+				});
+				const data = await res.json();
+				if (res.ok) {
+					setFriendRequest(data as UsersProps[]);
+				} else {
+					console.error('Failed to retreive all friend requests: ', data.message);
+				}
+			} catch (err) {
+				console.error(err);
+			} finally {
+				setIsLoading(false);
+			}
+		}
+
+		if (isOpen) {
 			allUsers();
+			friendRequest();
+		}
+
+
 	}, [isOpen, token]);
 
 	async function handleAddFriend(targetUserId: number) {
@@ -75,9 +104,14 @@ export default function AddFriend(props: any) {
 				})
 			});
 			if (res.ok) {
-				setIsInviteSend(true);
-				alert("Demande envoyée !");
-			} else {
+				// setIsInviteSend(true);
+				setSentIds(prev => {
+					const next = new Set(prev);
+					next.add(targetUserId);
+					return next;
+				});
+			} else 
+			{
 				const errorData = await res.json();
 				alert(`Erreur: ${errorData.message}`);
 			}
@@ -100,59 +134,116 @@ export default function AddFriend(props: any) {
 	return (
 		<div className="profile">
 			<div className="profile-header">
-				<h2>{words.messages.statistics.title}</h2>
+				<h2>{words.messages["friend-request"].title}</h2>
 				<button className="modal-close-button" onClick={handleClose}>
 					<img src={CrossSrc} alt="Close Icon" />
 				</button>
 			</div>
-			<div className="profile-addfriend">
-				{ isLoading ? (
-					<p>Searching for users...</p>
-				) : (
-					allUsers.length === 0
-					? ( <p>No users found</p> )
-					: (
-						allUsers.map((user) => (
-							<div key={user.name} className="contact-card">
-								<div style={{ display: 'flex', width: '100%' }}>
-									<img src={`/avatars/${user.avatar}`} alt="Avatar Icon" className="profile-card-avatar" />
-									<div className="profile-card-data">
-										<div className="profile-card-data-header">
-											<span>{user.name}</span>
-											<span className={(user.status === 1) ? "online" : "offline"}></span>
-										</div>
-										<div className="profile-card-data-extra">
-											<div>
-												<img src={SpeciesSrc} alt="Species Icon" />
-												<span>{user.species}</span>
+			<div className="AddFriendPannel">
+				<div className="profile-friend-request-can-send">
+				<h3>{words.messages["friend-request"].table.send}</h3>
+					{ isLoading ? (
+						<p>Searching for users...</p>
+					) : (
+						allUsers.length === 0
+						? ( <p>No users found</p> )
+						: (
+							allUsers.map((user) => (
+								<div key={user.id} className="contact-card">
+									<div style={{ display: 'flex', width: '100%' }}>
+										<img src={`/avatars/${user.avatar}`} alt="Avatar Icon" className="profile-card-avatar" />
+										<div className="profile-card-data">
+											<div className="profile-card-data-header">
+												<span>{user.name}</span>
+												<span className={(user.status === 1) ? "online" : "offline"}></span>
 											</div>
-											<div>
-												<img src={PlanetSrc} alt="Planet Icon" />
-												<span>{user.planet}</span>
-											</div>
-											<div>
-												<img src={DimensionSrc} alt="Dimension Icon" />
-												<span>{user.dimension}</span>
+											<div className="profile-card-data-extra">
+												<div>
+													<img src={SpeciesSrc} alt="Species Icon" />
+													<span>{user.species}</span>
+												</div>
+												<div>
+													<img src={PlanetSrc} alt="Planet Icon" />
+													<span>{user.planet}</span>
+												</div>
+												<div>
+													<img src={DimensionSrc} alt="Dimension Icon" />
+													<span>{user.dimension}</span>
+												</div>
 											</div>
 										</div>
 									</div>
-								</div>
-								{
-									!isInviteSent ? (
-										<img src={AddSrc} alt="Add Icon"
-											style={{ width: "48px", height: "48px", marginLeft: '12px' }}
+									{!sentIds.has(user.id) ? (
+										<img
+											src={AddSrc}
+											alt="Add Icon"
+											style={{ width: "48px", height: "48px", marginLeft: "12px" }}
 											onClick={() => handleAddFriend(user.id)}
 										/>
 									) : (
-										<img src={ValidSrc} alt="Valid Icon"
-											style={{ width: "48px", height: "48px", marginLeft: '12px', opacity: .75 }}
+										<img
+											src={ValidSrc}
+											alt="Valid Icon"
+											style={{ width: "48px", height: "48px", marginLeft: "12px", opacity: 0.75, pointerEvents: "none" }}
 										/>
-									)
-								}
-							</div>
-						)) )
-					)
-				}
+									)}
+								</div>
+							)) )
+						)
+					}
+				</div>
+				<div className="profile-friend-request-receive">
+				<h3>{words.messages["friend-request"].table.received}</h3>
+					{ isLoading ? (
+						<p>Searching for users...</p>
+					) : (
+						friendRequest.length === 0
+						? ( <p>No users found</p> )
+						: (
+							friendRequest.map((user) => (
+								<div key={user.name} className="contact-card">
+									<div style={{ display: 'flex', width: '100%' }}>
+										<img src={`/avatars/${user.avatar}`} alt="Avatar Icon" className="profile-card-avatar" />
+										<div className="profile-card-data">
+											<div className="profile-card-data-header">
+												<span>{user.name}</span>
+												<span className={(user.status === 1) ? "online" : "offline"}></span>
+											</div>
+											<div className="profile-card-data-extra">
+												<div>
+													<img src={SpeciesSrc} alt="Species Icon" />
+													<span>{user.species}</span>
+												</div>
+												<div>
+													<img src={PlanetSrc} alt="Planet Icon" />
+													<span>{user.planet}</span>
+												</div>
+												<div>
+													<img src={DimensionSrc} alt="Dimension Icon" />
+													<span>{user.dimension}</span>
+												</div>
+											</div>
+										</div>
+									</div>
+									{!sentIds.has(user.id) ? (
+										<img
+											src={AddSrc}
+											alt="Add Icon"
+											style={{ width: "48px", height: "48px", marginLeft: "12px" }}
+											onClick={() => handleAddFriend(user.id)}
+										/>
+									) : (
+										<img
+											src={ValidSrc}
+											alt="Valid Icon"
+											style={{ width: "48px", height: "48px", marginLeft: "12px", opacity: 0.75, pointerEvents: "none" }}
+										/>
+									)}
+								</div>
+							)) )
+						)
+					}
+				</div>
 			</div>
 		</div>
 	);

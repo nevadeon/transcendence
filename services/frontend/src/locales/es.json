@@ -68,6 +68,13 @@
             }
         }
     },
+	"friend-request": {
+		"title": "Solicitud de amistad",
+		"table": {
+			"received": "Solicitud recibida",
+			"send": "Solicitud enviada"
+		}
+	},
     "games": {
         "keys": {
             "up": "ARRIBA",

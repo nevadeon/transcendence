@@ -43,7 +43,7 @@
 }
 
 .stats-bar-frame:hover {
-	transform: translateY(-5px);
+	transform: translateY(-2px);
 }
 
 .stats-bar img {

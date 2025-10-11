@@ -24,6 +24,7 @@ const authenticate = async (req, reply) => {
 
 async function userRoutes(fastify) {
 	const { db } = fastify;
+	const SELECT_USER_FIELDS = "u.id, u.name, u.avatar, u.status, u.species, u.planet, u.dimension";
 
 	fastify.get("/users", async (req, reply) => {
 		try {
@@ -32,10 +33,41 @@ async function userRoutes(fastify) {
 			return ;
 		}
 		const userId = req.user.id;
-		console.log("\n\nuserID: \n\n", userId);
 		try {
 			const users = await db.all("SELECT id, name, avatar, status, species, planet, dimension FROM users WHERE id!=?", [userId]);
-			console.log("\n\nusers: \n\n", users);
+			return reply.code(200).send(users);
+		} catch (err) {
+			return reply.status(500).send({ message: "Erreur lors de la récupération des utilisateurs." });
+		}
+	});
+
+	fastify.get("/users/to-request", async (req, reply) => {
+		try {
+			await authenticate(req, reply);
+		} catch (err) {
+			return ;
+		}
+		const userId = req.user.id;
+		try {
+			const users = await db.all(
+				`SELECT u.id, u.name, u.avatar, u.status, u.species, u.planet, u.dimension
+				FROM users u
+				WHERE u.id != ?
+					AND NOT EXISTS (
+						SELECT 1
+						FROM friend_requests f
+						WHERE (f.user_id = ? AND f.friend_id = u.id)
+								OR (f.user_id = u.id AND f.friend_id = ?)
+					)
+					AND NOT EXISTS (
+						SELECT 1
+						FROM accepted_friends af
+						WHERE ((af.user_id = ? AND af.friend_id = u.id)
+							OR (af.user_id = u.id AND af.friend_id = ?))
+							AND af.status = 1
+						)`,
+				[userId, userId, userId, userId, userId]
+			);
 			return reply.code(200).send(users);
 		} catch (err) {
 			return reply.status(500).send({ message: "Erreur lors de la récupération des utilisateurs." });
@@ -258,20 +290,68 @@ async function userRoutes(fastify) {
 			return reply.code(400).send({ message: "Invalid friend ID." });
 		}
 		try {
-			await db.run(
-				`INSERT INTO friends (user_id, friend_id, status) VALUES (?, ?, 0)`,
-				[requesterId, targetUserId]
+			const alreadyFriends = await db.get(
+				`SELECT 1 FROM accepted_friends
+					WHERE(
+						(user_id = ? AND friend_id = ?) OR
+						(user_id = ? AND friend_id = ?)
+					)`,
+					[requesterId, targetUserId, targetUserId, requesterId]
+				);
+			if (alreadyFriends)
+				return reply.code(200).send({ message: "Already friends?", status: 1});
+			const incomingRequest = await db.get (
+				`SELECT 1 FROM friend_requests
+				WHERE user_id = ? AND friend_id = ?`,
+				[targetUserId, requesterId]
 			);
-			return reply.code(201).send({
-				message: "Friend request sent successfully.",
-				status: 0
-			});
+			if (incomingRequest) {
+				// Accepte l’amitié
+				await db.exec("BEGIN");
+				await db.run(
+					`INSERT OR IGNORE INTO accepted_friends (user_id, friend_id)
+					VALUES (?, ?)`,
+					[requesterId, targetUserId]
+				);
+				// Supprime toutes les demandes pendantes entre les deux
+				await db.run(
+					`DELETE FROM friend_requests
+					WHERE (user_id = ? AND friend_id = ?)
+						OR (user_id = ? AND friend_id = ?)`,
+					[requesterId, targetUserId, targetUserId, requesterId]
+				);
+				await db.exec("COMMIT");
+				return reply.code(202).send({ message: "Friend request matched and accepted.", status: 1 });
+			}
+			await db.run(
+			`INSERT INTO friend_requests (user_id, friend_id) VALUES (?, ?)`,
+			[requesterId, targetUserId]
+			);
+			return reply.code(201).send({ message: "Friend request sent successfully.", status: 0 });
 		} catch (err) {
 			if (err.code === 'SQLITE_CONSTRAINT') {
-				return reply.code(409).send({ message: "Friend request already exists between these users." });
+				return reply.code(202).send({ message: "Friend request already exists between these users." });
 			}
 			console.error("Erreur DB lors de l'ajout d'ami:", err);
 			return reply.code(500).send({ message: "Intern server error." });
+		}
+	});
+
+	fastify.get("/friends/request/:id", async (req, reply) => {
+		try { await authenticate(req, reply); } catch { return; }
+		const me = req.user.id;
+		try {
+			const rows = await db.all(
+				`SELECT u.id, u.name, u.avatar, u.status, u.species, u.planet, u.dimension
+				 FROM friend_requests f
+				 JOIN users u ON u.id = f.user_id
+				 WHERE f.friend_id = ?`,
+				[me]
+			);
+			return reply.code(200).send(rows);
+		} catch (err) {
+			fastify.log.error(err);
+			return reply.code(500).send({ message: "Failed to fetch incoming requests." });
 		}
 	});
 
