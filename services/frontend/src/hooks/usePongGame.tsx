@@ -2,38 +2,47 @@ import { useState, useEffect, useRef } from "react";
 import { Socket, io } from "socket.io-client";
 
 export interface GameState {
-    // vertical pos (entre 0 et 100 pour être responsive, ou en pixels)
     pads: {
-        [id: number]: number; // 1: 50, 2: 75, 3, 4
+        [id: number]: number;
     };
     ball: {
-        x: number; // pixel
+        x: number;
         y: number;
     };
     score: {
         p1: number;
         p2: number;
     };
-    // others too (ex: puissance de la balle, nom du vainqueur du set...)
 }
 
 export interface UsersTemp {
-    name: string,
-    avatar: string
+    name: string;
+    avatar: string;
+}
+
+export interface GameResults {
+    winnerId: number;
+    scoreLeft: number;
+    scoreRight: number;
 }
 
 const INTERPOLATION_DELAY_MS = 50;
 
-export default function usePongGame(gameMode: string, mainUser: UsersTemp | undefined, usersTemp: UsersTemp[]) { //usersTemp: UsersTemp[]
+export default function usePongGame(gameMode: string, mainUser: UsersTemp | undefined, usersTemp: UsersTemp[]) {
 	const socketRef = useRef<Socket | null>(null);
 	const stateHistoryRef = useRef<Array<GameState & { receivedAt: number }>>([]);
 	const [gameState, setGameState] = useState<GameState | null>(null);
+	const [gameResults, setGameResults] = useState<GameResults | null>(null);
 
 	useEffect(() => {
-		const socket = io('http://localhost:3002'); // url du back
+		const socket = io('http://localhost:3002');
 		socketRef.current = socket;
 		socket.on('connect', () => {
-			socket.emit('joinGame', { mode: gameMode, mainUser: mainUser, usersTemp: usersTemp });
+			socket.emit('joinGame', {
+                mode: gameMode,
+                mainUser: mainUser,
+                usersTemp: usersTemp
+            });
 		});
 
 		// interpolation logic
@@ -46,7 +55,7 @@ export default function usePongGame(gameMode: string, mainUser: UsersTemp | unde
 		});
 
 		socket.on('gameOver', (results: any) => {
-            // setGameResult(results);
+            setGameResults(results);
 			console.log("Jeu terminé, résultats:", results);
 		});
 
@@ -59,15 +68,12 @@ export default function usePongGame(gameMode: string, mainUser: UsersTemp | unde
         const interpolate = () => {
 			const history = stateHistoryRef.current;
             if (history.length < 2) {
-                // Pas assez de données pour interpoler, on passe.
                 frameId = requestAnimationFrame(interpolate);
                 return;
             }
             const renderTime = Date.now() - INTERPOLATION_DELAY_MS;
-            // 1. Trouver les deux états (A et B) qui encadrent le temps de rendu idéal (renderTime)
             let stateA = null;
             let stateB = null;
-			// On cherche l'état B (premier état reçu APRÈS le temps de rendu idéal)
             for (let i = 0; i < history.length; i++) {
                 if (history[i].receivedAt >= renderTime) {
                     stateB = history[i];
@@ -75,19 +81,14 @@ export default function usePongGame(gameMode: string, mainUser: UsersTemp | unde
                     break;
                 }
             }
-			// Si on ne trouve pas A et B (ex: le serveur n'envoie pas assez vite) : on utilise le plus récent
 			if (!stateA || !stateB) {
                 setGameState(history[history.length - 1]);
             } else {
-                // 2. Calculer le facteur d'interpolation (alpha)
                 const totalTime = stateB.receivedAt - stateA.receivedAt;
                 const progressTime = renderTime - stateA.receivedAt;
-                // Clamp pour s'assurer que alpha reste entre 0 et 1
                 const alpha = Math.max(0, Math.min(1, progressTime / totalTime));
-				// 3. Appliquer l'interpolation
                 const newBallX = stateA.ball.x + (stateB.ball.x - stateA.ball.x) * alpha;
                 const newBallY = stateA.ball.y + (stateB.ball.y - stateA.ball.y) * alpha;
-				// Interpolation des pads pour tous les IDs existants
                 const interpolatedPads: GameState['pads'] = {};
                 for (const padId in stateA.pads) {
                     const id = parseInt(padId);
@@ -97,16 +98,14 @@ export default function usePongGame(gameMode: string, mainUser: UsersTemp | unde
                         interpolatedPads[id] = stateA.pads[id];
                     }
                 }
-				// 4. Mettre à jour l'état final (on prend les scores de l'état B car ils ne s'interpolent pas)
                 setGameState({
                     pads: interpolatedPads,
                     ball: { x: newBallX, y: newBallY },
                     score: stateB.score,
-                } as GameState); // Cast nécessaire à cause de l'ajout de receivedAt
+                } as GameState);
 			}
             frameId = requestAnimationFrame(interpolate);
         };
-        // Démarrer la boucle de rendu pour le lissage
         frameId = requestAnimationFrame(interpolate);
         return () => cancelAnimationFrame(frameId);
     }, []);
@@ -115,5 +114,5 @@ export default function usePongGame(gameMode: string, mainUser: UsersTemp | unde
 		socketRef.current?.emit('move', { direction, action, padId });
 	};
 
-    return { gameState, sendInput };
+    return { gameState, gameResults, sendInput };
 };
