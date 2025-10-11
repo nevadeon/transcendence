@@ -26,7 +26,8 @@
         "billiard": "Multidimensional Pool",
         "friend-list": {
             "title": "Contact List",
-			"withoutFriendMessage": "Your alone, it's sad :)"
+			"withoutFriendMessage": "Your alone, it's sad :)",
+			"searchingForFriends": "Searching for users..."
         }
     },
     "profile": {

@@ -7,7 +7,7 @@ export default function Contacts(props: UsersProps) {
 
 	return (
 		<div className="contacts">
-			<img src={avatar} alt="Avatar Icon" />
+			<img src={`/avatars/${avatar}`} alt="Avatar Icon" />
 			<div className="contacts-data">
 				<div className="contacts-data-inner">
 					<div className="contacts-data-header">

@@ -24,7 +24,6 @@ const authenticate = async (req, reply) => {
 
 async function userRoutes(fastify) {
 	const { db } = fastify;
-	const SELECT_USER_FIELDS = "u.id, u.name, u.avatar, u.status, u.species, u.planet, u.dimension";
 
 	fastify.get("/users", async (req, reply) => {
 		try {
@@ -369,10 +368,10 @@ async function userRoutes(fastify) {
 				`SELECT u.id, u.name, u.avatar, u.status, u.species, u.planet, u.dimension
 				FROM accepted_friends f
 				JOIN users u ON u.id = f.user_id
-				WHERE f.friend_id = ?`,
-				[me]
+				WHERE f.friend_id = ? OR f.user_id = ?`,
+				[me, me]
 			);
-			reply.code(201).esnd(rows);
+			reply.code(201).send(rows);
 		} catch (err) {
 			return reply.code(500).send({ error: "Failed to fetch incoming requests."})
 		}
