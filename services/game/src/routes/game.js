@@ -4,7 +4,6 @@ async function gameRoutes(fastify) {
 
     fastify.get("/match_history/:id", async (req, reply) => {
 		const { username } = req.params;
-		console.log(username);
 		try {
 			// try to delete useless 3x OR
 			const matches = await db.all(`
@@ -27,7 +26,6 @@ async function gameRoutes(fastify) {
 
 	fastify.get("/users_stats/:id", async (req, reply) => {
 		const { username } = req.params;
-		console.log(username);
 		try {
 			const stats = await db.get(`
 				SELECT versus, versus_wins, versus_losses,
@@ -55,17 +53,13 @@ async function gameRoutes(fastify) {
 				`SELECT * FROM users_stats WHERE id = ?`,
 				[id]
 			);
-				console.log("tmp");
 			if (tmp) {
-				console.log("tmp");
 				return reply.code(205).send({ message: "Id already exist." });
 			}
-			console.log(id);
 			await db.run(
 				`INSERT INTO users_stats(id) VALUES(?)`,
 				[id]
 			);
-			console.log("tmp");
 			return reply.code(201);
 		} catch (err) {
 			console.log(err);
