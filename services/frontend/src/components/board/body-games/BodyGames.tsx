@@ -2,7 +2,7 @@ import { useState, type ChangeEvent } from "react";
 import { useNavigate } from "react-router";
 import Modal from "./Modal";
 import Profile from "./Profile";
-import Stats from "./Stats";
+// import Stats from "./Stats";
 import AddFriend from "./AddFriend";
 import useBoard from "../../../hooks/useBoard";
 import UsernameInput from "../../game/UsernameInput";
@@ -51,7 +51,7 @@ export default function BodyGames(props: BodyGamesProps) {
 				(
 					<Modal>
 						<Profile words={words} />
-						<Stats words={words} />
+						{/* <Stats words={words} /> */}
 						<AddFriend words={words} />
 					</Modal>
 				) : (

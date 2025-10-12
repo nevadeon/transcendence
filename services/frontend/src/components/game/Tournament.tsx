@@ -3,7 +3,6 @@ import WinnerCard from "./WinnerCard";
 import useTournament from "../../contexts/tournament/useTournament";
 import type { TournamentProps } from "../../interfaces/Tournament";
 import "../../styles/tournament/Tournament.css";
-import { useAuth } from "../../contexts/auth/useAuth";
 
 // /tournament
 export default function Tournament(props: TournamentProps) {
