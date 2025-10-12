@@ -28,3 +28,20 @@
 	position: relative;
 	justify-content: center;
 }
+
+.Hide {
+	position: absolute;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	top: 0;
+	left: 0;
+	width: 280px;
+	height: calc(100% + 8px);
+	margin: -4px 0 0 -4px;
+	background-color: var(--color-computer-600);
+	background: var(--color-computer-600);
+	opacity: 1;
+	box-sizing: border-box;
+	overflow: hidden;
+}

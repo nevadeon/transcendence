@@ -23,15 +23,15 @@ export default function Pong1vs1(props: Pong1vs1Props) {
 
 	let mode;
 	tournament?.isTournament ? mode = "tournament" : mode = "versus";
-	
+
 	let userLogin;
 	if (user) {
-		userLogin = {name: user.name, avatar: user.avatar.slice(9)};
+		userLogin = {name: user.name, avatar: user.avatar};
 	}
-	
+
 	if (!tournament && location.state?.from === '/tournament') //F5, tournament context logic lost but could be in 1vs1 !
 			navigate('/board', { replace: true });
-	
+
 	// Nettoyer le contexte tournament seulement si on vient d'un autre mode (pas du tournoi)
 	useEffect(() => {
 		// Ne nettoyer que si on n'est pas censé être en mode tournoi
@@ -40,7 +40,7 @@ export default function Pong1vs1(props: Pong1vs1Props) {
 			closeTournament();
 		}
 	}, [mode, tournament, closeTournament, activePhase]);
-	
+
 	const { gameState, sendInput } = usePongGame(mode, userLogin, location.state);
 	const { words } = props;
 	useGameControls(sendInput);
@@ -53,7 +53,7 @@ export default function Pong1vs1(props: Pong1vs1Props) {
 		return (
 			<div className="pong">
 				<Scores
-					avatar={user?.avatar ? user.avatar.slice(9) : location.state?.avatars?.[0] || "/avatars/defaults/morty.png"}
+					avatar={user?.avatar ? user.avatar : location.state?.avatars?.[0] || "/avatars/defaults/morty.png"}
 					name={userLogin?.name || null}
 					result={gameState?.score.p1}
 					ctrl={ctrl1}

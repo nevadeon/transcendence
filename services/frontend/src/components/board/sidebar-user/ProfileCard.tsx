@@ -13,7 +13,7 @@ export default function ProfileCard( props: ProfileCardProps ) {
 		<div className={ingame ? "profile-card-ingame" : "profile-card"} onClick={() => toggleElement('profile')}>
 			{ingame && username === undefined && <div className="Hide"></div>}
 			{username !== undefined && isElim && <div className="eliminated">{words.messages.tournament.eliminated}</div>}
-				<img src={avatar ? avatar : "default.png"} alt="Profile Avatar" className={ingame ? "profile-card-avatar-ingame" : "profile-card-avatar"} />
+				<img src={avatar ? avatar : "avatars/defaults/rick.png"} alt="Profile Avatar" className={ingame ? "profile-card-avatar-ingame" : "profile-card-avatar"} />
 				<div className="profile-card-data">
 					<div className={ingame ? "profile-card-data-ingame" : "profile-card-data-header"}>
 						<span>{username}</span>
