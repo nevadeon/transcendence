@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@types/babylonjs": "^2.4.5",
+    "babylonjs": "^8.31.0"
+  }
+}
