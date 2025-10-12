@@ -16,8 +16,8 @@ async function gameRoutes(fastify) {
 				`, [username, username, username, username]
 			);
 			return reply.code(201).send({
-                matches: Array(matches),
-                message: "Successfully get last 4 games from game_history" });
+				matches: Array(matches),
+				message: "Successfully get last 4 games from game_history" });
 		} catch (err) {
 			fastify.log.error(err);
 			return reply.code(500).send({ message: "Failed to get match history."})

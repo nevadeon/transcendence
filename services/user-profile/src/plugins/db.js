@@ -14,12 +14,12 @@ async function dbPlugin(fastify) {
 	});
 
 	// auto suppr au 'make re'
-	await db.exec(`
-		DROP TABLE IF EXISTS users;
-		DROP TABLE IF EXISTS tokens;
-        DROP TABLE IF EXISTS friend_requests;
-        DROP TABLE IF EXISTS accepted_friends;
-	`);
+	// await db.exec(`
+	// 	DROP TABLE IF EXISTS users;
+	// 	DROP TABLE IF EXISTS tokens;
+	// 	DROP TABLE IF EXISTS friend_requests;
+	// 	DROP TABLE IF EXISTS accepted_friends;
+	// `);
 	
 	// Création tables
 	await db.exec(`
@@ -44,8 +44,8 @@ async function dbPlugin(fastify) {
 			id INTEGER PRIMARY KEY AUTOINCREMENT,
 			username TEXT NOT NULL UNIQUE,
 			token TEXT NOT NULL UNIQUE,
-			created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-			expires_at DATETIME,
+			created_at DATETIME DEFAULT (datetime('now', '+2 hour')),
+			expires_at DATETIME DEFAULT (datetime('now', '+3 hour')),
 			FOREIGN KEY(username) REFERENCES users(name) ON DELETE CASCADE
 		)
 	`);
@@ -62,14 +62,13 @@ async function dbPlugin(fastify) {
 
 	await db.exec(`
 		CREATE TABLE IF NOT EXISTS accepted_friends (
-			user_id INTEGER NOT NULL,
+			user_id INTEGER  NOT NULL,
 			friend_id INTEGER NOT NULL,
 			status INTEGER NOT NULL DEFAULT 0 CHECK (status IN (0, 1, 2)),
-			PRIMARY KEY (user_id, friend_id),
 			FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE,
-			FOREIGN KEY(friend_id) REFERENCES users(id) ON DELETE CASCADE
-
-		)`)
+			FOREIGN KEY(friend_id) REFERENCES users(id) ON DELETE CASCADE,
+			PRIMARY KEY(user_id, friend_id)
+			)`)
 
 	fastify.decorate("db", db);
 }

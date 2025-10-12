@@ -60,7 +60,7 @@ export default function AddFriend(props: any) {
 		async function friendRequest() {
 			setIsLoading(true);
 			try {
-				const res = await fetch(`http://localhost:3001/friends/request/:${user.id}`, {
+				const res = await fetch(`http://localhost:3001/friends/request/${user.id}`, {
 					method: 'GET',
 					headers: {
 						'Content-Type': 'application/json',

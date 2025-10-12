@@ -61,7 +61,7 @@ export default function FriendList(props: FriendListProps) {
 						UserFriends.length === 0 ? (
 						<p className="friend-list-message">{words.messages.board["friend-list"].withoutFriendMessage}</p> )
 						: (
-							UserFriends.map((user) => (
+							UserFriends.map((user) =>  (
 								<Contacts 
 									id={user.id} 
 									name={user.name} 
