@@ -147,8 +147,8 @@ function predictYAtX(ball, targetX, yMin, yMax) {
     return yMax - (m - span);
 }
 
-const PAD_MIN_HEIGHT = PAD_HEIGHT / 2 + BALL_DIAMETER + 16;
-const PAD_MAX_HEIGHT = ARENA_HEIGHT - PAD_HEIGHT / 2 - BALL_DIAMETER - 16;
+const PAD_MIN_HEIGHT = PAD_HEIGHT / 2 + BALL_DIAMETER + 20;
+const PAD_MAX_HEIGHT = ARENA_HEIGHT - PAD_HEIGHT / 2 - BALL_DIAMETER - 20;
 function updatePads(state) {
     if (state.aiPadId) updateIa(state);
     const padIds = Object.keys(state.pads).map(Number);
@@ -291,7 +291,7 @@ function updateBallPhysics(state) {
 
             // slightly increase speed for gameplay and clamp
             let speed = Math.sqrt(ball.vx * ball.vx + ball.vy * ball.vy);
-            speed = Math.min(BALL_MAX_SPEED, Math.max(1, speed * 1.05));
+            speed = Math.min(BALL_MAX_SPEED, Math.max(1, speed * 1.03));
             const newVx = (ball.vx / Math.max(1e-6, Math.sqrt(ball.vx * ball.vx + ball.vy * ball.vy))) * speed;
             const newVy = (ball.vy / Math.max(1e-6, Math.sqrt(ball.vx * ball.vx + ball.vy * ball.vy))) * speed;
             ball.vx = newVx;
