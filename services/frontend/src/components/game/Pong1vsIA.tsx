@@ -7,11 +7,22 @@ import ArenaSource from "../../assets/game/arena.svg";
 import BallSrc from "../../assets/game/balls/morty's_head_ball.png";
 import ArrowUpSrc from "../../assets/game/keybinds/arrow-up.svg";
 import ArrowDownSrc from "../../assets/game/keybinds/arrow-down.svg";
+import usePongGame from "../../hooks/usePongGame";
+import { useAuth } from "../../contexts/auth/useAuth";
+import { useLocation } from "react-router";
+
 // /game/1vsia
 // TODO: import Arena and Scores Component + canvas setup
 export default function Pong1vsIA(props: Pong1vsIAProps) {
 	// const ctrl1 = { upKey: 'q', downKey: 'a' };
+	const { user } = useAuth();
+	const location = useLocation();
+	let userLogin;
+	user ? userLogin = {name: user.name, avatar: user.avatar.slice(9)} : null;
+	const { gameState, sendInput } = usePongGame('versusIa', userLogin, location.state);
 	const { words } = props;
+	gameState
+	sendInput
 
 	return (
 		<div className="pong">
