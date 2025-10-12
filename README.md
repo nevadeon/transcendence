@@ -25,7 +25,7 @@
 [] Maj: live chat  
  
 ### IA-Algo
-[V] Maj: IA opponent  
+[x] Maj: IA opponent  
 [x] Min: User & game stat dash board  
 
 ### Cybersecurity

@@ -13,7 +13,7 @@ export default function Pong1vsIA(props: Pong1vsIAProps) {
 	const { user } = useAuth();
 	const location = useLocation();
 	let userLogin;
-	user ? userLogin = {name: user.name, avatar: user.avatar.slice(8)} : null;
+	user ? userLogin = {name: user.name, avatar: user.avatar} : null;
 	const { gameState, sendInput } = usePongGame('versusIa', userLogin, location.state);
 	const { words } = props;
 	useGameControls(sendInput);
