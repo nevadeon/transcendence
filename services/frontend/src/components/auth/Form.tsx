@@ -86,6 +86,22 @@ export default function Form(props: FormProps) {
 		console.log(is2FACodeGen);
 	}
 
+	async function createStatsRow(id: number) {
+		try {
+			const res = await fetch(`http://localhost:3002/users_stats/init/${id}`, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ id: id })
+			});
+			await res.json();
+			if (res.ok) {
+				return ;
+			}
+		} catch (err) {
+			console.error('Update error:', err);
+		}
+	}
+
 	async function handleClick(fieldName: string) {
 		const value = userData[fieldName as keyof FormData];
 		if (!value || value.length === 0) {
