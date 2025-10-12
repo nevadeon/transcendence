@@ -12,7 +12,7 @@ export function setupSocketLogic(io, fastify) {
             const mainPlayer = data.mainUser; //HERE !!!
             const playersTemp = data.usersTemp;
 
-            // fastify.log.info(`received game id: ${gameId}, mode: ${gameMode}`)
+            console.log(`received game id: ${gameId}, mode: ${gameMode}`)
 
             const game = createGameSession(fastify, gameId, io, gameMode, mainPlayer, playersTemp);
 
