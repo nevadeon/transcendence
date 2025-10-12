@@ -20,10 +20,8 @@ export default function BabylonArena3D({ pad1Pos, pad2Pos, ballPos }: BabylonAre
     const engineRef = useRef<BABYLON.Engine | null>(null);
     const sceneRef = useRef<BABYLON.Scene | null>(null);
 
-
     useEffect(() => {
         if (!canvasRef.current) return;
-
         const canvas = canvasRef.current;
         const engine = new BABYLON.Engine(canvas, true);
         engineRef.current = engine;
@@ -40,6 +38,9 @@ export default function BabylonArena3D({ pad1Pos, pad2Pos, ballPos }: BabylonAre
                     new BABYLON.Vector3(0, 0, 0),      // cible (centre de la scène)
                     scene
                 );
+
+                scene.autoClear = false;
+                scene.clearColor = new BABYLON.Color4(0, 0, 0, 0);
 
                 camera.attachControl(canvas, true);
                 camera.lowerAlphaLimit = camera.upperAlphaLimit = camera.alpha;
@@ -81,14 +82,10 @@ export default function BabylonArena3D({ pad1Pos, pad2Pos, ballPos }: BabylonAre
                 wall.registerInstancedBuffer("color", 4);
                 wall.instancedBuffers.color = new BABYLON.Color4(0, 0.79, 0.07, 0.98);
 
-                if (onoff == 0)
-                {
-                    var ground = BABYLON.MeshBuilder.CreateGround("ground", {width: 1200, height: 751}, scene);
-                    ground.position.y -= 5;
-                    onoff = 1;
-                    ground.registerInstancedBuffer("color", 4);
-                    ground.instancedBuffers.color = new BABYLON.Color4(0.76, 0.77, 1);
-                }
+                var ground = BABYLON.MeshBuilder.CreateGround("ground", {width: 1200, height: 751}, scene);
+                ground.position.y -= 5;
+                ground.registerInstancedBuffer("color", 4);
+                ground.instancedBuffers.color = new BABYLON.Color4(0.76, 0.77, 1);
 
                 ball.registerInstancedBuffer("color", 4);
                 ball.instancedBuffers.color = new BABYLON.Color4(0, 1, 0, 0.3);
@@ -106,7 +103,7 @@ export default function BabylonArena3D({ pad1Pos, pad2Pos, ballPos }: BabylonAre
                     const theta = 2 * Math.PI * u;
                     const phi = Math.acos(2 * v - 1);
 
-                    const r = radius * Math.cbrt(Math.random()) * 7;
+                    const r = radius * Math.cbrt(Math.random()) * 3;
 
                     const x = r * Math.sin(phi) * Math.cos(theta);
                     const y = r * Math.sin(phi) * Math.sin(theta);
@@ -206,19 +203,13 @@ export default function BabylonArena3D({ pad1Pos, pad2Pos, ballPos }: BabylonAre
                     rightPadInstances.parent = rightPadGroup;
                 }
 
-                leftPadGroup.position.x -= 600;
-                rightPadGroup.position.x += 600;
-
-                ballGroup.position.z = ballPos.y - 375.5;
-                ballGroup.position.x = ballPos.x - 600;
-                leftPadGroup.position.z = pad1Pos - 375.5;
-                rightPadGroup.position.z = pad2Pos - 375.5;
+                leftPadGroup.position.x -= 525;
+                rightPadGroup.position.x += 525;
 
                 return scene;
             };
 
         const scene = createScene();
-
 
         engine.runRenderLoop(() => scene.render());
         window.addEventListener("resize", () => engine.resize());
@@ -227,7 +218,21 @@ export default function BabylonArena3D({ pad1Pos, pad2Pos, ballPos }: BabylonAre
             engine.dispose();
             window.removeEventListener("resize", () => engine.resize());
         };
-    }, [pad1Pos, pad2Pos, ballPos]);
+    }, []);
+
+    useEffect(() => {
+    if (!ballGroupRef.current || !leftPadGroupRef.current || !rightPadGroupRef.current) return;
+
+    const ballGroup = ballGroupRef.current;
+    const leftPadGroup = leftPadGroupRef.current;
+    const rightPadGroup = rightPadGroupRef.current;
+
+    ballGroup.position.z = ballPos.y - 375.5;
+    ballGroup.position.x = ballPos.x - 600;
+    leftPadGroup.position.z = pad1Pos - 375.5;
+    rightPadGroup.position.z = pad2Pos - 375.5;
+
+  }, [pad1Pos, pad2Pos, ballPos]);
 
     return (
         <canvas
