@@ -73,15 +73,18 @@ export default function usePongGame(gameMode: string, mainUser: UsersTemp | unde
 		});
 
 		socket.on('gameOver', (data) => {
-            if (tournament) {
-                updateMatches(mainUser || null, { matchResults: data.matchResults, phase: data.phase }); // {winnerId, scoreLeft, scoreRight, phase}
-                console.log("after gameOver tournament.results: ", tournament); //update at rendering !!!
-                navigate('/tournament', { replace: true });
-            } else {
-                setGameResults(data);
-                navigate('/board', { replace: true });
-            }
-        });
+			// Ne rediriger vers le tournoi que si on est explicitement en mode tournament
+			// ET que le contexte tournament existe ET que la phase correspond à un tournoi
+			if (tournament && gameMode === 'tournament' && data.phase && 
+				(data.phase === 'demi1' || data.phase === 'demi2' || data.phase === 'final')) {
+				updateMatches(mainUser || null, { matchResults: data.matchResults, phase: data.phase });
+				console.log("after gameOver tournament.results: ", tournament);
+				navigate('/tournament', { replace: true });
+			} else {
+				setGameResults(data);
+				navigate('/board', { replace: true });
+			}
+		});
 
 		return () => { socket.disconnect(); };
 	}, []);

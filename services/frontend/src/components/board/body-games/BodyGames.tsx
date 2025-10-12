@@ -6,6 +6,7 @@ import Profile from "./Profile";
 import AddFriend from "./AddFriend";
 import useBoard from "../../../hooks/useBoard";
 import UsernameInput from "../../game/UsernameInput";
+import useTournament from "../../../contexts/tournament/useTournament";
 import type { BodyGamesProps } from "../../../interfaces/BodyGames";
 import "../../../styles/board/body-games/BodyGames.css";
 import type { MatchUsersTemp } from "../../../interfaces/Tournament";
@@ -14,21 +15,28 @@ export default function BodyGames(props: BodyGamesProps) {
 	const [ modeToLaunch, setModeToLaunch ] = useState<string | null>(null);
 	const [ usernames, setUsernames ] = useState<string[]>(Array(3).fill(''));
 	const { openElement } = useBoard();
+	const { closeTournament } = useTournament();
 	const navigate = useNavigate();
 	const { words } = props;
 
 	const handleGameSelect = (mode: string) => {
 		if (mode === 'tournament') {
 			navigate('/tournament');
-		} else if (mode === '1vsIA') {
-			navigate('/game/1vsia');
-		} else if (mode === '1vs1') {
-			setUsernames(Array(1).fill(''));
-			setModeToLaunch(mode);
-		} else if (mode == 'billiard') {
-			navigate('/game/billiard');
-		} else if (mode == '2vs2')
-			navigate('/game/2vs2');
+		} else {
+			// Fermer le tournoi existant si on sélectionne un autre mode
+			closeTournament();
+			
+			if (mode === '1vsIA') {
+				navigate('/game/1vsia');
+			} else if (mode === '1vs1') {
+				setUsernames(Array(1).fill(''));
+				setModeToLaunch(mode);
+			} else if (mode == 'billiard') {
+				navigate('/game/billiard');
+			} else if (mode == '2vs2') {
+				navigate('/game/2vs2');
+			}
+		}
     };
 
 	// DRY !!!

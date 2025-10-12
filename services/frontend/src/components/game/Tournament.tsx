@@ -3,12 +3,29 @@ import WinnerCard from "./WinnerCard";
 import useTournament from "../../contexts/tournament/useTournament";
 import type { TournamentProps } from "../../interfaces/Tournament";
 import "../../styles/tournament/Tournament.css";
+import { useEffect } from "react";
+import { useNavigate } from "react-router";
 
 // /tournament
 export default function Tournament(props: TournamentProps) {
-	const { tournament } = useTournament();
+	const { tournament, closeTournament } = useTournament();
 	const { words } = props;
-	words
+	const navigate = useNavigate();
+	
+	// Vérifier si le tournoi est terminé (un gagnant est défini)
+	const isCompleted = tournament?.results?.matches?.[2]?.winnerId !== undefined;
+	
+	// Auto-fermer le tournoi après 10 secondes si terminé
+	useEffect(() => {
+		if (isCompleted) {
+			const timer = setTimeout(() => {
+				closeTournament();
+				navigate('/board', { replace: true });
+			}, 10000); // 10 secondes pour voir le gagnant
+			
+			return () => clearTimeout(timer);
+		}
+	}, [isCompleted, closeTournament, navigate]);
 
 	const challengers = tournament?.results?.challengers; //[x3 inputs] || [x4 inputs]
 	const matches = tournament?.results?.matches; //[x3, 'demi1'...]
@@ -17,6 +34,28 @@ export default function Tournament(props: TournamentProps) {
 
 	return (
 		<div className="tournament-board">
+			{/* Bouton pour quitter le tournoi */}
+			<button 
+				onClick={() => {
+					closeTournament();
+					navigate('/board', { replace: true });
+				}}
+				style={{
+					position: 'absolute',
+					top: '20px',
+					right: '20px',
+					padding: '10px 20px',
+					backgroundColor: '#ff4444',
+					color: 'white',
+					border: 'none',
+					borderRadius: '5px',
+					cursor: 'pointer',
+					zIndex: 1000
+				}}
+			>
+				Quitter le tournoi
+			</button>
+			
 			<div className="demis">
 				<div className="match">
 					<ProfileCard id={1} avatar={matches?.[0]?.opponents?.[0].avatar} username={matches?.[0]?.opponents?.[0].name ? matches?.[0]?.opponents?.[0].name : undefined} planet="testbis" species="bonkou" dimension="test"  ingame={true} isElim={matches?.[0].winnerId === 2 ? true : false} words={words} />
