@@ -2,8 +2,8 @@ import type { LanguageContextType } from "./Language";
 
 export interface ProfileCardProps {
 	id: number,
-	avatar: string,
-	username?: string | undefined,
+	avatar?: string,
+	username: string,
 	species: string,
 	planet: string,
 	dimension: string,

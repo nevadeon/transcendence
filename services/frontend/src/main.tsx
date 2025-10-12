@@ -5,6 +5,7 @@ import router from './routes/Router.tsx'
 import { AuthProvider } from './contexts/auth/AuthContext.tsx'
 import { LanguageProvider } from './contexts/language/LanguageContext.tsx'
 import { BoardProvider } from './contexts/board/BoardContext.tsx'
+import { TournamentProvider } from './contexts/tournament/TournamentContext.tsx'
 import './styles/index.css'
 // import './assets/start.mp3'
 // + <SoundProvider /> => Settings Provider(fusion both?)
@@ -14,7 +15,9 @@ createRoot(document.getElementById('root')!).render(
 			<AuthProvider>
 				<LanguageProvider>
 					<BoardProvider>
-						<RouterProvider router={router} />
+						<TournamentProvider>
+							<RouterProvider router={router} />
+						</TournamentProvider>
 					</BoardProvider>
 				</LanguageProvider>
 			</AuthProvider>

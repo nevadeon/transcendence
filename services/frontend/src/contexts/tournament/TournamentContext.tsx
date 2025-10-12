@@ -1,80 +1,52 @@
 import { createContext, useState } from "react";
-import type { ReactNode } from "react";
 import type { UserDataProps } from "../../interfaces/UserData";
-
-export interface TournamentContextType {
-	tournament: TournamentStates | null;
-	initTournament: (user: UserDataProps, randAvatars: string[]) => void;
-	updateMatches: (data: {
-        challengers?: MatchUsersTemp[],
-        phase?: string,
-        matchResults?: { winnerId: number, scoreLeft: number, scoreRight: number }
-    }) => void;
-	closeTournament: () => void;
-}
-
-export interface TournamentProviderProps {
-	children: ReactNode;
-}
-
-export interface MatchUsersTemp {
-	name: string | null;
-	avatar: string | null;
-}
-
-export interface Matches {
-	phase: string; // "demi1, demi2, final" -> retrieve in /tournament for components CSS states
-	opponents: MatchUsersTemp[]; //x2, 1vs1
-	winnerId: number | null; //until receive from websocket gameOver
-	scoreLeft: number | null; //opponents[0]
-	scoreRight: number | null;  //opponents[1]
-}
-
-export interface TournamentResults {
-	challengers: MatchUsersTemp[] | null; // handle userLogin too, x4, tournament
-	matches: Matches[]; // x2 after input see below
-}
-
-export interface TournamentStates {
-	tournamentId: number;
-	isTournament: boolean; //1vs1 or tournament
-	mode: string; // always as "tournament", not 1vs1
-	results: TournamentResults; //x1(demi1), x2(+demi2), x3(finals)
-}
+import type { TournamentContextType,
+    TournamentProviderProps,
+    TournamentStates,
+    MatchUsersTemp } from "../../interfaces/Tournament";
 
 export const TournamentContext = createContext<TournamentContextType | undefined>(undefined);
 
-	function initTournament(user: UserDataProps, randAvatars: string[]) {
-        console.log(randAvatars);
-        if (randAvatars.length === 4) {
+export function TournamentProvider({ children }: TournamentProviderProps) {
+	const [tournament, setTournament] = useState<TournamentStates | null>(null);
+
+	function initTournament(user: UserDataProps | null, randAvatars: string[]) { //null
+        console.log("initTournament: ", user, randAvatars);
+        if (!user) {
             setTournament({
                 tournamentId: Math.floor(Math.random() * 100000), // ID unique
                 isTournament: true,
                 mode: "tournament",
-                results: { // J'ai simplifié results à être un seul objet TournamentResults
-                    challengers: randAvatars.map((avatar) => ({ name: null, avatar })),
+                results: {
+                    challengers: randAvatars.map((avatar) => ({ name: undefined, avatar })),
                     matches: [
-                        { phase: "demi1", opponents: randAvatars.slice(0, 2).map(avatar => ({ name: null, avatar })), winnerId: null, scoreLeft: null, scoreRight: null },
-                        { phase: "demi2", opponents: randAvatars.slice(2, 4).map(avatar => ({ name: null, avatar })), winnerId: null, scoreLeft: null, scoreRight: null },
-                        { phase: "final", opponents: [{ name: null, avatar: null }, { name: null, avatar: null }], winnerId: null, scoreLeft: null, scoreRight: null },
+                        {
+                            phase: "demi1",
+                            opponents: randAvatars.slice(0, 2).map(avatar => ({ name: undefined, avatar })),
+                            winnerId: undefined,
+                            scoreLeft: undefined,
+                            scoreRight: undefined
+                        },
+                        { phase: "demi2", opponents: randAvatars.slice(2, 4).map(avatar => ({ name: undefined, avatar })), winnerId: undefined, scoreLeft: undefined, scoreRight: undefined },
+                        { phase: "final", opponents: [{ name: undefined, avatar: undefined }, { name: undefined, avatar: undefined }], winnerId: undefined, scoreLeft: undefined, scoreRight: undefined },
                     ],
                 }
             });
-        } else if (randAvatars.length === 3) {
-            setTournament({
-                tournamentId: Math.floor(Math.random() * 100000), // ID unique
-                isTournament: true,
-                mode: "tournament",
-                results: { // J'ai simplifié results à être un seul objet TournamentResults
-                    challengers: randAvatars.map((avatar) => ({ name: null, avatar })),
-                    matches: [
-                        { phase: "demi1", opponents: [{ name: user.name, avatar: user.avatar }, { name: null, avatar: randAvatars[0] }], winnerId: null, scoreLeft: null, scoreRight: null },
-                        { phase: "demi2", opponents: randAvatars.slice(1, 3).map(avatar => ({ name: null, avatar })), winnerId: null, scoreLeft: null, scoreRight: null },
-                        { phase: "final", opponents: [{ name: null, avatar: null }, { name: null, avatar: null }], winnerId: null, scoreLeft: null, scoreRight: null },
-                    ],
-                }
-            });
+            return ;
         }
+        setTournament({
+            tournamentId: Math.floor(Math.random() * 100000),
+            isTournament: true,
+            mode: "tournament",
+            results: {
+                challengers: randAvatars.map((avatar) => ({ name: undefined, avatar })), //set user.name + user.avatar
+                matches: [
+                    { phase: "demi1", opponents: [{ name: user.name, avatar: user.avatar }, { name: undefined, avatar: randAvatars[0] }], winnerId: undefined, scoreLeft: undefined, scoreRight: undefined },
+                    { phase: "demi2", opponents: randAvatars.slice(1, 3).map(avatar => ({ name: undefined, avatar })), winnerId: undefined, scoreLeft: undefined, scoreRight: undefined },
+                    { phase: "final", opponents: [{ name: undefined, avatar: undefined }, { name: undefined, avatar: undefined }], winnerId: undefined, scoreLeft: undefined, scoreRight: undefined },
+                ],
+            }
+        });
     };
 
 	function updateMatches(data: {
@@ -84,14 +56,19 @@ export const TournamentContext = createContext<TournamentContextType | undefined
     }) {
 		if (!tournament)
 			return;
+        console.log("updatematches: ", data);
         setTournament(prev => {
             if (!prev)
 				return null;
             // Copie profonde pour l'immutabilité
             const newTournament = JSON.parse(JSON.stringify(prev)) as TournamentStates;
-            const currentResults = newTournament.results; // Simplifié à un seul objet dans cette version
+            const currentResults = newTournament?.results; // Simplifié à un seul objet dans cette version
             // 1. MISE À JOUR DES NOMS DES CHALLENGERS (Appelé par /tournament après input)
-            if (data.challengers) {
+            console.log("currentResults TournamentContext.tsx: ", currentResults);
+            if (data.challengers
+                && currentResults
+                && currentResults?.matches?.[0]?.opponents?.[0]
+                && currentResults?.matches?.[1].opponents?.[0]) {
                 currentResults.challengers = data.challengers;
                 currentResults.matches[0].opponents[0].name = data.challengers[0].name;
                 currentResults.matches[0].opponents[1].name = data.challengers[1].name;
@@ -99,7 +76,10 @@ export const TournamentContext = createContext<TournamentContextType | undefined
                 currentResults.matches[1].opponents[1].name = data.challengers[3].name;
             }
             // 2. MISE À JOUR DES RÉSULTATS DE MATCH (Appelé par /game/1vs1 après WebSocket 'gameOver')
-            if (data.phase && data.matchResults) {
+            if (data.phase
+                && data.matchResults
+                && currentResults?.matches
+                && currentResults?.matches?.[2].opponents?.[0]) {
                 const matchIndex = currentResults.matches.findIndex(m => m.phase === data.phase);
                 if (matchIndex !== -1) {
                     const matchToUpdate = currentResults.matches[matchIndex];
@@ -132,5 +112,5 @@ export const TournamentContext = createContext<TournamentContextType | undefined
 		<TournamentContext.Provider value={{ tournament, initTournament, updateMatches, closeTournament }}>
 			{children}
 		</TournamentContext.Provider>
-  );
+    );
 }

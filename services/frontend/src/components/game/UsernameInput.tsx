@@ -16,9 +16,13 @@ export default function UsernameInput(props: UsernameInputProps) {
         e.preventDefault();
         const trimmedUsernames = users.map((name) => name.trim());
 		const allFieldsValid = trimmedUsernames.every((name) => name.length > 0);
+		const challengers = trimmedUsernames.map((name, index) => ({
+            name: name,
+            avatar: avatars[index], 
+        }));
 
 		if (allFieldsValid)
-			onSubmit(trimmedUsernames, avatars); //#TODO
+			onSubmit(challengers);
 		else
 			console.error("Veuillez remplir tous les champs utilisateur.");
     }
@@ -37,7 +41,7 @@ export default function UsernameInput(props: UsernameInputProps) {
             words.messages["portal-gun"].opponent + " 2",
             words.messages["portal-gun"].opponent + " 3",
         ],
-		//tournament-local: [x4]
+		// if () tournament-local: [x4]
     };
 
 	if (mode && inputLabels.hasOwnProperty(mode)) {
