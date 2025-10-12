@@ -1,0 +1,11 @@
+{
+  "language": "fr",
+  "players_Blue": [
+    {"avatar" : "morty.png", "name" : "Morty"},
+    {"avatar" : "summer.png", "name" : "Summer"},
+  ],
+ "players_Red" : [
+    {"avatar" : "rick.png", "name" : "Rick"},
+    {"avatar" : "spaceBess.png", "name" : "SpaceBess"},
+  ]
+}
