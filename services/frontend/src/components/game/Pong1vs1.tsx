@@ -5,6 +5,7 @@ import { useGameControls } from "../../hooks/useGameControls";
 import useTournament from "../../contexts/tournament/useTournament";
 import type { Pong1vs1Props } from "../../interfaces/Pong1vs1";
 import Scores from "./Scores";
+import Arena3d from "./Arena3d";
 import Arena from "./Arena";
 import { useSearchParams } from "react-router";
 
@@ -96,7 +97,7 @@ export default function Pong1vs1(props: Pong1vs1Props) {
 					isAI={false}
 					words={words}
 				/>
-				<Arena
+				<Arena3d
 					pad1Pos={gameState?.pads[1]}
 					pad2Pos={gameState?.pads[2]}
 					ballPos={gameState?.ball}

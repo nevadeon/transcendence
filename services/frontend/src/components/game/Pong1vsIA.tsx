@@ -1,5 +1,5 @@
 import Scores from "./Scores";
-import Arena from "./Arena";
+import Arena3d from "./Arena3d";
 import { useLocation } from "react-router";
 import usePongGame from "../../hooks/usePongGame";
 import { useGameControls } from "../../hooks/useGameControls";
@@ -32,7 +32,7 @@ export default function Pong1vsIA(props: Pong1vsIAProps) {
                 isAI={false}
                 words={words}
             />
-            <Arena
+            <Arena3d
                 pad1Pos={gameState.pads[1]}
                 pad2Pos={gameState.pads[2]}
                 ballPos={gameState.ball}

@@ -29,7 +29,7 @@ export default function BodyGames(props: BodyGamesProps) {
 			navigate('/game/billiard');
 		} else if (mode == '2vs2')
 			navigate('/game/2vs2');
-    };
+	};
 
 	// DRY !!!
 	function handleInputChange(e: ChangeEvent<HTMLInputElement>, index: number): void {
