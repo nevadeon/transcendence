@@ -4,6 +4,8 @@ import PadLeftSrc from "../../assets/game/padleft.svg";
 import PadRightSrc from "../../assets/game/padright.svg";
 import BallSrc from "../../assets/game/balls/morty's_head_ball.png";
 
+import BabylonArena3D from "./Babylon3D.tsx";
+
 const ARENA_WIDTH = 1200;
 const ARENA_HEIGHT = 751;
 const PAD_WIDTH = 37;
@@ -81,9 +83,85 @@ export default function Arena(props: any) {
         renderGame();
     }, [arenaImage, ballImage, padLeftImage, padRightImage, pad1Pos, pad2Pos, ballPos.x, ballPos.y]);
 
-	return (
-		<div className="pong-1vs1-arena">
-			<canvas ref={canvasRef} className="pong-1vs1-canvas" />
-		</div>
-	);
+    return (
+        <div
+            className="pong-1vs1-arena"
+            style={{
+                position: "relative",
+                width: ARENA_WIDTH,
+                height: ARENA_HEIGHT,
+            }}
+        >
+            {/* Babylon.js 3D derrière */}
+            <div
+                style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    width: "100%",
+                    height: "100%",
+                    zIndex: 0,
+                }}
+            >
+                <BabylonArena3D />
+            </div>
+
+            {/* Canvas 2D du jeu au-dessus */}
+            <canvas
+                ref={canvasRef}
+                className="pong-1vs1-canvas"
+                style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    zIndex: 1,
+                    pointerEvents: "none",
+                }}
+            />
+        </div>
+    );
 }
+
+// return (
+// 	<div className="pong-1vs1-arena">
+// 		<canvas ref={canvasRef} className="pong-1vs1-canvas" />
+// 	</div>
+// );
+
+// 	return (
+//     <div
+//         className="pong-1vs1-arena"
+//         style={{
+//             position: "relative",
+//             width: ARENA_WIDTH,
+//             height: ARENA_HEIGHT,
+//         }}
+//     >
+//         {/* Babylon.js 3D derrière */}
+//         <div
+//             style={{
+//                 position: "absolute",
+//                 top: 0,
+//                 left: 0,
+//                 width: "100%",
+//                 height: "100%",
+//                 zIndex: 0,
+//             }}
+//         >
+//             <BabylonArena3D />
+//         </div>
+
+//         {/* Canvas 2D du jeu au-dessus */}
+//         <canvas
+//             ref={canvasRef}
+//             className="pong-1vs1-canvas"
+//             style={{
+//                 position: "absolute",
+//                 top: 0,
+//                 left: 0,
+//                 zIndex: 1,
+//                 pointerEvents: "none",
+//             }}
+//         />
+//     </div>
+// );
