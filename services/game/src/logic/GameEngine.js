@@ -1,6 +1,6 @@
 import { saveGameResults } from "./saveGameResults.js";
 
-const SCORE_TO_WIN = 5;
+const SCORE_TO_WIN = 1;
 const GAME_TICK_MS = 1000 / 60;
 
 const ARENA_WIDTH = 1200;

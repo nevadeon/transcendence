@@ -35,7 +35,7 @@ export interface TotalStatsProps {
 	tournament: number,
 	tournament_wins: number,
 	tournament_losses: number,
-	billard: number,
+	billiard: number,
 	billard_wins: number,
 	billard_losses: number
 }
@@ -129,7 +129,7 @@ export default function Stats(props: StatsProps) {
 			'versusCoop',
 			'versusIa',
 			'tournament',
-			'billard',
+			'billiard',
 		];
 
 		const transformedArray: ModeStats[] = [];

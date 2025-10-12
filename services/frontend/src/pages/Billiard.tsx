@@ -7,7 +7,7 @@ const Billiard: React.FC = () => {
 				src="/billiard_game/index.html"
 				className="billiard-frame"
 				allowFullScreen
-				title="billard"
+				title="billiard"
 			/>
 		</div>
 	);

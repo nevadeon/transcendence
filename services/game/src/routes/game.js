@@ -2,7 +2,7 @@
 async function gameRoutes(fastify) {
     const { db } = fastify;
 
-    fastify.get("/match_history/:username", async (req, reply) => {
+    fastify.get("/match_history/:id", async (req, reply) => {
 		const { username } = req.params;
 		console.log(username);
 		try {
@@ -25,7 +25,7 @@ async function gameRoutes(fastify) {
 		}
 	});
 
-	fastify.get("/users_stats/:username", async (req, reply) => {
+	fastify.get("/users_stats/:id", async (req, reply) => {
 		const { username } = req.params;
 		console.log(username);
 		try {
@@ -34,7 +34,7 @@ async function gameRoutes(fastify) {
 				versusCoop, versusCoop_wins, versusCoop_losses,
 				versusIa, versusIa_wins, versusIa_losses,
 				tournament, tournament_wins, tournament_losses,
-				billard, billard_wins, billard_losses FROM users_stats
+				billiard, billard_wins, billard_losses FROM users_stats
 				WHERE name=?
 				`, [username]
 			);
@@ -46,6 +46,32 @@ async function gameRoutes(fastify) {
 			return reply.code(500).send({ message: "Failed to get user's stats."})
 		}
 	});
+
+	fastify.post("/users_stats/init/:id", async (req, reply) => {
+		const { id } = req.params;
+
+		try {
+			const tmp = await db.get(
+				`SELECT * FROM users_stats WHERE id = ?`,
+				[id]
+			);
+				console.log("tmp");
+			if (tmp) {
+				console.log("tmp");
+				return reply.code(205).send({ message: "Id already exist." });
+			}
+			console.log(id);
+			await db.run(
+				`INSERT INTO users_stats(id) VALUES(?)`,
+				[id]
+			);
+			console.log("tmp");
+			return reply.code(201);
+		} catch (err) {
+			console.log(err);
+			return reply.code(500).send({ error : "err" });
+		}
+	})
 }
 
 export default gameRoutes;
