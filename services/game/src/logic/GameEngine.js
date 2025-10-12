@@ -15,9 +15,9 @@ const PAD_HEIGHT = 120;
 const PAD_OFFSET_X = 64;
 const PAD_OFFSET_X_2V2 = 32;
 
-export const activeGames = {};
+// export const activeGames = {};
 
-function initState(gameMode) {
+function getInitialState(gameMode) {
     const pads = {
         1: {
             x: PAD_OFFSET_X,
@@ -90,24 +90,13 @@ export function createGameSession(fastify, gameId, io, gameMode, mainPlayer, pla
                     console.error(err);
                 }
                 const winnerId = state.score.p1 > state.score.p2 ? 1 : 2;
-<<<<<<< HEAD
-                io.to(gameId).emit('gameOver', {
-                    winnerId: winnerId,
-                    scoreLeft: state.score.p1,
-<<<<<<< HEAD
-                    scoreRight: state.score.p2,
-=======
-                    scoreRight: state.score.p2
->>>>>>> 713e6c0 (added tournament context functions, still need to fix possibly null values)
-=======
-                io.to(gameId).emit('gameOver', { 
+				 io.to(gameId).emit('gameOver', { 
                     matchResults: {
                         winnerId: winnerId,
                         scoreLeft: state.score.p1,
                         scoreRight: state.score.p2,
                     },
                     phase: phase
->>>>>>> 67a1b9a (added so many things on tournament)
                 });
             }
         }
