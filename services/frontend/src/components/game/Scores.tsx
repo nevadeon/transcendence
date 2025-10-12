@@ -1,8 +1,9 @@
 import type { ScoresProps } from "../../interfaces/Scores";
-
+import { useAuth } from "../../contexts/auth/useAuth";
 // const BASE_IMG_URL = import.meta.env.BASE_IMG_URL;
 
 export default function Scores(props: ScoresProps) {
+	const { user } = useAuth();
 	const { avatar, avatar2, name, name2, result, ctrl, ctrl2, is2vs2, words } = props;
 
 	return (
@@ -11,10 +12,10 @@ export default function Scores(props: ScoresProps) {
 				is2vs2 &&
 				<>
 					<div className="profile-card pong-1vs1-card">
-						<img src={`${avatar}`} alt="Player Icon" />
+						<img src={`${user.avatar}`} alt="Player Icon" />
 						<div className="player-data">
-							<span>{name}</span>
-							<span>N.313</span>
+							<span>{user.name}</span>
+							<span>{user.dimension}</span>
 						</div>
 					</div>
 					<div className="pong-1vs1-shortcuts">

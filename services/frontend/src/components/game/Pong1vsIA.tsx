@@ -1,16 +1,17 @@
 import type { Pong1vsIAProps } from "../../interfaces/Pong1vsIA";
-import Avatar1Source from "../../../public/avatars/defaults/rick.png";
-import Avatar2Source from "../../../public/avatars/defaults/summer.png";
+import Avatar2Source from "../../../public/avatars/defaults/DecoyJerry.png";
 import ArenaSource from "../../assets/game/arena.svg";
 // import PadLeftSource from "../../assets/game/padleft.svg";
 // import PadSource from "../../assets/game/padright.svg";
 import BallSrc from "../../assets/game/balls/morty's_head_ball.png";
 import ArrowUpSrc from "../../assets/game/keybinds/arrow-up.svg";
 import ArrowDownSrc from "../../assets/game/keybinds/arrow-down.svg";
+import { useAuth } from "../../contexts/auth/useAuth"; 
 // /game/1vsia
 // TODO: import Arena and Scores Component + canvas setup
 export default function Pong1vsIA(props: Pong1vsIAProps) {
 	// const ctrl1 = { upKey: 'q', downKey: 'a' };
+	const { user } = useAuth();
 	const { words } = props;
 
 	return (
@@ -18,10 +19,10 @@ export default function Pong1vsIA(props: Pong1vsIAProps) {
 			<div className="pong-1vs1-scores">
 				<span className="pong-result">06</span>
 				<div className="profile-card pong-1vs1-card">
-					<img src={Avatar1Source} alt="Player Icon" />
+					<img src={`${user.avatar}`} alt="Player Icon" />
 					<div className="player-data">
-						<span>ttaquet</span>
-						<span>N.313</span>
+						<span>{user.name}</span>
+						<span>{user.dimension}</span>
 					</div>
 				</div>
 				<div className="pong-1vs1-shortcuts">
@@ -48,8 +49,8 @@ export default function Pong1vsIA(props: Pong1vsIAProps) {
 				<div className="profile-card pong-1vs1-card">
 					<img src={Avatar2Source} alt="Player Icon" />
 					<div className="player-data">
-						<span>Mr.summer</span>
-						<span>N.999</span>
+						<span>{words.messages.AIOpponent}</span>
+						<span>Z-999</span>
 					</div>
 				</div>
 				<div className="pong-1vs1-shortcuts">
