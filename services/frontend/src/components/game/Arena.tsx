@@ -84,42 +84,47 @@ export default function Arena(props: any) {
     }, [arenaImage, ballImage, padLeftImage, padRightImage, pad1Pos, pad2Pos, ballPos.x, ballPos.y]);
 
     return (
+    <div
+        className="pong-1vs1-arena"
+        style={{
+            position: "relative",
+            width: ARENA_WIDTH,
+            height: ARENA_HEIGHT,
+        }}
+    >
+        {/* Babylon.js 3D derrière */}
         <div
-            className="pong-1vs1-arena"
             style={{
-                position: "relative",
-                width: ARENA_WIDTH,
-                height: ARENA_HEIGHT,
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: "100%",
+                zIndex: 0,
             }}
         >
-            {/* Babylon.js 3D derrière */}
-            <div
-                style={{
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    width: "100%",
-                    height: "100%",
-                    zIndex: 0,
-                }}
-            >
-                <BabylonArena3D />
-            </div>
-
-            {/* Canvas 2D du jeu au-dessus */}
-            <canvas
-                ref={canvasRef}
-                className="pong-1vs1-canvas"
-                style={{
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    zIndex: 1,
-                    pointerEvents: "none",
-                }}
+            <BabylonArena3D
+                pad1Pos={pad1Pos} 
+                pad2Pos={pad2Pos} 
+                ballPos={ballPos} 
             />
         </div>
-    );
+
+        {/* Canvas 2D du jeu au-dessus */}
+        <canvas
+            ref={canvasRef}
+            className="pong-1vs1-canvas"
+            style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                zIndex: 1,
+                pointerEvents: "none",
+            }}
+        />
+    </div>
+);
+
 }
 
 // return (
