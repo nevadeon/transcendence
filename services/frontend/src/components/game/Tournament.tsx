@@ -11,10 +11,10 @@ export default function Tournament(props: TournamentProps) {
 	const { tournament, closeTournament } = useTournament();
 	const { words } = props;
 	const navigate = useNavigate();
-	
+
 	// Vérifier si le tournoi est terminé (un gagnant est défini)
 	const isCompleted = tournament?.results?.matches?.[2]?.winnerId !== undefined;
-	
+
 	// Auto-fermer le tournoi après 10 secondes si terminé
 	useEffect(() => {
 		if (isCompleted) {
@@ -22,7 +22,7 @@ export default function Tournament(props: TournamentProps) {
 				closeTournament();
 				navigate('/board', { replace: true });
 			}, 10000); // 10 secondes pour voir le gagnant
-			
+
 			return () => clearTimeout(timer);
 		}
 	}, [isCompleted, closeTournament, navigate]);
@@ -35,7 +35,7 @@ export default function Tournament(props: TournamentProps) {
 	return (
 		<div className="tournament-board">
 			{/* Bouton pour quitter le tournoi */}
-			<button 
+			<button
 				onClick={() => {
 					closeTournament();
 					navigate('/board', { replace: true });
@@ -55,12 +55,12 @@ export default function Tournament(props: TournamentProps) {
 			>
 				Quitter le tournoi
 			</button>
-			
+
 			<div className="demis">
 				<div className="match">
-					<ProfileCard id={1} avatar={matches?.[0]?.opponents?.[0].avatar} username={matches?.[0]?.opponents?.[0].name ? matches?.[0]?.opponents?.[0].name : undefined} planet="testbis" species="bonkou" dimension="test"  ingame={true} isElim={matches?.[0].winnerId === 2 ? true : false} words={words} />
+					<ProfileCard id={1} avatar={matches?.[0]?.opponents?.[0].avatar} username={matches?.[0]?.opponents?.[0].name ?? undefined} planet="testbis" species="bonkou" dimension="test"  ingame={true} isElim={matches?.[0].winnerId === 2 ? true : false} words={words} />
 					<div className={matches?.[0].winnerId === 1 ? "progressive-line-demis player1 top" : "progressive-line-demis player1 top invisible"}></div>
-					<ProfileCard id={1} avatar={matches?.[0]?.opponents?.[1].avatar} username={matches?.[0]?.opponents?.[1].name ? matches?.[0]?.opponents?.[1].name : undefined} planet="testbis" species="bonkou" dimension="test"  ingame={true} isElim={matches?.[0].winnerId === 1 ? true : false} words={words} />
+					<ProfileCard id={1} avatar={matches?.[0]?.opponents?.[1].avatar} username={matches?.[0]?.opponents?.[1].name ?? undefined} planet="testbis" species="bonkou" dimension="test"  ingame={true} isElim={matches?.[0].winnerId === 1 ? true : false} words={words} />
 					<div className={matches?.[0].winnerId === 2 ? "progressive-line-demis player2 top" : "progressive-line-demis player2 top invisible"}></div>
 				</div>
 				<div className="match">
@@ -81,8 +81,8 @@ export default function Tournament(props: TournamentProps) {
 			<div className="winner">
 				{
 					matches?.[2]?.winnerId === 1
-						? <WinnerCard avatar={matches?.[2]?.opponents?.[0].avatar} username={matches?.[2]?.opponents?.[0].name} words={words} />
-						: <WinnerCard avatar={matches?.[2]?.opponents?.[1].avatar} username={matches?.[2]?.opponents?.[1].name} words={words} />
+						? <WinnerCard avatar={matches?.[2]?.opponents?.[0].avatar} username={matches?.[2]?.opponents?.[0].name ?? undefined } words={words} />
+						: <WinnerCard avatar={matches?.[2]?.opponents?.[1].avatar} username={matches?.[2]?.opponents?.[1].name ?? undefined } words={words} />
 				}
 			</div>
 		</div>

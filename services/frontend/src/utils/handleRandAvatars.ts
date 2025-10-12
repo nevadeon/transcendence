@@ -1,12 +1,12 @@
 import type { UserDataProps } from "../interfaces/UserData";
 
 const avatarPaths = [
-	'defaults/rick.png',
-	'defaults/morty.png',
-	'defaults/rockRick.png',
-	'defaults/spaceBess.png',
-	'defaults/spaceMorty.png',
-	'defaults/summer.png',
+	'avatars/defaults/rick.png',
+	'avatars/defaults/morty.png',
+	'avatars/defaults/rockRick.png',
+	'avatars/defaults/spaceBess.png',
+	'avatars/defaults/spaceMorty.png',
+	'avatars/defaults/summer.png',
 ];
 
 function shuffleArray<T>(array: T[]): T[] {

@@ -11,7 +11,7 @@ export default function UsernameInput(props: UsernameInputProps) {
 	const { tournament } = useTournament();
 
     const numberOfPlayers = users.length;
-	const userAvatar = user?.avatar.slice(9);
+	const userAvatar = user?.avatar;
     const avatars = handleRandomAvatars(userAvatar, numberOfPlayers, user);
 	let currLabels: string[] | undefined;
 

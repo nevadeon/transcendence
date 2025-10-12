@@ -22,7 +22,7 @@ export default function TournamentPage() {
 
 	const finalMatch = tournament?.results?.matches?.find(m => m.phase === 'final');
     const isTournamentOver = finalMatch?.winnerId !== null;
-	const userAvatar = user?.avatar.slice(9);
+	const userAvatar = user?.avatar;
 
 	const getNextPhase = () => {
 		if (!tournament)
@@ -37,7 +37,7 @@ export default function TournamentPage() {
 		return undefined; // Le tournoi est terminé
 	};
 	const nextPhase = getNextPhase();
-	
+
 	useEffect(() => {
 		if (!tournament) {
 			let avatars;
@@ -52,7 +52,6 @@ export default function TournamentPage() {
 			}
 		}
 
-		
 		let timer = null;
 		if (tournament?.results?.matches?.[2]?.winnerId) { //works fine, because don't have winnerId based on 2 opponents
 			console.log("closeTournament after 5sec\n: ", tournament);
@@ -61,7 +60,7 @@ export default function TournamentPage() {
 			// timer = setTimeout(() => {
 			// }, DELAY_MS);
 		}
-		
+
 		if (tournament?.results?.matches?.[0]?.winnerId) {
 			if (timer) clearTimeout(timer);
 			timer = setTimeout(() => {
@@ -90,7 +89,7 @@ export default function TournamentPage() {
 		updateMatches(user, { challengers: challengers, phase: nextPhase });
 		navigate(`/game/1vs1?phase=${nextPhase}`);
 	};
-	
+
 	const backgroundStyle = {
 		display: 'flex',
 		alignItems: 'center',
