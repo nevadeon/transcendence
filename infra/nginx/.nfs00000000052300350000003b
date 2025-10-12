@@ -1,0 +1,79 @@
+user nginx; 
+worker_processes auto;
+
+error_log /var/log/nginx/error.log warn;
+pid /var/run/nginx.pid;
+
+events { worker_connections 1024; }
+
+http {
+	include			/etc/nginx/mime.types;
+	default_type	application/octet-stream;
+
+	log_format main '$remote_addr - $remote_user [$time_local] "$request" '
+					'$status $body_bytes_sent "$http_referer" '
+					'"$http_user_agent" "$http_x_forwarded_for"';
+
+	access_log /var/log/nginx/access.log main;
+
+	sendfile on;
+	keepalive_timeout 65;
+
+	upstream backend {
+		server user-profile:3001;
+		# server game:3002;  # Ajouter si nécessaire
+		server user-stats:3003;
+	}
+
+	# ----- REDIRECTION HTTP → HTTPS -----
+	server {
+		listen 80;
+		server_name localhost;
+		return 301 https://localhost:8443;
+	}
+
+	# ----- HTTPS SERVER -----
+	server {
+		listen 443 ssl;
+		http2 on;
+		server_name localhost;
+
+		root /usr/share/nginx/html;
+		index index.html;
+
+		ssl_certificate /etc/nginx/ssl/fullchain.pem;
+		ssl_certificate_key /etc/nginx/ssl/privkey.pem;
+		ssl_protocols TLSv1.2 TLSv1.3;
+		ssl_ciphers HIGH:!aNULL:!MD5;
+
+		# ----- API BACKEND -----
+		location /api/user-profile/ {
+			proxy_pass http://backend/;
+			proxy_http_version 1.1;
+			proxy_set_header Host $host;
+			proxy_set_header X-Real-IP $remote_addr;
+			proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+			proxy_set_header X-Forwarded-Proto $scheme;
+		}
+
+		location /api/user-stats/ {
+			proxy_pass http://backend/;
+			proxy_http_version 1.1;
+			proxy_set_header Host $host;
+			proxy_set_header X-Real-IP $remote_addr;
+			proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+			proxy_set_header X-Forwarded-Proto $scheme;
+		}
+
+		location /docs {
+			proxy_pass http://user-profile:3001;
+			proxy_set_header Host $host;
+			proxy_set_header X-Real-IP $remote_addr;
+		}
+
+		# ----- FRONTEND (SPA) -----
+		location / {
+			try_files $uri $uri/ /index.html;
+		}
+	}
+}

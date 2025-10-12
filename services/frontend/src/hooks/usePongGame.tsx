@@ -46,7 +46,7 @@ export default function usePongGame(gameMode: string, mainUser: UsersTemp | unde
 		});
 
 		socket.on('gameOver', (results: any) => {
-            setGameResult(results);
+            // setGameResult(results);
 			console.log("Jeu terminé, résultats:", results);
 		});
 
