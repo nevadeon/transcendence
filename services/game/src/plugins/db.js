@@ -13,12 +13,19 @@ async function dbPlugin(fastify) {
 		driver: sqlite3.Database,
 	});
 
+<<<<<<< HEAD
 	// await db.exec(`
 	// 	DROP TABLE IF EXISTS users_stats;
 	// 	DROP TABLE IF EXISTS match_history;
 	// 	DROP TABLE IF EXISTS game_sessions;
 	// 	DROP TABLE IF EXISTS tournament_config;
 	// `);
+=======
+	await db.exec(`
+		DROP TABLE IF EXISTS users_stats;
+		DROP TABLE IF EXISTS match_history;
+	`);
+>>>>>>> 713e6c0 (added tournament context functions, still need to fix possibly null values)
 
 	await db.exec(`
 		CREATE TABLE IF NOT EXISTS users_stats (
@@ -26,7 +33,10 @@ async function dbPlugin(fastify) {
 			games INTEGER DEFAULT 0,
 			wins INTEGER DEFAULT 0,
 			losses INTEGER DEFAULT 0,
+<<<<<<< HEAD
 			INTEGER DEFAULT 0,
+=======
+>>>>>>> 713e6c0 (added tournament context functions, still need to fix possibly null values)
 			versus INTEGER DEFAULT 0,
 			versus_wins INTEGER DEFAULT 0,
 			versus_losses INTEGER DEFAULT 0,
@@ -60,30 +70,6 @@ async function dbPlugin(fastify) {
 			date DATE DEFAULT (DATE('now'))
 		)
 	`)
-
-	await db.exec(`
-        CREATE TABLE IF NOT EXISTS game_sessions (
-			id INTEGER PRIMARY KEY AUTOINCREMENT,
-			mode TEXT NOT NULL,
-			status TEXT NOT NULL,
-			user_host_id INTEGER NOT NULL,
-			players_json TEXT NOT NULL,
-			state_json TEXT NULL,
-			created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-        )
-    `);
-
-    await db.exec(`
-        CREATE TABLE IF NOT EXISTS tournament_config (
-			id INTEGER PRIMARY KEY AUTOINCREMENT,
-			host_user_id INTEGER NOT NULL,
-			players_json TEXT NOT NULL,
-			matches_json TEXT NOT NULL,
-			current_match_id INTEGER NULL,
-			status TEXT NOT NULL,
-			winner_name TEXT NULL
-        )
-    `);
 
 	fastify.decorate("db", db);
 }

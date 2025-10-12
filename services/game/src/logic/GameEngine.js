@@ -90,7 +90,11 @@ export function createGameSession(fastify, gameId, io, gameMode, mainPlayer, pla
                 io.to(gameId).emit('gameOver', {
                     winnerId: winnerId,
                     scoreLeft: state.score.p1,
+<<<<<<< HEAD
                     scoreRight: state.score.p2,
+=======
+                    scoreRight: state.score.p2
+>>>>>>> 713e6c0 (added tournament context functions, still need to fix possibly null values)
                 });
             }
         }

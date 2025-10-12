@@ -16,8 +16,13 @@ async function gameRoutes(fastify) {
 				`, [id, id, id, id]
 			);
 			return reply.code(201).send({
+<<<<<<< HEAD
 				matches: Array(matches),
 				message: "Successfully get last 4 games from game_history" });
+=======
+                matches: matches,
+                message: "Successfully get last 4 games from game_history" });
+>>>>>>> 713e6c0 (added tournament context functions, still need to fix possibly null values)
 		} catch (err) {
 			fastify.log.error(err);
 			return reply.code(500).send({ message: "Failed to get match history."})
@@ -27,7 +32,7 @@ async function gameRoutes(fastify) {
 	fastify.get("/users_stats/:id", async (req, reply) => {
 		const { id } = req.params;
 		try {
-			const stats = await db.get(`
+			const stats = await db.all(`
 				SELECT versus, versus_wins, versus_losses,
 				versusIa, versusIa_wins, versusIa_losses,
 				tournament, tournament_wins, tournament_losses,
@@ -36,8 +41,13 @@ async function gameRoutes(fastify) {
 				`, [id]
 			);
 			return reply.code(201).send({
+<<<<<<< HEAD
 				stats: Array(stats),
 				message: "Successfully get totals from users_stats" });
+=======
+                stats: stats,
+                message: "Successfully get totals from users_stats" });
+>>>>>>> 713e6c0 (added tournament context functions, still need to fix possibly null values)
 		} catch (err) {
 			fastify.log.error(err);
 			return reply.code(500).send({ message: "Failed to get user's stats."})
