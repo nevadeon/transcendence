@@ -30,6 +30,7 @@
 			"searchingForFriends": "Searching for users..."
         }
     },
+	"AIOpponent":"Decoy Jerry",
     "profile": {
         "title": "PROFILE",
         "name": "USERNAME",

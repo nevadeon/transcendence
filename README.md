@@ -49,7 +49,7 @@
 [x] Min: Server-Side Rendering (SSR) Integration  
 
 ### Server-Side Pong
-[V] Maj: Replace Basic Pong with Server-Side Pong and Implementing an API  
+[x] Maj: Replace Basic Pong with Server-Side Pong and Implementing an API  
 [] Maj: Enabling Pong Gameplay via CLI against Web Users with API Integration  
 
 
