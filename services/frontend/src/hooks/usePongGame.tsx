@@ -38,6 +38,19 @@ export default function usePongGame(gameMode: string, mainUser: UsersTemp | unde
     const { tournament, updateMatches } = useTournament();
     const navigate = useNavigate();
 
+    const getNextPhase = () => {
+		if (!tournament)
+			return undefined;
+		const matches = tournament.results?.matches;
+		const nextMatch = matches?.find(match => match.winnerId === undefined);
+		console.log("nextMatch: ", nextMatch);
+		if (nextMatch) {
+			return nextMatch.phase; // "demi1", "demi2", ou "final"
+		}
+		return undefined; // Le tournoi est terminé
+	};
+	const nextPhase = getNextPhase();
+
 	useEffect(() => {
 		const socket = io('http://localhost:3002');
 		socketRef.current = socket;
@@ -45,7 +58,8 @@ export default function usePongGame(gameMode: string, mainUser: UsersTemp | unde
 			socket.emit('joinGame', {
                 mode: gameMode,
                 mainUser: mainUser,
-                usersTemp: usersTemp
+                usersTemp: usersTemp,
+                phase: nextPhase
             });
 		});
 
@@ -59,14 +73,13 @@ export default function usePongGame(gameMode: string, mainUser: UsersTemp | unde
 		});
 
 		socket.on('gameOver', (data) => {
-            console.log("data: ", data);
             if (tournament) {
-                console.log('gameOver tournament');
-                updateMatches({ matchResults: data });
-                navigate('/tournament', { replace: true }); 
+                updateMatches(mainUser || null, { matchResults: data.matchResults, phase: data.phase }); // {winnerId, scoreLeft, scoreRight, phase}
+                console.log("after gameOver tournament.results: ", tournament); //update at rendering !!!
+                navigate('/tournament', { replace: true });
             } else {
                 setGameResults(data);
-                navigate('/board');
+                navigate('/board', { replace: true });
             }
         });
 
