@@ -1,6 +1,6 @@
 import { saveGameResults } from "./saveGameResults.js";
 
-const SCORE_TO_WIN = 1;
+const SCORE_TO_WIN = 3;
 const GAME_TICK_MS = 1000 / 60;
 const AI_REFRESH_RATE = 1000;
 
