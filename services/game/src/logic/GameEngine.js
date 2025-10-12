@@ -55,7 +55,7 @@ function getInitialState(gameMode) {
         },
         score: scores,
         isRunning: true,
-        gameMode: gameMode,
+        gameMode: gameMode,	
         lastAiUpdate: performance.now(),
     };
 };

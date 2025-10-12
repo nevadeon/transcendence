@@ -7,6 +7,7 @@ import type { Pong1vs1Props } from "../../interfaces/Pong1vs1";
 import Scores from "./Scores";
 import Arena from "./Arena";
 import { useSearchParams } from "react-router";
+import { useEffect } from "react";
 
 // /game/1vs1
 export default function Pong1vs1(props: Pong1vs1Props) {
@@ -15,16 +16,31 @@ export default function Pong1vs1(props: Pong1vs1Props) {
 	const { user } = useAuth();
 	const navigate = useNavigate();
 	const location = useLocation();
-	const { tournament } = useTournament();
+	const { tournament, closeTournament } = useTournament();
 	const [ SearchParams, setSearchParams ] = useSearchParams();
 	setSearchParams;
 	const activePhase = SearchParams.get('phase');
 
 	let mode;
 	tournament?.isTournament ? mode = "tournament" : mode = "versus";
+	
 	let userLogin;
-	if (!tournament && location.state.from === '/tournament') //F5, tournament context logic lost but could be in 1vs1 !
+	if (user) {
+		userLogin = {name: user.name, avatar: user.avatar.slice(9)};
+	}
+	
+	if (!tournament && location.state?.from === '/tournament') //F5, tournament context logic lost but could be in 1vs1 !
 			navigate('/board', { replace: true });
+	
+	// Nettoyer le contexte tournament seulement si on vient d'un autre mode (pas du tournoi)
+	useEffect(() => {
+		// Ne nettoyer que si on n'est pas censé être en mode tournoi
+		// et que le contexte existe mais qu'on n'a pas de phase active
+		if (mode === "versus" && tournament && !activePhase) {
+			closeTournament();
+		}
+	}, [mode, tournament, closeTournament, activePhase]);
+	
 	const { gameState, sendInput } = usePongGame(mode, userLogin, location.state);
 	const { words } = props;
 	useGameControls(sendInput);
@@ -32,16 +48,13 @@ export default function Pong1vs1(props: Pong1vs1Props) {
 		return <p>Connexion au serveur de jeu...</p>;
 	}
 	if (!tournament) {
-		user ? userLogin = {name: user.name, avatar: user.avatar.slice(9)} : null;
-
-
 		console.log("location.state: ", location.state);
 
 		return (
 			<div className="pong">
 				<Scores
-					avatar={user.avatar ? user.avatar.slice(9) : location.state.avatars[0]}
-					name={null}
+					avatar={user?.avatar ? user.avatar.slice(9) : location.state?.avatars?.[0] || "/avatars/defaults/morty.png"}
+					name={userLogin?.name || null}
 					result={gameState?.score.p1}
 					ctrl={ctrl1}
 					isAI={false}
@@ -54,7 +67,7 @@ export default function Pong1vs1(props: Pong1vs1Props) {
 				/>
 				<Scores
 					avatar={"/avatars/defaults/morty.png"}
-					name={location.state[0] || "bot" }
+					name={location.state?.[0]?.name || "Adversaire"}
 					result={gameState?.score.p2}
 					ctrl={ctrl2}
 					isAI={false}
