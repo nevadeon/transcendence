@@ -10,14 +10,12 @@ import type { Pong1vsIAProps } from "../../interfaces/Pong1vsIA";
 // TODO: import Arena and Scores Component + canvas setup
 export default function Pong1vsIA(props: Pong1vsIAProps) {
 	const ctrl1 = { upKey: 'q', downKey: 'a' };
-	const ctrl2 = { upKey: 'p', downKey: 'l' };
 	const { user } = useAuth();
 	const location = useLocation();
 	let userLogin;
-	user ? userLogin = {name: user.name, avatar: user.avatar.slice(9)} : null;
+	user ? userLogin = {name: user.name, avatar: user.avatar.slice(8)} : null;
 	const { gameState, sendInput } = usePongGame('versusIa', userLogin, location.state);
 	const { words } = props;
-
 	useGameControls(sendInput);
 
     if (!gameState) {
@@ -27,11 +25,11 @@ export default function Pong1vsIA(props: Pong1vsIAProps) {
 	return (
 		<div className="pong">
             <Scores
-                avatar={user.avatar ? user.avatar.slice(9) : location.state.avatars[0]}
-                name={user.name ? user.name : location.state.usernames[0]}
+                avatar={userLogin?.avatar ? userLogin.avatar : user.avatar}
+                name={userLogin?.name ? userLogin.name : user.name}
                 result={gameState.score.p1}
                 ctrl={ctrl1}
-                is2vs2={false}
+                isAI={false}
                 words={words}
             />
             <Arena
@@ -40,11 +38,11 @@ export default function Pong1vsIA(props: Pong1vsIAProps) {
                 ballPos={gameState.ball}
             />
             <Scores
-                avatar={user.avatar ? location.state.avatars[0] : location.state.avatars[1]}
-                name={user.name ? location.state.usernames[0] : location.state.usernames[1]}
+                avatar={"/avatars/defaults/DecoyJerry.png"}
+                name={words.messages.AIOpponent}
                 result={gameState.score.p2}
-                ctrl={ctrl2}
-                is2vs2={false}
+                ctrl={ctrl1}
+                isAI={true}
                 words={words}
             />
         </div>
