@@ -48,6 +48,22 @@ interface ValidationMsg2FAProps {
     message: string;
 }
 
+export async function createStatsRow(id: number) {
+		try {
+			const res = await fetch(`http://localhost:3002/users_stats/init/${id}`, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ id: id })
+			});
+			await res.json();
+			if (res.ok) {
+				return ;
+			}
+		} catch (err) {
+			console.error('Update error:', err);
+		}
+	}
+
 export default function Form(props: FormProps) {
 	const [ userData, setUserData ] = useState<FormData>(userDataInit);
 	const [ validationMsg, setValidationMsg ] = useState<ValidationMsgProps | null>(null);
@@ -68,22 +84,6 @@ export default function Form(props: FormProps) {
 	function handleClick2FACancel() {
 		setIs2FACodeGen(false);
 		console.log(is2FACodeGen);
-	}
-
-	async function createStatsRow(id: number) {
-		try {
-			const res = await fetch(`http://localhost:3002/users_stats/init/${id}`, {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ id: id })
-			});
-			await res.json();
-			if (res.ok) {
-				return ;
-			}
-		} catch (err) {
-			console.error('Update error:', err);
-		}
 	}
 
 	async function handleClick(fieldName: string) {

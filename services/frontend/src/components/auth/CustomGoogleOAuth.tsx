@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router';
 import { useGoogleLogin } from '@react-oauth/google';
 import { useAuth } from '../../contexts/auth/useAuth';
 import googleIcon from "../../assets/oauth/google.svg";
+import { createStatsRow } from './Form';
 
 export default function CustomGoogleButton() {
 	const naviguate = useNavigate();
@@ -20,6 +21,7 @@ export default function CustomGoogleButton() {
 			});
 			const data = await res.json();
 			if (res.ok && data.token && data.user) {
+				createStatsRow(data.user.id);
 				login(data.token, data.user);
 				naviguate('/board');
 				console.log('OAuth 2.0 succeed');
