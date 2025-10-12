@@ -16,7 +16,7 @@ const authenticate = async (req, reply) => {
 			}
 			req.user = payload;
 		} catch (err) {
-			fastify.log.error('JWT Verification Failed:', err);
+			console.log({error: 'JWT Verification Failed:', err});
 			reply.code(401).send({ message: "Authentification requise. Token JWT invalide ou manquant." });
 			throw err; // to trigger catch(err) within calling routes
 		}
@@ -354,9 +354,13 @@ async function userRoutes(fastify) {
 	});
 
 	fastify.delete("/users/:id", async (req, reply) => {
-		const result = await db.run("DELETE FROM users WHERE id=?", [req.params.id]);
-		if (result.changes === 0) return reply.code(404).send({ message: "User not found." });
-		return reply.code(201).send({ message: "User deleted successfully." });
+		try {
+			const result = await db.run("DELETE FROM users WHERE id=?", [req.params.id]);
+			if (result.changes === 0) return reply.code(404).send({ message: "User not found." });
+			return reply.code(201).send({ message: "User deleted successfully." });
+		} catch (err) {
+			return reply.code(500).send({ error: "Internal Error" });
+		}
 	});
 
 	fastify.get("/users/friends/:id", async (req, reply) => {
@@ -369,6 +373,7 @@ async function userRoutes(fastify) {
 						WHEN f.user_id = ? THEN f.friend_id
 						ELSE f.user_id
 					END AS friend_id,
+					u.id,
 					u.name,
 					u.avatar,
 					u.status,
@@ -387,6 +392,31 @@ async function userRoutes(fastify) {
 			reply.code(201).send(rows);
 		} catch (err) {
 			return reply.code(500).send({ error: "Failed to fetch incoming requests."})
+		}
+	});
+
+	fastify.delete("/users/friends/:id", async (req, reply) => {
+		try {
+			await authenticate(req, reply);
+		} catch (err) {
+			console.log(err);
+			return reply.code(405).send({ error: "Failed to autentificate "});
+		}
+		const me = Number(req.user?.id);
+		const other = Number(req.params.id);
+		try {
+			const result = await db.run(
+				`DELETE FROM accepted_friends
+					WHERE (user_id = ? AND friend_id = ?)
+						`,
+	 				[me, other]
+			);
+			console.log(result);
+			if (result.changes === 0) return reply.code(404).send({ message: "Friend not found." });
+			return reply.code(201).send({ message: "Friend deleted successfully." });
+		} catch (err) {
+			console.log(err);
+			return reply.code(500).send({ error: "Internal Error" });
 		}
 	});
 }
