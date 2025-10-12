@@ -26,9 +26,6 @@ export interface TotalStatsProps {
 	versus: number,
 	versus_wins: number,
 	versus_losses: number,
-	versusCoop: number,
-	versusCoop_wins: number,
-	versusCoop_losses: number,
 	versusIa: number,
 	versusIa_wins: number,
 	versusIa_losses: number,
@@ -71,7 +68,7 @@ export default function Stats(props: StatsProps) {
 		async function allGames() {
 			setIsLoading(true);
 			try {
-				const res = await fetch(`http://localhost:3002/match_history/${user.name}`, {
+				const res = await fetch(`http://localhost:3002/match_history/${user.id}`, {
 					method: 'GET',
 					headers: {
 						'Content-Type': 'application/json',
@@ -94,7 +91,7 @@ export default function Stats(props: StatsProps) {
 		async function allStats() {
 			setIsLoading(true);
 			try {
-				const res = await fetch(`http://localhost:3002/users_stats/${user.name}`, {
+				const res = await fetch(`http://localhost:3002/users_stats/${user.id}`, {
 					method: 'GET',
 					headers: {
 						'Content-Type': 'application/json',
@@ -124,10 +121,9 @@ export default function Stats(props: StatsProps) {
 	// Définir les préfixes de modes de jeu (le nom de la carte)
 		const modePrefixes = [
 			'versus',
-			'versusCoop',
 			'versusIa',
 			'tournament',
-			'billiard',
+			// 'billiard',
 		];
 
 		const transformedArray: ModeStats[] = [];
