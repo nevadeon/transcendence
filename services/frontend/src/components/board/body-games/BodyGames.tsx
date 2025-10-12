@@ -8,6 +8,7 @@ import useBoard from "../../../hooks/useBoard";
 import UsernameInput from "../../game/UsernameInput";
 import type { BodyGamesProps } from "../../../interfaces/BodyGames";
 import "../../../styles/board/body-games/BodyGames.css";
+import type { MatchUsersTemp } from "../../../interfaces/Tournament";
 
 export default function BodyGames(props: BodyGamesProps) {
 	const [ modeToLaunch, setModeToLaunch ] = useState<string | null>(null);
@@ -39,8 +40,8 @@ export default function BodyGames(props: BodyGamesProps) {
 		});
 	}
 
-	const handleFormSubmit = (usernames: string[], avatars: string[]) => {
-        navigate(`/game/${modeToLaunch}`, { state: { usernames, avatars } }); //+random avatars here??? avatars: string[]
+	const handleFormSubmit = (challengers: MatchUsersTemp[]) => {
+        navigate(`/game/${modeToLaunch}`, { state: challengers }); //+random avatars here??? avatars: string[]
     };
 
 	return (

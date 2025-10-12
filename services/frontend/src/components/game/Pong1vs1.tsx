@@ -1,7 +1,7 @@
 // import { useLocation, useNavigate } from "react-router";
 import { useLocation } from "react-router";
-import Scores from "./Scores";
-import Arena from "./Arena";
+// import Scores from "./Scores";
+// import Arena from "./Arena";
 import { useAuth } from "../../contexts/auth/useAuth";
 import { useGameControls } from "../../hooks/useGameControls";
 import usePongGame from "../../hooks/usePongGame";
@@ -11,22 +11,22 @@ import type { Pong1vs1Props } from "../../interfaces/Pong1vs1";
 
 // /game/1vs1
 export default function Pong1vs1(props: Pong1vs1Props) {
-	const ctrl1 = { upKey: 'q', downKey: 's' };
-	const ctrl2 = { upKey: 'p', downKey: 'l' };
-	const { tournament } = useTournament();
+	// const ctrl1 = { upKey: 'q', downKey: 'a' };
+	// const ctrl2 = { upKey: 'o', downKey: 'l' };
 	const { user } = useAuth();
 	const location = useLocation();
 	// const navigate = useNavigate();
+	const { tournament } = useTournament();
 	let mode;
 	tournament?.isTournament ? mode = "tournament" : mode = "versus";
 	let userLogin;
 	user ? userLogin = {name: user.name, avatar: user.avatar.slice(9)} : null;
-	const { gameState, sendInput } = usePongGame('versus', userLogin, location.state);
-    const { usernames } = location.state;
+	const { gameState, sendInput } = usePongGame(mode, userLogin, location.state);
 
 	// pads[1], pads[3] for left side , then pads[2], pads[4] BUT pads[2] doesn't respond !!!
 	// const navigate = useNavigate(); //tournament matchmaking flow
 	const { words } = props;
+	words
 
 	useGameControls(sendInput);
 
@@ -34,13 +34,9 @@ export default function Pong1vs1(props: Pong1vs1Props) {
         return <p>Connexion au serveur de jeu...</p>;
     }
 
-	// if (results) {
-	// 	navigate( '/tournament' );
-	// }
-
 	return (
 		<div className="pong">
-			<Scores
+			{/* <Scores
 				avatar={user.avatar ? user.avatar.slice(9) : location.state.avatars[0]}
 				name={null}
 				result={gameState.score.p1}
@@ -60,7 +56,7 @@ export default function Pong1vs1(props: Pong1vs1Props) {
 				ctrl={ctrl2}
 				isAI={false}
 				words={words}
-			/>
+			/> */}
 		</div>
 	);
 }

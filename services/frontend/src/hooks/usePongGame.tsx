@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router";
 import { Socket, io } from "socket.io-client";
+import useTournament from "../contexts/tournament/useTournament";
 
 export interface GameState {
     pads: {
@@ -33,6 +35,8 @@ export default function usePongGame(gameMode: string, mainUser: UsersTemp | unde
 	const stateHistoryRef = useRef<Array<GameState & { receivedAt: number }>>([]);
 	const [gameState, setGameState] = useState<GameState | null>(null);
 	const [gameResults, setGameResults] = useState<GameResults | null>(null);
+    const { tournament, updateMatches } = useTournament();
+    const navigate = useNavigate();
 
 	useEffect(() => {
 		const socket = io('http://localhost:3002');
@@ -54,10 +58,17 @@ export default function usePongGame(gameMode: string, mainUser: UsersTemp | unde
             }
 		});
 
-		socket.on('gameOver', (results: any) => {
-            setGameResults(results);
-			console.log("Jeu terminé, résultats:", results);
-		});
+		socket.on('gameOver', (data) => {
+            console.log("data: ", data);
+            if (tournament) {
+                console.log('gameOver tournament');
+                updateMatches({ matchResults: data });
+                navigate('/tournament', { replace: true }); 
+            } else {
+                setGameResults(data);
+                navigate('/board');
+            }
+        });
 
 		return () => { socket.disconnect(); };
 	}, []);
