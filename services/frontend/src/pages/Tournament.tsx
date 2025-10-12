@@ -55,9 +55,7 @@ export default function TournamentPage() {
 					winner: 'red'
 				} )
 			});
-			console.log("test");
 			const data = await res.json();
-			console.log("test");
 			if (res.ok) {
 				console.log('Registration successful', data);
 			} else {

@@ -79,7 +79,6 @@ export default function Stats(props: StatsProps) {
 					}
 				});
 				const data = await res.json();
-				console.log("data: ", data);
 				if (res.ok) {
 					setGameHistory(data.matches);
 				} else {
@@ -103,7 +102,6 @@ export default function Stats(props: StatsProps) {
 					}
 				});
 				const data = await res.json();
-				console.log("data: ", data);
 				if (res.ok) {
 					setUserStats(data.stats);
 				} else {
