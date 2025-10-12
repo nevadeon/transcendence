@@ -10,7 +10,7 @@ import type { Pong1vs1Props } from "../../interfaces/Pong1vs1";
 // /game/1vs1
 export default function Pong1vs1(props: Pong1vs1Props) {
 	const ctrl1 = { upKey: 'q', downKey: 'a' };
-	const ctrl2 = { upKey: 'o', downKey: 'l' };
+	const ctrl2 = { upKey: 'f', downKey: 'v' };
 	const { user } = useAuth();
 	const location = useLocation();
 	let userLogin;

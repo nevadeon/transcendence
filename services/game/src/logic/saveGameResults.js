@@ -38,7 +38,7 @@ export async function saveGameResults(fastify, state, gameMode, mainPlayer, play
 					winnerId]
 			);
 
-			const VALID_MODES = ['versus', 'versusCoop', 'versusIa', 'tournament', 'billard'];
+			const VALID_MODES = ['versus', 'versusCoop', 'versusIa', 'tournament', 'billiard'];
 			if (!VALID_MODES.includes(gameMode))
 				throw new error(`Mode invalide: ${gameMode}`);
 
@@ -99,7 +99,7 @@ export async function saveGameResults(fastify, state, gameMode, mainPlayer, play
 					winnerId]
 			);
 
-			const VALID_MODES = ['versus', 'versusCoop', 'versusIa', 'tournament', 'billard'];
+			const VALID_MODES = ['versus', 'versusCoop', 'versusIa', 'tournament', 'billiard'];
 			if (!VALID_MODES.includes(gameMode))
 				throw new error(`Mode invalide: ${gameMode}`);
 
