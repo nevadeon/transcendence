@@ -29,7 +29,6 @@ function initState(gameMode) {
             directionY: 0
         },
     };
-    if (gameMode === 'versusIa') state.aiPadId = 2;
     if (gameMode === '2v2') {
         pads[3] = {
             x: PAD_OFFSET_X_2V2,
@@ -62,8 +61,15 @@ function initState(gameMode) {
 
 export function createGameSession(fastify, gameId, io, gameMode, mainPlayer, playersTemp) {
     const state = initState(gameMode);
+    if (typeof gameMode === 'string' && gameMode.toLowerCase().includes('ia')) {
+        state.aiPadId = 2;
+    }
     state.gameId = gameId;
     activeGames[gameId] = state;
+    // debug: emit session-start details to server console
+    if (console && console.debug) {
+        console.debug('[GameEngine] new session', { gameId, gameMode, aiPadId: state.aiPadId, pads: state.pads, ball: state.ball });
+    }
     let tickRunning = false;
 
     const gameLoopId = setInterval(async () => {
@@ -124,6 +130,7 @@ function updateIa(state) {
     const predictedY = predictYAtX(state.ball, targetX, BALL_MIN_HEIGHT, BALL_MAX_HEIGHT);
     if (predictedY != null) {
         pad.aiTargetY = predictedY;
+        if (console && console.debug) console.debug('[GameEngine][AI] predicted', { gameId: state.gameId, padId: state.aiPadId, predictedY });
     }
 
     state.lastAiUpdate = now;
@@ -150,7 +157,7 @@ function predictYAtX(ball, targetX, yMin, yMax) {
 const PAD_MIN_HEIGHT = PAD_HEIGHT / 2;
 const PAD_MAX_HEIGHT = ARENA_HEIGHT - PAD_HEIGHT / 2;
 function updatePads(state) {
-    if (state.gameMode === '1vsIA') updateIa(state);
+    if (state.aiPadId) updateIa(state);
     const padIds = Object.keys(state.pads).map(Number);
     const ball = state.ball;
     for (const padId of padIds) {

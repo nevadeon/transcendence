@@ -1,73 +1,52 @@
+import Scores from "./Scores";
+import Arena from "./Arena";
+import { useLocation } from "react-router";
+import usePongGame from "../../hooks/usePongGame";
+import { useGameControls } from "../../hooks/useGameControls";
+import { useAuth } from "../../contexts/auth/useAuth";
 import type { Pong1vsIAProps } from "../../interfaces/Pong1vsIA";
-import Avatar2Source from "../../../public/avatars/defaults/DecoyJerry.png";
-import ArenaSource from "../../assets/game/arena.svg";
-// import PadLeftSource from "../../assets/game/padleft.svg";
-// import PadSource from "../../assets/game/padright.svg";
-import BallSrc from "../../assets/game/balls/morty's_head_ball.png";
-import ArrowUpSrc from "../../assets/game/keybinds/arrow-up.svg";
-import ArrowDownSrc from "../../assets/game/keybinds/arrow-down.svg";
-import { useAuth } from "../../contexts/auth/useAuth"; 
+
 // /game/1vsia
 // TODO: import Arena and Scores Component + canvas setup
 export default function Pong1vsIA(props: Pong1vsIAProps) {
-	// const ctrl1 = { upKey: 'q', downKey: 'a' };
+	const ctrl1 = { upKey: 'q', downKey: 'a' };
+	const ctrl2 = { upKey: 'p', downKey: 'l' };
 	const { user } = useAuth();
+	const location = useLocation();
+	let userLogin;
+	user ? userLogin = {name: user.name, avatar: user.avatar.slice(9)} : null;
+	const { gameState, sendInput } = usePongGame('versusIa', userLogin, location.state);
 	const { words } = props;
+
+	useGameControls(sendInput);
+
+    if (!gameState) {
+        return <p>Connexion au serveur de jeu...</p>;
+    }
 
 	return (
 		<div className="pong">
-			<div className="pong-1vs1-scores">
-				<span className="pong-result">06</span>
-				<div className="profile-card pong-1vs1-card">
-					<img src={`${user.avatar}`} alt="Player Icon" />
-					<div className="player-data">
-						<span>{user.name}</span>
-						<span>{user.dimension}</span>
-					</div>
-				</div>
-				<div className="pong-1vs1-shortcuts">
-					<div className="pong-1vs1-shortcuts-key">
-						<span>A</span>
-						<span>{words.messages.games.keys.up}</span>
-					</div>
-					<div className="pong-1vs1-shortcuts-key">
-						<span>Q</span>
-						<span>{words.messages.games.keys.down}</span>
-					</div>
-				</div>
-			</div>
-			<div className="pong-1vs1-arena">
-				<img src={ArenaSource} alt="Arena Image" className="pong-1vs1-arena-zone" />
-				<div className="pong-1vs1-arena-playzone">
-					{/* <img src={PadSource} alt="Pad Image" className="pad left" style={{transform: `translateY(${pad1Pos - 50}%)`}} /> */}
-					<img src={BallSrc} alt="Morty Ball" className="ball" />
-					{/* <img src={PadSource} alt="Pad Image" className="pad" style={{transform: `translateY(${pad2Pos - 50}%)`}} /> */}
-				</div>
-			</div>
-			<div className="pong-1vs1-scores">
-				<span className="pong-result">04</span>
-				<div className="profile-card pong-1vs1-card">
-					<img src={Avatar2Source} alt="Player Icon" />
-					<div className="player-data">
-						<span>{words.messages.AIOpponent}</span>
-						<span>Z-999</span>
-					</div>
-				</div>
-				<div className="pong-1vs1-shortcuts">
-					<div className="pong-1vs1-shortcuts-key">
-						<span>
-							<img src={ArrowUpSrc} alt="Arrow Up Icon" />
-							</span>
-						<span>{words.messages.games.keys.up}</span>
-					</div>
-					<div className="pong-1vs1-shortcuts-key">
-						<span>
-							<img src={ArrowDownSrc} alt="Arrow Down Icon" />
-						</span>
-						<span>{words.messages.games.keys.down}</span>
-					</div>
-				</div>
-			</div>
-		</div>
+            <Scores
+                avatar={user.avatar ? user.avatar.slice(9) : location.state.avatars[0]}
+                name={user.name ? user.name : location.state.usernames[0]}
+                result={gameState.score.p1}
+                ctrl={ctrl1}
+                is2vs2={false}
+                words={words}
+            />
+            <Arena
+                pad1Pos={gameState.pads[1]}
+                pad2Pos={gameState.pads[2]}
+                ballPos={gameState.ball}
+            />
+            <Scores
+                avatar={user.avatar ? location.state.avatars[0] : location.state.avatars[1]}
+                name={user.name ? location.state.usernames[0] : location.state.usernames[1]}
+                result={gameState.score.p2}
+                ctrl={ctrl2}
+                is2vs2={false}
+                words={words}
+            />
+        </div>
 	);
 }
