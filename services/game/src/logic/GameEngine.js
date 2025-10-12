@@ -1,6 +1,6 @@
 import { saveGameResults } from "./saveGameResults.js";
 
-const SCORE_TO_WIN = 5;
+const SCORE_TO_WIN = 3;
 const GAME_TICK_MS = 1000 / 60;
 const AI_REFRESH_RATE = 1000;
 
@@ -147,8 +147,8 @@ function predictYAtX(ball, targetX, yMin, yMax) {
     return yMax - (m - span);
 }
 
-const PAD_MIN_HEIGHT = PAD_HEIGHT / 2;
-const PAD_MAX_HEIGHT = ARENA_HEIGHT - PAD_HEIGHT / 2;
+const PAD_MIN_HEIGHT = PAD_HEIGHT / 2 + BALL_DIAMETER + 16;
+const PAD_MAX_HEIGHT = ARENA_HEIGHT - PAD_HEIGHT / 2 - BALL_DIAMETER - 16;
 function updatePads(state) {
     if (state.aiPadId) updateIa(state);
     const padIds = Object.keys(state.pads).map(Number);
@@ -172,21 +172,19 @@ function updatePads(state) {
         const nextY = pad.y + (directionY * PAD_SPEED);
         const clampedY = clamp(nextY, PAD_MIN_HEIGHT, PAD_MAX_HEIGHT);
 
-        // Compute pad rect at proposed position and test against ball circle.
-        // If moving to clampedY would overlap the ball, skip the movement to avoid
-        // pushing the ball inside the pad (this implements the "don't push the ball" policy).
-        const padLeft = pad.x;
-        const padRight = pad.x + PAD_WIDTH;
-        const padTop = clampedY - PAD_HEIGHT / 2;
-        const padBottom = clampedY + PAD_HEIGHT / 2;
+        // Compute pad rect at proposed position and test against ball circle
+        // const padLeft = pad.x;
+        // const padRight = pad.x + PAD_WIDTH;
+        // const padTop = clampedY - PAD_HEIGHT / 2;
+        // const padBottom = clampedY + PAD_HEIGHT / 2;
 
-        const closestX = Math.max(padLeft, Math.min(ball.x, padRight));
-        const closestY = Math.max(padTop, Math.min(ball.y, padBottom));
-        const dx = ball.x - closestX;
-        const dy = ball.y - closestY;
-        const dist2 = dx * dx + dy * dy;
-        const ballRadius = BALL_DIAMETER / 2;
-        if (dist2 < ballRadius * ballRadius) continue;
+        // const closestX = Math.max(padLeft, Math.min(ball.x, padRight));
+        // const closestY = Math.max(padTop, Math.min(ball.y, padBottom));
+        // const dx = ball.x - closestX;
+        // const dy = ball.y - closestY;
+        // const dist2 = dx * dx + dy * dy;
+        // const ballRadius = BALL_DIAMETER / 2;
+        // if (dist2 < ballRadius * ballRadius) continue;
 
         pad.y = clampedY;
     }
@@ -217,6 +215,12 @@ function updateBallPhysics(state) {
     if (ballTop <= 16 || ballBottom >= ARENA_HEIGHT - 16) {
         ball.vy *= -1;
         ball.y = clamp(ball.y, BALL_MIN_HEIGHT, BALL_MAX_HEIGHT);
+
+        let speed = Math.sqrt(ball.vx * ball.vx + ball.vy * ball.vy);
+        speed = Math.min(BALL_MAX_SPEED, Math.max(1, speed * 1.04));
+        const norm = Math.max(1e-6, Math.sqrt(ball.vx * ball.vx + ball.vy * ball.vy));
+        ball.vx = (ball.vx / norm) * speed;
+        ball.vy = (ball.vy / norm) * speed;
         return false;
     }
 
@@ -287,7 +291,7 @@ function updateBallPhysics(state) {
 
             // slightly increase speed for gameplay and clamp
             let speed = Math.sqrt(ball.vx * ball.vx + ball.vy * ball.vy);
-            speed = Math.min(BALL_MAX_SPEED, Math.max(1, speed * 1.06));
+            speed = Math.min(BALL_MAX_SPEED, Math.max(1, speed * 1.05));
             const newVx = (ball.vx / Math.max(1e-6, Math.sqrt(ball.vx * ball.vx + ball.vy * ball.vy))) * speed;
             const newVy = (ball.vy / Math.max(1e-6, Math.sqrt(ball.vx * ball.vx + ball.vy * ball.vy))) * speed;
             ball.vx = newVx;

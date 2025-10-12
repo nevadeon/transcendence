@@ -5,10 +5,10 @@ type SendInputFn = (direction: 'up' | 'down', action: 'start' | 'stop', padId: n
 const CONTROL_MAP: { [key: string]: { padId: number, direction: 'up' | 'down' } } = {
     // J1
     'q': { padId: 1, direction: 'up' },
-    'a': { padId: 1, direction: 'down' },
+    's': { padId: 1, direction: 'down' },
     // J2
-    'f': { padId: 2, direction: 'up' },
-    'v': { padId: 2, direction: 'down' },
+    'p': { padId: 2, direction: 'up' },
+    'l': { padId: 2, direction: 'down' },
 	// J3
     'k': { padId: 3, direction: 'up' },
     'm': { padId: 3, direction: 'down' },

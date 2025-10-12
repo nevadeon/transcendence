@@ -9,7 +9,7 @@ import type { Pong1vsIAProps } from "../../interfaces/Pong1vsIA";
 // /game/1vsia
 // TODO: import Arena and Scores Component + canvas setup
 export default function Pong1vsIA(props: Pong1vsIAProps) {
-	const ctrl1 = { upKey: 'q', downKey: 'a' };
+	const ctrl1 = { upKey: 'q', downKey: 's' };
 	const { user } = useAuth();
 	const location = useLocation();
 	let userLogin;
