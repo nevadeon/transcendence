@@ -2,6 +2,7 @@ import { saveGameResults } from "./saveGameResults.js";
 
 const SCORE_TO_WIN = 5;
 const GAME_TICK_MS = 1000 / 60;
+const AI_REFRESH_RATE = 1000;
 
 const ARENA_WIDTH = 1200;
 const ARENA_HEIGHT = 751;
@@ -28,6 +29,7 @@ function initState(gameMode) {
             directionY: 0
         },
     };
+    if (gameMode === 'versusIa') state.aiPadId = 2;
     if (gameMode === '2v2') {
         pads[3] = {
             x: PAD_OFFSET_X_2V2,
@@ -53,6 +55,8 @@ function initState(gameMode) {
         },
         score: scores,
         isRunning: true,
+        gameMode: gameMode,
+        lastAiUpdate: performance.now(),
     };
 };
 
@@ -107,14 +111,62 @@ export function createGameSession(fastify, gameId, io, gameMode, mainPlayer, pla
 // Fonction utilitaire pour limiter une valeur dans une plage
 const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
 
+function updateIa(state) {
+    if (!state.aiPadId) return;
+    const now = performance.now();
+    if (now - state.lastAiUpdate < AI_REFRESH_RATE) return;
+
+    // predict intersection with the AI pad's X and store target Y
+    const pad = state.pads[state.aiPadId];
+    if (!pad) return;
+
+    const targetX = pad.x + PAD_WIDTH / 2;
+    const predictedY = predictYAtX(state.ball, targetX, BALL_MIN_HEIGHT, BALL_MAX_HEIGHT);
+    if (predictedY != null) {
+        pad.aiTargetY = predictedY;
+    }
+
+    state.lastAiUpdate = now;
+}
+
+// Predict the Y position where the ball center will be when its X equals targetX.
+// Accounts for vertical bounces between yMin and yMax by folding the line with a triangle wave.
+function predictYAtX(ball, targetX, yMin, yMax) {
+    const vx = ball.vx;
+    const vy = ball.vy;
+    if (vx === 0) return null; // no horizontal motion
+    const t = (targetX - ball.x) / vx;
+    if (t < 0) return null; // moving away
+
+    const yRaw = ball.y + vy * t;
+    const span = yMax - yMin;
+    const period = 2 * span;
+    // positive modulo for floats
+    let m = ((yRaw - yMin) % period + period) % period;
+    if (m <= span) return yMin + m;
+    return yMax - (m - span);
+}
+
 const PAD_MIN_HEIGHT = PAD_HEIGHT / 2;
 const PAD_MAX_HEIGHT = ARENA_HEIGHT - PAD_HEIGHT / 2;
 function updatePads(state) {
+    if (state.gameMode === '1vsIA') updateIa(state);
     const padIds = Object.keys(state.pads).map(Number);
     const ball = state.ball;
     for (const padId of padIds) {
         const pad = state.pads[padId];
-        const directionY = pad.directionY;
+
+        let directionY = pad.directionY;
+        if (padId === state.aiPadId && pad.aiTargetY != null) {
+            const diff = pad.aiTargetY - pad.y;
+            if (Math.abs(diff) < PAD_SPEED) {
+                pad.y = clamp(pad.aiTargetY, PAD_MIN_HEIGHT, PAD_MAX_HEIGHT);
+                pad.aiTargetY = null;
+                continue;
+            }
+            directionY = diff > 0 ? 1 : -1;
+        }
+
         if (directionY === 0) continue;
 
         const nextY = pad.y + (directionY * PAD_SPEED);
@@ -133,7 +185,8 @@ function updatePads(state) {
         const dx = ball.x - closestX;
         const dy = ball.y - closestY;
         const dist2 = dx * dx + dy * dy;
-        if (dist2 < BALL_RADIUS * BALL_RADIUS) continue;
+        const ballRadius = BALL_DIAMETER / 2;
+        if (dist2 < ballRadius * ballRadius) continue;
 
         pad.y = clampedY;
     }
