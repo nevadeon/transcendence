@@ -14,12 +14,12 @@ async function dbPlugin(fastify) {
 		driver: sqlite3.Database,
 	});
 
-	await db.exec(`
-		DROP TABLE IF EXISTS users_stats;
-		DROP TABLE IF EXISTS match_history;
-		DROP TABLE IF EXISTS game_sessions;
-		DROP TABLE IF EXISTS tournament_config;
-	`);
+	// await db.exec(`
+	// 	DROP TABLE IF EXISTS users_stats;
+	// 	DROP TABLE IF EXISTS match_history;
+	// 	DROP TABLE IF EXISTS game_sessions;
+	// 	DROP TABLE IF EXISTS tournament_config;
+	// `);
 
 	await db.exec(`
 		CREATE TABLE IF NOT EXISTS users_stats (
@@ -28,11 +28,9 @@ async function dbPlugin(fastify) {
 			wins INTEGER DEFAULT 0,
 			losses INTEGER DEFAULT 0,
 			INTEGER DEFAULT 0,
+			versus INTEGER DEFAULT 0,
 			versus_wins INTEGER DEFAULT 0,
 			versus_losses INTEGER DEFAULT 0,
-			versusCoop INTEGER DEFAULT 0,
-			versusCoop_wins INTEGER DEFAULT 0,
-			versusCoop_losses INTEGER DEFAULT 0,
 			versusIa INTEGER DEFAULT 0,
 			versusIa_wins INTEGER DEFAULT 0,
 			versusIa_losses INTEGER DEFAULT 0,

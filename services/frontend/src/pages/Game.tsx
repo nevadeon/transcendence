@@ -1,9 +1,7 @@
 import { Profiler } from "react";
 import { useParams } from "react-router";
 import Pong1vs1 from "../components/game/Pong1vs1";
-// import Pong2vs2 from "../components/game/Pong2vs2";
 import Pong1vsIA from "../components/game/Pong1vsIA";
-// import Tournament from "../components/game/Tournament";
 import GameBackground from "../components/game/GameBackground";
 import useLanguage from "../hooks/useLanguage";
 import CitadelClashSrc from "../assets/game/backgrounds/planet8_bg.png";
@@ -26,7 +24,7 @@ const backgrounds = [
 export default function GamePage() {
 	const { mode } = useParams<{mode: string}>();
 	const words = useLanguage();
-	const bgPath = mode === '2vs2' ? null : randomBackground();
+	const bgPath = randomBackground();
 
 	function randomBackground() {
 		const randomIndex = Math.floor(Math.random() * backgrounds.length);
@@ -48,8 +46,6 @@ export default function GamePage() {
 		switch(mode) {
 			case '1vs1':
 				return <Profiler id="Pong1vs1" onRender={onRender}> <Pong1vs1 words={words} /> </Profiler>;
-			// case '2vs2':
-			// 	return <Profiler id="Pong2vs2" onRender={onRender}> <Pong2vs2 words={words} /> </Profiler>;
 			case '1vsia':
 				return <Profiler id="Pong1vsIA" onRender={onRender}> <Pong1vsIA words={words} /> </Profiler>;
 			default:

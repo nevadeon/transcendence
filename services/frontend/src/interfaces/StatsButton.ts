@@ -1,5 +1,5 @@
-import type { LanguageContextType } from "./Language";
+// import type { LanguageContextType } from "./Language";
 
-export interface StatsButtonProps {
-	words: LanguageContextType
-}
+// export interface StatsButtonProps {
+// 	words: LanguageContextType
+// }

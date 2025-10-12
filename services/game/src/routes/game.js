@@ -1,9 +1,9 @@
 // gameRoutes.js
 async function gameRoutes(fastify) {
-    const { db } = fastify;
+	const { db } = fastify;
 
-    fastify.get("/match_history/:id", async (req, reply) => {
-		const { username } = req.params;
+	fastify.get("/match_history/:id", async (req, reply) => {
+		const { id } = req.params;
 		try {
 			// try to delete useless 3x OR
 			const matches = await db.all(`
@@ -13,7 +13,7 @@ async function gameRoutes(fastify) {
 					OR right_team_A = ?
 					OR right_team_B = ?
 				ORDER BY date DESC
-				`, [username, username, username, username]
+				`, [id, id, id, id]
 			);
 			return reply.code(201).send({
 				matches: Array(matches),
@@ -25,20 +25,19 @@ async function gameRoutes(fastify) {
 	});
 
 	fastify.get("/users_stats/:id", async (req, reply) => {
-		const { username } = req.params;
+		const { id } = req.params;
 		try {
 			const stats = await db.get(`
 				SELECT versus, versus_wins, versus_losses,
-				versusCoop, versusCoop_wins, versusCoop_losses,
 				versusIa, versusIa_wins, versusIa_losses,
 				tournament, tournament_wins, tournament_losses,
 				billiard, billard_wins, billard_losses FROM users_stats
-				WHERE name=?
-				`, [username]
+				WHERE id=?
+				`, [id]
 			);
 			return reply.code(201).send({
-                stats: Array(stats),
-                message: "Successfully get totals from users_stats" });
+				stats: Array(stats),
+				message: "Successfully get totals from users_stats" });
 		} catch (err) {
 			fastify.log.error(err);
 			return reply.code(500).send({ message: "Failed to get user's stats."})
