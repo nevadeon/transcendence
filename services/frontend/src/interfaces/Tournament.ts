@@ -1,6 +1,7 @@
 import type { UserDataProps } from "./UserData";
 import type { LanguageContextType } from "./Language";
 import type { ReactNode } from "react";
+import type { UsersTemp } from "../hooks/usePongGame";
 
 export interface TournamentProps {
 	words: LanguageContextType
@@ -31,14 +32,14 @@ export interface TournamentResults {
 export interface TournamentStates {
 	tournamentId: number;
 	isTournament: boolean; //1vs1 or tournament
-	mode?: string; // always as "tournament", not 1vs1
+	mode?: string; // always as "tournament"
 	results?: TournamentResults; //x1(demi1), x2(+demi2), x3(finals)
 }
 
 export interface TournamentContextType {
 	tournament: TournamentStates | null;
 	initTournament: (user: UserDataProps | null, randAvatars: string[]) => void;
-	updateMatches: (data: {
+	updateMatches: (user: UsersTemp | null, data: {
 		challengers?: MatchUsersTemp[],
 		phase?: string,
 		matchResults?: { winnerId: number, scoreLeft: number, scoreRight: number }

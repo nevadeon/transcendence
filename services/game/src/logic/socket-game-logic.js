@@ -11,10 +11,9 @@ export function setupSocketLogic(io, fastify) {
             const gameMode = data.mode;
             const mainPlayer = data.mainUser; //HERE !!!
             const playersTemp = data.usersTemp;
+            const phase = data.phase;
 
-            console.log(`received game id: ${gameId}, mode: ${gameMode}`)
-
-            const game = createGameSession(fastify, gameId, io, gameMode, mainPlayer, playersTemp);
+            const game = createGameSession(fastify, gameId, io, gameMode, mainPlayer, playersTemp, phase);
 
             fastify.log.info(`New 1v1 local game started: ${gameId}`);
 

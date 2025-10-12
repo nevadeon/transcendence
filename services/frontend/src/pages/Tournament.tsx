@@ -10,8 +10,6 @@ import TeleportSrc from "../assets/tournament/teleport-bg.png";
 import "../styles/tournament/Tournament.css";
 import { handleRandomAvatars } from "../utils/handleRandAvatars.ts";
 
-// const BASE_URL = import.meta.env.API_ADDR;
-// const USER_STATS_PORT = import.meta.env.USER_STATS_PORT;
 const NUM_USERS = 3;
 const DELAY_MS = 5000;
 
@@ -25,6 +23,20 @@ export default function TournamentPage() {
 	const finalMatch = tournament?.results?.matches?.find(m => m.phase === 'final');
     const isTournamentOver = finalMatch?.winnerId !== null;
 	const userAvatar = user?.avatar.slice(9);
+
+	const getNextPhase = () => {
+		if (!tournament)
+			return undefined;
+		const matches = tournament.results?.matches;
+		const nextMatch = matches?.find(match => match.winnerId === undefined);
+		console.log("nextMatch: ", nextMatch);
+		if (nextMatch) {
+			console.log("nextMatch: ", nextMatch)
+			return nextMatch.phase; // "demi1", "demi2", ou "final"
+		}
+		return undefined; // Le tournoi est terminé
+	};
+	const nextPhase = getNextPhase();
 	
 	useEffect(() => {
 		if (!tournament) {
@@ -40,17 +52,26 @@ export default function TournamentPage() {
 			}
 		}
 
+		
 		let timer = null;
-		if (tournament?.results?.matches?.[2]?.winnerId) {
+		if (tournament?.results?.matches?.[2]?.winnerId) { //works fine, because don't have winnerId based on 2 opponents
+			console.log("closeTournament after 5sec\n: ", tournament);
+			closeTournament();
+			navigate('/board', { replace: true });
+			// timer = setTimeout(() => {
+			// }, DELAY_MS);
+		}
+		
+		if (tournament?.results?.matches?.[0]?.winnerId) {
+			if (timer) clearTimeout(timer);
 			timer = setTimeout(() => {
-				closeTournament();
-				navigate('/board', { replace: true });
+				navigate(`/game/1vs1?phase=${nextPhase}`, { state: { from: location.pathname } });
 			}, DELAY_MS);
-			console.log("closeTournament after 5sec\n");
+			console.log("go to nextPhase after 5sec\n");
 		}
 
 		return () => {
-            if (timer) { clearTimeout(timer); }
+            if (timer) clearTimeout(timer);
         };
 	}, [isTournamentOver, closeTournament, navigate]);
 
@@ -64,23 +85,9 @@ export default function TournamentPage() {
 		});
 	}
 
-	const getNextPhase = () => {
-		if (!tournament)
-			return undefined;
-		const matches = tournament.results?.matches;
-		const nextMatch = matches?.find(match => match.winnerId === undefined);
-		console.log("nextMatch: ", nextMatch);
-		if (nextMatch) {
-			console.log("nextMatch: ", nextMatch)
-			return nextMatch.phase; // "demi1", "demi2", ou "final"
-		}
-		return undefined; // Le tournoi est terminé
-	};
-	const nextPhase = getNextPhase();
-
 	async function handleFormSubmit(challengers: MatchUsersTemp[]) { //, phase? already init
-		console.log("challengers: ", challengers);
-		updateMatches({ challengers: challengers, phase: nextPhase });
+		console.log("challengers in handleFormSubmit in Tournament.tsx: ", challengers);
+		updateMatches(user, { challengers: challengers, phase: nextPhase });
 		navigate(`/game/1vs1?phase=${nextPhase}`);
 	};
 	
@@ -98,7 +105,10 @@ export default function TournamentPage() {
 
 	return (
 		<div className="tournament-page" style={backgroundStyle}>
-			<UsernameInput mode={"tournament"} users={usernames} onChange={handleInputChange} onSubmit={handleFormSubmit} words={words} />
+			{
+				!tournament?.results?.challengers?.[1].name &&
+					<UsernameInput mode={"tournament"} users={usernames} onChange={handleInputChange} onSubmit={handleFormSubmit} words={words} />
+			}
 			<Tournament words={words} />
 			<div style={{position: 'absolute', top: '0', left: '0', width: '100%', height: '100%', background: '#214241', opacity: '50%'}}></div>
 		</div>

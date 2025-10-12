@@ -3,12 +3,15 @@ import { useAuth } from "../../contexts/auth/useAuth";
 import { handleRandomAvatars } from "../../utils/handleRandAvatars";
 import type { UsernameInputProps } from "../../interfaces/UsernameInput";
 import "../../styles/tournament/UsernameInput.css";
+import useTournament from "../../contexts/tournament/useTournament";
 
 export default function UsernameInput(props: UsernameInputProps) {
 	const { mode, users, onChange, onSubmit, words } = props;
 	const { user } = useAuth();
-	const userAvatar = user?.avatar.slice(9);
+	const { tournament } = useTournament();
+
     const numberOfPlayers = users.length;
+	const userAvatar = user?.avatar.slice(9);
     const avatars = handleRandomAvatars(userAvatar, numberOfPlayers, user);
 	let currLabels: string[] | undefined;
 
@@ -16,10 +19,19 @@ export default function UsernameInput(props: UsernameInputProps) {
         e.preventDefault();
         const trimmedUsernames = users.map((name) => name.trim());
 		const allFieldsValid = trimmedUsernames.every((name) => name.length > 0);
-		const challengers = trimmedUsernames.map((name, index) => ({
-            name: name,
-            avatar: avatars[index], 
-        }));
+
+		let challengers;
+		if (tournament?.isTournament) {
+			challengers = trimmedUsernames.map((name, index) => ({
+				name: name,
+				avatar: tournament.results?.challengers?.[index].avatar,
+			}));
+		} else {
+			challengers = trimmedUsernames.map((name, index) => ({
+				name: name,
+				avatar: avatars[index],
+			}));
+		}
 
 		if (allFieldsValid)
 			onSubmit(challengers);

@@ -4,6 +4,7 @@ const SCORE_TO_WIN = 3;
 const GAME_TICK_MS = 1000 / 60;
 const AI_REFRESH_RATE = 1000;
 
+
 const ARENA_WIDTH = 1200;
 const ARENA_HEIGHT = 751;
 const BALL_DIAMETER = 48;
@@ -59,9 +60,11 @@ function initState(gameMode) {
     };
 };
 
-export function createGameSession(fastify, gameId, io, gameMode, mainPlayer, playersTemp) {
-    const state = initState(gameMode);
-    if (gameMode === 'versusIa') state.aiPadId = 2;
+// Stocke toutes les sessions de jeu actives.
+export const activeGames = {};
+
+export function createGameSession(fastify, gameId, io, gameMode, mainPlayer, playersTemp, phase) {
+    const state = getInitialState(gameMode);
     state.gameId = gameId;
     activeGames[gameId] = state;
     let tickRunning = false;
@@ -87,6 +90,7 @@ export function createGameSession(fastify, gameId, io, gameMode, mainPlayer, pla
                     console.error(err);
                 }
                 const winnerId = state.score.p1 > state.score.p2 ? 1 : 2;
+<<<<<<< HEAD
                 io.to(gameId).emit('gameOver', {
                     winnerId: winnerId,
                     scoreLeft: state.score.p1,
@@ -95,6 +99,15 @@ export function createGameSession(fastify, gameId, io, gameMode, mainPlayer, pla
 =======
                     scoreRight: state.score.p2
 >>>>>>> 713e6c0 (added tournament context functions, still need to fix possibly null values)
+=======
+                io.to(gameId).emit('gameOver', { 
+                    matchResults: {
+                        winnerId: winnerId,
+                        scoreLeft: state.score.p1,
+                        scoreRight: state.score.p2,
+                    },
+                    phase: phase
+>>>>>>> 67a1b9a (added so many things on tournament)
                 });
             }
         }
