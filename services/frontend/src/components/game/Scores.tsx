@@ -4,57 +4,24 @@ import { useAuth } from "../../contexts/auth/useAuth";
 
 export default function Scores(props: ScoresProps) {
 	const { user } = useAuth();
-	const { avatar, avatar2, name, name2, result, ctrl, ctrl2, is2vs2, words } = props;
+	const { avatar, name, result, ctrl, isAI, words } = props;
 
+    let username = (name && !isAI) ? name : user.name;
+    let tavatar = (name && !isAI) ? avatar : user.avatar;
 	return (
 		<div className="pong-1vs1-scores">
-			{
-				is2vs2 &&
-				<>
-					<div className="profile-card pong-1vs1-card">
-						<img src={`${user.avatar}`} alt="Player Icon" />
-						<div className="player-data">
-							<span>{user.name}</span>
-							<span>{user.dimension}</span>
-						</div>
-					</div>
-					<div className="pong-1vs1-shortcuts">
-						<div className="pong-1vs1-shortcuts-key">
-							<span>{ctrl.upKey.toUpperCase()}</span>
-							<span>{words.messages.games.keys.up}</span>
-						</div>
-						<div className="pong-1vs1-shortcuts-key">
-							<span>{ctrl.downKey.toUpperCase()}</span>
-							<span>{words.messages.games.keys.down}</span>
-						</div>
-					</div>
-				</>
-			}
-			<span className={is2vs2 ? "pong-result vs2" : "pong-result"}>
+			<span className={"pong-result"}>
 				{result < 10 ? "0" + result : result}
 			</span>
-			{
-				is2vs2 &&
-				<div className="pong-1vs1-shortcuts">
-					<div className="pong-1vs1-shortcuts-key">
-						<span>{ctrl2?.upKey.toUpperCase()}</span>
-						<span>{words.messages.games.keys.up}</span>
-					</div>
-					<div className="pong-1vs1-shortcuts-key">
-						<span>{ctrl2?.downKey.toUpperCase()}</span>
-						<span>{words.messages.games.keys.down}</span>
-					</div>
-				</div>
-			}
-			<div className={is2vs2 ? "profile-card pong-1vs1-card bot" : "profile-card pong-1vs1-card"}>
-				<img src={is2vs2 ? `/avatars/${avatar2}` : `/avatars/${avatar}`} alt="Player Icon" />
+			<div className={"profile-card pong-1vs1-card"}>
+				<img src={`${tavatar && !isAI ? tavatar : avatar}`} alt="Player Icon" />
 				<div className="player-data">
-					<span>{is2vs2 ? name2 : name}</span>
-					<span>N.313</span>
+					<span>{username && !isAI ? username : name}</span>
+					<span>{user.dimension && !isAI ? user.dimension : "Z-999"}</span>
 				</div>
 			</div>
 			{
-				!is2vs2 &&
+				!isAI &&
 				<div className="pong-1vs1-shortcuts">
 					<div className="pong-1vs1-shortcuts-key">
 						<span>{ctrl.upKey.toUpperCase()}</span>
@@ -65,7 +32,19 @@ export default function Scores(props: ScoresProps) {
 						<span>{words.messages.games.keys.down}</span>
 					</div>
 				</div>
-			}
+			}{
+                isAI &&
+                <div className="pong-1vsAI-shortcut">
+                   <div className="pong-1vsAI-shortcuts-key">
+						<span>{ctrl.upKey.toUpperCase()}</span>
+						<span>{words.messages.games.keys.up}</span>
+					</div>
+					<div className="pong-1vsAI-shortcuts-key">
+						<span>{ctrl.downKey.toUpperCase()}</span>
+						<span>{words.messages.games.keys.down}</span>
+					</div>
+                </div>
+            }
 		</div>
 	);
 }

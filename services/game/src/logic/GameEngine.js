@@ -61,15 +61,9 @@ function initState(gameMode) {
 
 export function createGameSession(fastify, gameId, io, gameMode, mainPlayer, playersTemp) {
     const state = initState(gameMode);
-    if (typeof gameMode === 'string' && gameMode.toLowerCase().includes('ia')) {
-        state.aiPadId = 2;
-    }
+    if (gameMode === 'versusIa') state.aiPadId = 2;
     state.gameId = gameId;
     activeGames[gameId] = state;
-    // debug: emit session-start details to server console
-    if (console && console.debug) {
-        console.debug('[GameEngine] new session', { gameId, gameMode, aiPadId: state.aiPadId, pads: state.pads, ball: state.ball });
-    }
     let tickRunning = false;
 
     const gameLoopId = setInterval(async () => {
@@ -130,7 +124,6 @@ function updateIa(state) {
     const predictedY = predictYAtX(state.ball, targetX, BALL_MIN_HEIGHT, BALL_MAX_HEIGHT);
     if (predictedY != null) {
         pad.aiTargetY = predictedY;
-        if (console && console.debug) console.debug('[GameEngine][AI] predicted', { gameId: state.gameId, padId: state.aiPadId, predictedY });
     }
 
     state.lastAiUpdate = now;

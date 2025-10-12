@@ -8,11 +8,11 @@ interface ControlKeys {
 export interface ScoresProps {
 	avatar: string,
 	avatar2?: string,
-	name: string,
+	name: string | null,
 	name2?: string,
 	result: number,
 	ctrl: ControlKeys,
 	ctrl2?: ControlKeys,
-	is2vs2: boolean,
+    isAI: boolean,
 	words: LanguageContextType
 }
