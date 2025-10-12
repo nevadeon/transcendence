@@ -14,12 +14,12 @@ async function dbPlugin(fastify) {
 	});
 
 	// auto suppr au 'make re'
-	// await db.exec(`
-	// 	DROP TABLE IF EXISTS users;
-	// 	DROP TABLE IF EXISTS tokens;
-    //     DROP TABLE IF EXISTS friend_requests;
-    //     DROP TABLE IF EXISTS accepted_friend;
-	// `);
+	await db.exec(`
+		DROP TABLE IF EXISTS users;
+		DROP TABLE IF EXISTS tokens;
+        DROP TABLE IF EXISTS friend_requests;
+        DROP TABLE IF EXISTS accepted_friends;
+	`);
 	
 	// Création tables
 	await db.exec(`
