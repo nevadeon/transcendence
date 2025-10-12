@@ -71,7 +71,9 @@ export default function TournamentPage() {
 	return (
 		<div className="tournament-page" style={backgroundStyle}>
 			<HomeButton/>
-			<UsernameInput mode={"tournament"} users={usernames} onChange={handleInputChange} onSubmit={handleFormSubmit} words={words} />
+			<div className="portal-gun-tournament-page">
+				<UsernameInput mode={"tournament"} users={usernames} onChange={handleInputChange} onSubmit={handleFormSubmit} words={words} />
+			</div>
 			<Tournament users={usernames} words={words} winnerA="" winnerB=""/>
 			<div style={{position: 'absolute', top: '0', left: '0', width: '100%', height: '100%', background: '#214241', opacity: '50%'}}></div>
 		</div>

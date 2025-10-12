@@ -9,7 +9,7 @@
 	border-radius: 30px;
 	align-items: center;
 	justify-content: center;
-	margin-right: 5%;
+	width: 40%;
 }
 
 .portal-gun-input .container:nth-child {
