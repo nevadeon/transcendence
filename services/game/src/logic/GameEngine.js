@@ -55,7 +55,7 @@ function getInitialState(gameMode) {
         },
         score: scores,
         isRunning: true,
-        gameMode: gameMode,	
+        gameMode: gameMode,
         lastAiUpdate: performance.now(),
     };
 };
@@ -65,6 +65,7 @@ export const activeGames = {};
 
 export function createGameSession(fastify, gameId, io, gameMode, mainPlayer, playersTemp, phase) {
     const state = getInitialState(gameMode);
+    if (gameMode === 'versusIa') state.aiPadId = 2;
     state.gameId = gameId;
     activeGames[gameId] = state;
     let tickRunning = false;
@@ -90,7 +91,7 @@ export function createGameSession(fastify, gameId, io, gameMode, mainPlayer, pla
                     console.error(err);
                 }
                 const winnerId = state.score.p1 > state.score.p2 ? 1 : 2;
-				 io.to(gameId).emit('gameOver', { 
+				 io.to(gameId).emit('gameOver', {
                     matchResults: {
                         winnerId: winnerId,
                         scoreLeft: state.score.p1,
@@ -111,7 +112,7 @@ export function createGameSession(fastify, gameId, io, gameMode, mainPlayer, pla
         tickRunning = false;
     }, GAME_TICK_MS);
 
-    // 
+    //
 
     return state;
 }
