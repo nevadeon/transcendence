@@ -1,6 +1,10 @@
 .profile {
 	position: relative;
 	width: 100%;
+	height: 100vh;
+	min-height: 0;
+	display: flex;
+	flex-direction: column;
 }
 
 .profile-header {

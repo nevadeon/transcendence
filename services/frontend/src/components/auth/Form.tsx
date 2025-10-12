@@ -48,6 +48,22 @@ interface ValidationMsg2FAProps {
     message: string;
 }
 
+export async function createStatsRow(id: number) {
+		try {
+			const res = await fetch(`http://localhost:3002/users_stats/init/${id}`, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ id: id })
+			});
+			await res.json();
+			if (res.ok) {
+				return ;
+			}
+		} catch (err) {
+			console.error('Update error:', err);
+		}
+	}
+
 export default function Form(props: FormProps) {
 	const [ userData, setUserData ] = useState<FormData>(userDataInit);
 	const [ validationMsg, setValidationMsg ] = useState<ValidationMsgProps | null>(null);
@@ -70,6 +86,22 @@ export default function Form(props: FormProps) {
 		console.log(is2FACodeGen);
 	}
 
+	async function createStatsRow(id: number) {
+		try {
+			const res = await fetch(`http://localhost:3002/users_stats/init/${id}`, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ id: id })
+			});
+			await res.json();
+			if (res.ok) {
+				return ;
+			}
+		} catch (err) {
+			console.error('Update error:', err);
+		}
+	}
+
 	async function handleClick(fieldName: string) {
 		const value = userData[fieldName as keyof FormData];
 		if (!value || value.length === 0) {
@@ -86,7 +118,6 @@ export default function Form(props: FormProps) {
 				body: JSON.stringify({ [fieldName]: value })
 			});
 			const data = await res.json();
-			console.log(res, data);
 			if (res.ok) {
 				setValidationMsg(null);
 				if (fieldName !== "password")
@@ -122,6 +153,7 @@ export default function Form(props: FormProps) {
 				if (res.ok && data.token && data.user) {
 					setValidationMsg(null);
 					login(data.token, data.user);
+					createStatsRow(data.user.id);
 					navigate('/board');
 					console.log('Registration succeed');
 				} else {
@@ -151,7 +183,7 @@ export default function Form(props: FormProps) {
 				if (res.ok && token && user) {
 					setValidationMsg(null);
 					setIs2FARequired(false);
-            		setTwoFactorCode('');
+					setTwoFactorCode('');
 					login(token, user);
 					navigate('/board');
 					console.log('Login successful');

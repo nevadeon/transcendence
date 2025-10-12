@@ -35,7 +35,7 @@ export interface TotalStatsProps {
 	tournament: number,
 	tournament_wins: number,
 	tournament_losses: number,
-	billard: number,
+	billiard: number,
 	billard_wins: number,
 	billard_losses: number
 }
@@ -79,7 +79,6 @@ export default function Stats(props: StatsProps) {
 					}
 				});
 				const data = await res.json();
-				console.log("data: ", data);
 				if (res.ok) {
 					setGameHistory(data.matches);
 				} else {
@@ -103,7 +102,6 @@ export default function Stats(props: StatsProps) {
 					}
 				});
 				const data = await res.json();
-				console.log("data: ", data);
 				if (res.ok) {
 					setUserStats(data.stats);
 				} else {
@@ -129,7 +127,7 @@ export default function Stats(props: StatsProps) {
 			'versusCoop',
 			'versusIa',
 			'tournament',
-			'billard',
+			'billiard',
 		];
 
 		const transformedArray: ModeStats[] = [];

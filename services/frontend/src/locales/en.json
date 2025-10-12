@@ -21,12 +21,13 @@
         "logout": "LOGOUT",
         "1vs1": "DIMENSIONAL DUEL",
         "2vs2": "CITADEL CLASH",
-        "1vsia": "VS MR.summer",
+        "1vsia": "VS Decoy Jerry",
         "tournament": "PICKLE RICK CUP",
         "billiard": "Multidimensional Pool",
         "friend-list": {
             "title": "Contact List",
-            "infos": "Mobile . Sun 01:17"
+			"withoutFriendMessage": "Your alone, it's sad :)",
+			"searchingForFriends": "Searching for users..."
         }
     },
     "profile": {
@@ -73,6 +74,13 @@
             }
         }
     },
+	"friend-request": {
+		"title": "Friends requests",
+		"table": {
+			"received": "Requests received",
+			"send": "Requests sent"
+		}
+	},
     "games": {
         "keys": {
             "up": "UP",

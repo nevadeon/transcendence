@@ -19,7 +19,7 @@ async function statsRoutes(fastify) {
 			);
 
 			const players = [red_team_A, red_team_B, blue_team_A, blue_team_B];
-			const VALID_MODES = ['versus', 'versusCoop', 'versusIa', 'tournament', 'billard'];
+			const VALID_MODES = ['versus', 'versusCoop', 'versusIa', 'tournament', 'billiard'];
 			if (!VALID_MODES.includes(mode))
 				throw new error(`Mode invalide: ${mode}`);
 

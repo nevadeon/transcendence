@@ -13,13 +13,14 @@ async function dbPlugin(fastify) {
 		driver: sqlite3.Database,
 	});
 
-	//auto suppr au 'make re'
+	// auto suppr au 'make re'
 	await db.exec(`
 		DROP TABLE IF EXISTS users;
 		DROP TABLE IF EXISTS tokens;
-        DROP TABLE IF EXISTS friends;
+        DROP TABLE IF EXISTS friend_requests;
+        DROP TABLE IF EXISTS accepted_friends;
 	`);
-
+	
 	// Création tables
 	await db.exec(`
 		CREATE TABLE IF NOT EXISTS users (
@@ -50,15 +51,25 @@ async function dbPlugin(fastify) {
 	`);
 
 	await db.exec(`
-        CREATE TABLE IF NOT EXISTS friends (
-            user_id INTEGER NOT NULL,
-            friend_id INTEGER NOT NULL,
-            status INTEGER NOT NULL DEFAULT 0 CHECK (status IN (0, 1, 2)),
-            PRIMARY KEY (user_id, friend_id),
-            FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE,
-            FOREIGN KEY(friend_id) REFERENCES users(id) ON DELETE CASCADE
-        )
-    `);
+		CREATE TABLE IF NOT EXISTS friend_requests (
+			user_id INTEGER NOT NULL,
+			friend_id INTEGER NOT NULL,
+			PRIMARY KEY (user_id, friend_id),
+			FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE,
+			FOREIGN KEY(friend_id) REFERENCES users(id) ON DELETE CASCADE
+		)
+	`);
+
+	await db.exec(`
+		CREATE TABLE IF NOT EXISTS accepted_friends (
+			user_id INTEGER NOT NULL,
+			friend_id INTEGER NOT NULL,
+			status INTEGER NOT NULL DEFAULT 0 CHECK (status IN (0, 1, 2)),
+			PRIMARY KEY (user_id, friend_id),
+			FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE,
+			FOREIGN KEY(friend_id) REFERENCES users(id) ON DELETE CASCADE
+
+		)`)
 
 	fastify.decorate("db", db);
 }

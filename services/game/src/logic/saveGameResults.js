@@ -38,7 +38,7 @@ export async function saveGameResults(fastify, state, gameMode, mainPlayer, play
 					winnerId]
 			);
 
-			const VALID_MODES = ['versus', 'versusCoop', 'versusIa', 'tournament', 'billard'];
+			const VALID_MODES = ['versus', 'versusCoop', 'versusIa', 'tournament', 'billiard'];
 			if (!VALID_MODES.includes(gameMode))
 				throw new error(`Mode invalide: ${gameMode}`);
 
@@ -58,10 +58,8 @@ export async function saveGameResults(fastify, state, gameMode, mainPlayer, play
 				[name]);
 			} else {
 				await db.run (`
-					UPDATE users_stats
-					SET losses = losses + 1,
-					${gameMode}_losses = ${gameMode}_losses + 1
-					WHERE name = ?`,
+					UPDATE users_stats SET losses = losses + 1,
+					${gameMode}_losses = ${gameMode}_losses + 1 WHERE name = ?`,
 				[name]);
 			}
 			console.log("Successfully wrote 2vs2 in match_history & users_stats");
@@ -101,7 +99,7 @@ export async function saveGameResults(fastify, state, gameMode, mainPlayer, play
 					winnerId]
 			);
 
-			const VALID_MODES = ['versus', 'versusCoop', 'versusIa', 'tournament', 'billard'];
+			const VALID_MODES = ['versus', 'versusCoop', 'versusIa', 'tournament', 'billiard'];
 			if (!VALID_MODES.includes(gameMode))
 				throw new error(`Mode invalide: ${gameMode}`);
 

@@ -18,7 +18,9 @@ export function setupSocketLogic(io, fastify) {
 
             // 2. to socket.on('gameState', (state: GameState) => { setGameState(state); });   from usePongGame.tsx
             io.to(gameId).emit('gameState', {
-                pads: game.pads,
+                pads: Object.fromEntries(
+                    Object.entries(game.pads).map(([padId, pad]) => [padId, pad.y])
+                ),
                 ball: { x: game.ball.x, y: game.ball.y },
                 score: game.score
             });
@@ -33,8 +35,14 @@ export function setupSocketLogic(io, fastify) {
             const directionValue = data.direction === 'up' ? -1 : 1;
             const actionValue = data.action === 'start' ? directionValue : 0;
 
-            game.inputs[data.padId] = actionValue;
-            console.log(`Input reçu pour Pad ${data.padId}: ${data.action}. Nouvel input: ${game.inputs[data.padId]}. Direction: ${data.direction}`);
+            const pad = game.pads[data.padId];
+            if (!pad) {
+                console.warn(`move received for unknown pad ${data.padId}`);
+                return;
+            }
+
+            pad.directionY = actionValue;
+            console.log(`Pad ${data.padId} dy set to ${pad.dy} (action=${data.action}, dir=${data.direction})`);
         });
 
         // 3. Gérer la déconnexion

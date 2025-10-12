@@ -23,8 +23,7 @@ async function dbPlugin(fastify) {
 
 	await db.exec(`
 		CREATE TABLE IF NOT EXISTS users_stats (
-			id INTEGER PRIMARY KEY AUTOINCREMENT,
-			name TEXT NOT NULL UNIQUE,
+			id INTEGER NOT NULL PRIMARY KEY UNIQUE,
 			games INTEGER DEFAULT 0,
 			wins INTEGER DEFAULT 0,
 			losses INTEGER DEFAULT 0,
@@ -40,8 +39,8 @@ async function dbPlugin(fastify) {
 			tournament INTEGER DEFAULT 0,
 			tournament_wins INTEGER DEFAULT 0,
 			tournament_losses INTEGER DEFAULT 0,
-			billard INTEGER DEFAULT 0,
-			billard_wins INTEGER DEFAULT 0
+			billiard INTEGER DEFAULT 0,
+			billard_wins INTEGER DEFAULT 0,
 			billard_losses INTEGER DEFAULT 0
 		)
 	`);
@@ -90,27 +89,6 @@ async function dbPlugin(fastify) {
     `);
 
 	fastify.decorate("db", db);
-
-    startGarbageCollector(db);
-}
-
-function startGarbageCollector(db) {
-    const runCleanup = async () => {
-        try {
-            console.log("Démarrage du nettoyage des sessions de jeu obsolètes...");
-            const result = await db.run(`
-                DELETE FROM game_sessions WHERE
-                    status != 'completed'
-                    AND created_at < DATETIME('now', '-1 hour');
-            `);
-            console.log(`Nettoyage terminé. ${result.changes} sessions obsolètes supprimées.`);
-        } catch (error) {
-            console.error("Erreur lors de l'exécution du Garbage Collector pour game_sessions:", error);
-        }
-    };
-    // exec direct apres run de la db
-    setTimeout(runCleanup, 5000);
-    setInterval(runCleanup, CLEANUP_INTERVAL_MS);
 }
 
 export default fp(dbPlugin);

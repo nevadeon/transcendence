@@ -21,12 +21,13 @@
         "logout": "CERRAR SESIÓN",
         "1vs1": "DUELO DIMENSIONAL",
         "2vs2": "CHOQUE DE LA CIUDADELA",
-        "1vsia": "VS SR.summer",
+        "1vsia": "VS Jerry señuelo",
         "tournament": "COPA RICK PEPINILLO",
         "billiard": "Billar Multidimensional",
         "friend-list": {
             "title": "Lista de Contactos",
-            "infos": "Tel . Dom 01:17"
+			"withoutFriendMessage": "Estás solo, es triste :)",
+			"searchingForFriends": "Buscando usuarias..."
         }
     },
     "profile": {
@@ -68,6 +69,13 @@
             }
         }
     },
+	"friend-request": {
+		"title": "Solicitud de amistad",
+		"table": {
+			"received": "Solicitud recibida",
+			"send": "Solicitud enviada"
+		}
+	},
     "games": {
         "keys": {
             "up": "ARRIBA",
